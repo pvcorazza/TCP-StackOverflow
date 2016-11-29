@@ -33,7 +33,7 @@ public class MySQLConnect{
 			Statement stmt = (Statement) conn.createStatement();
 			
 			String sqlInsert = "insert into user " // need a space
-		               + "VALUES (NULL, 'show', 'qweqeqw', '0', '1')";
+		               + "VALUES (NULL, '"+username+"', '"+pwd+"', '0', '1')";
 		         System.out.println("The SQL query is: " + sqlInsert);  // Echo for debugging
 		         int countInserted = stmt.executeUpdate(sqlInsert);
 		         System.out.println(countInserted + " records inserted.\n");

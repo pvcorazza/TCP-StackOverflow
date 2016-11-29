@@ -5,7 +5,7 @@ import java.util.Date;
 public abstract class Post {
 	
 	private String text;
-	private int id_author;		//id do usuario que fez o post
+	private int idAuthor;		//id do usuario que fez o post
 	private Date date;
 
 	public String getText() {
@@ -17,11 +17,11 @@ public abstract class Post {
 	}
 
 	public int getId_author() {
-		return id_author;
+		return idAuthor;
 	}
 
 	public void setId_author(int id_author) {
-		this.id_author = id_author;
+		this.idAuthor = id_author;
 	}
 
 	public Date getDate() {
