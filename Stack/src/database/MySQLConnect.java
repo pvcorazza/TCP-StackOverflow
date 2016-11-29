@@ -13,13 +13,13 @@ public class MySQLConnect{
 		Connection conn = null;
 		try{
 			
-			String url1 = "jdbc:mysql://localhost:3306/stackoverflow";
-	        String user = "root";
-	        String password = "";
+			String url1 = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
+	        String user = "sql9146901";
+	        String password = "tPcthmKbZt";
 	        
 	        conn = DriverManager.getConnection(url1, user, password);
 	        if (conn != null) {
-                System.out.println("Connected to the database test1");
+                System.out.println("Connected to the database FREESQLDATABASE");
             }
 	        
 			

@@ -8,7 +8,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		MySQLConnect connect = new MySQLConnect();
-		connect.connect("as","dfgbs");
+		connect.connect("teste","hostinger");
 	}
 
 }
