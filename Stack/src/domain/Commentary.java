@@ -1,6 +1,6 @@
 package domain;
 
-public class Comment extends Post {
+public class Commentary extends Post {
 
 	int id;
 

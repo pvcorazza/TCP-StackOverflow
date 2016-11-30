@@ -2,16 +2,26 @@ package dao.interfaces;
 
 import java.sql.SQLException;
 
+import database.exception.DatabaseException;
 import domain.Answer;
 
+/**
+ * This interface handles the interaction with the table that contains all answers of a question
+ *
+ */
 public interface AnswerDAOInterface {
 	
-	void insert (Answer answer);
-	void update (Answer answer);
-	void delete (Answer answer);
+	int  insert (Answer answer) throws DatabaseException;
 	
-	Answer findByID(Integer id);
+	void update (Answer answer) throws DatabaseException;
 	
-	void connect() throws SQLException;
+	void delete (Answer answer) throws DatabaseException;
+	void delete (Integer id) throws DatabaseException;
+	
+	Answer select(Integer answerId) throws DatabaseException;
+	Answer select(Integer answerId,Integer userId) throws DatabaseException;
+	Answer select(Integer answerId,Integer userId,Integer id_question) throws DatabaseException;
+	
+	
 
 }
