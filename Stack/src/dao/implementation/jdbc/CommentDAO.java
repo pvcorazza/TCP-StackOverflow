@@ -1,4 +1,4 @@
-package DAO.implementation.jdbc;
+package dao.implementation.jdbc;
 
 import java.sql.SQLException;
 
@@ -9,8 +9,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.UserDataHandler;
-
-import DAO.CommentDAOInterface;
+import dao.interfaces.CommentDAOInterface;
 
 public class CommentDAO implements CommentDAOInterface {
 	

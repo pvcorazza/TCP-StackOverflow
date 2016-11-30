@@ -20,9 +20,39 @@ public class User {
 		public int getPermission(){
 			return this.permission;
 		}
+		
+		public static Permission createPermission(int i){
+			switch (i) {
+				case 0:
+					return Permission.NOT_AUTHENTICATED;
+			
+				case 1:
+					return Permission.AUTHENTICATED;
+					
+				case 2:
+					return Permission.MODERATOR;
+					
+				case 3:
+					return Permission.ADMINISTRATOR;
+					
+				default:
+				return Permission.NOT_AUTHENTICATED;
+			}
+		}
 	}
 	
 	
+	
+	public User(int id, String username, String password, Boolean blocked, Permission permission) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.blocked = blocked;
+		this.permission = permission;
+	}
+
+
 	public User(String username, String password, Permission permission) {
 		super();
 		this.username = username;

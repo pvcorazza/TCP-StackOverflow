@@ -1,8 +1,8 @@
-package DAO.implementation.jdbc;
+package dao.implementation.jdbc;
 
 import java.sql.SQLException;
 
-import DAO.QuestionDAOInterface;
+import dao.interfaces.QuestionDAOInterface;
 import domain.Question;
 
 public class QuestionDAO implements QuestionDAOInterface {
