@@ -2,22 +2,10 @@ package dao.implementation.jdbc;
 
 import java.sql.SQLException;
 
-import org.w3c.dom.Comment;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.UserDataHandler;
 import dao.interfaces.CommentDAOInterface;
 
 public class CommentDAO implements CommentDAOInterface {
-	
-	private String url1 = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
-	private String user = "sql9146901";
-	private String password = "tPcthmKbZt";
-	
-	private final String TABLE = "question_comment";
+
 
 	@Override
 	public void insert(domain.Comment answer) {

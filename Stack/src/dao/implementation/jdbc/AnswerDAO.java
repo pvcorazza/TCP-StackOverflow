@@ -5,12 +5,7 @@ import java.sql.SQLException;
 import dao.interfaces.AnswerDAOInterface;
 import domain.Answer;
 
-public class AnswerDAO implements AnswerDAOInterface {
-	
-	private String url1 = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
-	private String user = "sql9146901";
-	private String password = "tPcthmKbZt";
-	private final String TABLE = "answer";
+public class AnswerDAO implements AnswerDAOInterface {	
 
 	@Override
 	public void insert(Answer answer) {

@@ -1,7 +1,5 @@
 package dao.interfaces;
 
-import java.sql.SQLException;
-
 import domain.User;
 import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;

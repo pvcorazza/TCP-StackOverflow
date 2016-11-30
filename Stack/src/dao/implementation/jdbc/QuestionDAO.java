@@ -6,12 +6,8 @@ import dao.interfaces.QuestionDAOInterface;
 import domain.Question;
 
 public class QuestionDAO implements QuestionDAOInterface {
+		
 	
-	private String url1 = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
-	private String user = "sql9146901";
-	private String password = "tPcthmKbZt";
-	
-	private final String TABLE = "question";
 
 	@Override
 	public void insert(Question answer) {
