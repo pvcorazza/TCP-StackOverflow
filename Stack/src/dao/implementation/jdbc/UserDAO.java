@@ -53,7 +53,7 @@ public class UserDAO implements UserDAOInterface {
 
 		catch (MySQLIntegrityConstraintViolationException e) {
 			throw new DatabaseUserDuplicated();
-			
+
 		} catch (SQLException e) {
 			throw new DatabaseException("Impossivel inserir usuário");
 		}
@@ -82,11 +82,9 @@ public class UserDAO implements UserDAOInterface {
 			stmt.close();
 			conn.close();
 
-		} 
-		catch (DatabaseConnectionException d) {
+		} catch (DatabaseConnectionException d) {
 			System.out.println(d);
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new DatabaseUserDuplicated("Não foi possível atualizar o usuário");
@@ -105,6 +103,37 @@ public class UserDAO implements UserDAOInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public User select(String username) throws UserNotFoundException {
+
+		try {
+
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+
+			String selectSQL = "SELECT * FROM " + ConnectionFactory.USER_TABLE + " WHERE username = ?";
+
+			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				User user = new User(rs.getInt("id"), rs.getString("username"), null,
+						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
+
+				return user;
+			}
+
+			stmt.close();
+			conn.close();
+
+		} catch (Exception e) {
+			throw new UserNotFoundException("Usuário não encontrado.");
+		}
+		return null;
+	}
+
 
 	@Override
 	public User select(String username, String password) throws UserNotFoundException {
@@ -132,7 +161,7 @@ public class UserDAO implements UserDAOInterface {
 			conn.close();
 
 		} catch (Exception e) {
-			throw new UserNotFoundException("Não foi possível fazer login. Usuário não encontrado.");
+			throw new UserNotFoundException("Usuário não encontrado.");
 		}
 		return null;
 	}

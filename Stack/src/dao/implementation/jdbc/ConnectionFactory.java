@@ -11,10 +11,10 @@ public class ConnectionFactory {
 	static final String URL = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
 	static final String USER = "sql9146901";
 	static final String PASSWORD = "tPcthmKbZt";
-	static final String USER_TABLE = "user";
-	static final String ANSWER_TABLE = "answer";
-	static final String QUESTION_TABLE = "question";
-	static final String COMMENT_TABLE = "question_comment";
+	public static final String USER_TABLE = "user";
+	public static final String ANSWER_TABLE = "answer";
+	public static final String QUESTION_TABLE = "question";
+	public static final String COMMENT_TABLE = "question_comment";
 	
 	//Retorna uma nova conexão
 	public Connection getConnection() throws DatabaseConnectionException {

@@ -1,20 +1,10 @@
 package domain;
 
-import java.sql.SQLException;
 import java.util.Scanner;
-
-import dao.implementation.jdbc.UserDAO;
-import database.exception.DatabaseConnectionException;
-import database.exception.DatabaseException;
-import database.exception.DatabaseUserDuplicated;
-import domain.User.Permission;
-import exceptions.userDAO.UserNotFoundException;
 
 public class Main {
 
 	public static void main(String[] args) {
-
-		User user = null;
 
 		int opcao;
 		Scanner scanner = new Scanner(System.in);
@@ -27,75 +17,25 @@ public class Main {
 			System.out.print("Digite a opção desejada: ");
 			opcao = scanner.nextInt();
 
-			String username;
-			String password;
-			UserDAO userDAO = new UserDAO();
+			Management m = new Management();
 
 			switch (opcao) {
 
 			// Criar usuário
 			case 1:
-
-				System.out.print("Digite o nome do usuário: ");
-				username = scanner.next();
-				System.out.print("Digite a senha: ");
-				password = scanner.next();
-
-				user = new User(username, password, Permission.AUTHENTICATED);
-
-				try {
-					int userID = userDAO.insert(user);
-					user.setId(userID);
-					System.out.print("Usuario inserido\n");
-				} catch (DatabaseUserDuplicated e) {
-					System.out.println(e);
-				} catch (DatabaseConnectionException e) {
-					e.getMessage();
-				} catch (DatabaseException e) {
-					e.printStackTrace();
-				}	
-				
+				m.createUser();
 				break;
 
 			// Update usuário
 			case 2:
 
-				if (user != null) {
-					user.setPermission(User.Permission.ADMINISTRATOR);
-					user.setBlocked(true);
-					try {
-						userDAO.update(user);
-						System.out.println("Realizou update\n");
-					} catch (DatabaseUserDuplicated e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					finally {
-						break;
-					}
-				}
-			
+				m.updateUser();
+				break;
 
 			// Login
 			case 3:
 
-				System.out.print("Digite o nome do usuário: ");
-				username = scanner.next();
-				System.out.print("Digite a senha: ");
-				password = scanner.next();
-
-				try {
-					User loggedUser = userDAO.select(username, password);
-					System.out.println("Login realizado");
-					System.out.println("Id: " + loggedUser.getId());
-					System.out.println("username: " + loggedUser.getUsername());
-					System.out.println("Password: " + loggedUser.getPassword());
-					System.out.println("Blocked: " + loggedUser.getBlocked());
-					System.out.println("Permission: " + loggedUser.getPermission().getPermission());
-				} catch (UserNotFoundException e) {
-
-					e.printStackTrace();
-				}
+				m.login();
 				break;
 
 			case 0:

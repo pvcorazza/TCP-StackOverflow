@@ -60,6 +60,19 @@ public class User {
 		this.permission = permission;
 	}
 	
+	public User(int id, Permission permission) {
+		super();
+		this.id = id;
+		this.permission = permission;
+	}
+	
+	
+	public User(int id, Boolean blocked) {
+		super();
+		this.id = id;
+		this.blocked = blocked;
+	}
+	
 	
 	public User(Permission permission) {
 		super();
