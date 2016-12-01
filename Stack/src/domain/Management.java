@@ -15,16 +15,10 @@ public class Management {
 	private String password;
 	private Scanner scanner1;
 
-	public void createUser() {
+	public void createUser(User user) {
 
 		UserDAO userDAO = new UserDAO();
 		scanner1 = new Scanner(System.in);
-		System.out.print("Digite o nome do usuário: ");
-		username = scanner1.next();
-		System.out.print("Digite a senha: ");
-		password = scanner1.next();
-
-		User user = new User(username, password, Permission.AUTHENTICATED);
 
 		try {
 			int userID = userDAO.insert(user);
@@ -39,22 +33,23 @@ public class Management {
 		}
 	}
 
-	public void updateUser() {
+	public void updateUser(String username) {
 
-		User user;
+		User updatedUser;
 		UserDAO userDAO = new UserDAO();
 		scanner1 = new Scanner(System.in);
-		System.out.print("Digite o nome do usuário: ");
-		username = scanner1.next();
 
 		int option;
 
 		try {
-			user = userDAO.select(username);
+			updatedUser = userDAO.select(username);
+			
+			if (updatedUser != null) {
+			
 			System.out.println("Usuário encontrado");
 
 			do {
-				if (user.getBlocked() == true) {
+				if (updatedUser.getBlocked() == true) {
 					System.out.println("1 - Desbloquear usuário");
 				} else {
 					System.out.println("1 - Bloquear usuário");
@@ -66,8 +61,8 @@ public class Management {
 
 				switch (option) {
 				case 1:
-					user.setBlocked(!user.getBlocked());
-					userDAO.update(user);
+					updatedUser.setBlocked(!updatedUser.getBlocked());
+					userDAO.update(updatedUser);
 					System.out.println("Operação realizada com sucesso");
 					break;
 
@@ -81,18 +76,18 @@ public class Management {
 
 					switch (privilege) {
 					case 1:
-						user.setPermission(User.Permission.AUTHENTICATED);
-						userDAO.update(user);
+						updatedUser.setPermission(User.Permission.AUTHENTICATED);
+						userDAO.update(updatedUser);
 						System.out.println("Operação realizada com sucesso");
 						break;
 					case 2:
-						user.setPermission(User.Permission.MODERATOR);
-						userDAO.update(user);
+						updatedUser.setPermission(User.Permission.MODERATOR);
+						userDAO.update(updatedUser);
 						System.out.println("Operação realizada com sucesso");
 						break;
 					case 3:
-						user.setPermission(User.Permission.ADMINISTRATOR);
-						userDAO.update(user);
+						updatedUser.setPermission(User.Permission.ADMINISTRATOR);
+						userDAO.update(updatedUser);
 						System.out.println("Operação realizada com sucesso");
 						break;
 					default:
@@ -107,7 +102,10 @@ public class Management {
 
 				}
 
-			} while (option != 0);
+			} while (option != 0); }
+			else {
+				System.out.println("Usuário não encontrado.");
+			}
 
 		} catch (UserNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -119,7 +117,7 @@ public class Management {
 
 	}
 	
-	void login() {
+	public User login() {
 		
 		scanner1 = new Scanner(System.in);
 		UserDAO userDAO = new UserDAO();
@@ -136,9 +134,12 @@ public class Management {
 			System.out.println("Password: " + loggedUser.getPassword());
 			System.out.println("Blocked: " + loggedUser.getBlocked());
 			System.out.println("Permission: " + loggedUser.getPermission().getPermission());
+			return loggedUser;
 		} catch (UserNotFoundException e) {
 
 			e.printStackTrace();
 		}
+		return null;
+		
 	}
 }
