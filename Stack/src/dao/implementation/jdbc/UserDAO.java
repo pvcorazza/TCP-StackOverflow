@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import dao.interfaces.UserDAOInterface;
+import database.exception.DatabaseConnectionException;
 import domain.User;
 import domain.User.Permission;
 import exceptions.userDAO.UserExceptionDAO;
@@ -15,7 +16,7 @@ import exceptions.userDAO.UserNotFoundException;
 public class UserDAO implements UserDAOInterface {
 
 	@Override
-	public int insert(User user) throws UserNotFoundException {
+	public int insert(User user) throws UserExceptionDAO {
 
 		int generatedKey = 0;
 
@@ -45,11 +46,14 @@ public class UserDAO implements UserDAOInterface {
 
 			stmt.close();
 			conn.close();
+		}
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new UserNotFoundException("Usuário não encontrado");
+		catch (DatabaseConnectionException d) {
+			System.out.println(d);
+		}
+
+		catch (SQLException e) {
+			throw new UserExceptionDAO();
 		}
 
 		return generatedKey;
@@ -76,7 +80,11 @@ public class UserDAO implements UserDAOInterface {
 			stmt.close();
 			conn.close();
 
-		} catch (SQLException e) {
+		} 
+		catch (DatabaseConnectionException d) {
+			System.out.println(d);
+		}
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new UserExceptionDAO("Não foi possível atualizar o usuário");
@@ -117,10 +125,9 @@ public class UserDAO implements UserDAOInterface {
 
 				return user;
 			}
-			
+
 			stmt.close();
 			conn.close();
-
 
 		} catch (Exception e) {
 			throw new UserNotFoundException("Não foi possível fazer login. Usuário não encontrado.");

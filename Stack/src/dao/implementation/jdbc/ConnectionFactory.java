@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import database.exception.DatabaseConnectionException;
+
 public class ConnectionFactory {
 	
 	static final String URL = "jdbc:mysql://sql9.freesqldatabase.com:3306/sql9146901";
@@ -15,11 +17,11 @@ public class ConnectionFactory {
 	static final String COMMENT_TABLE = "question_comment";
 	
 	//Retorna uma nova conexão
-	public Connection getConnection() {
+	public Connection getConnection() throws DatabaseConnectionException {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DatabaseConnectionException();
 		}
 	}
 }

@@ -10,6 +10,11 @@ public class UserExceptionDAO extends Exception {
 
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public UserExceptionDAO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -20,5 +25,11 @@ public class UserExceptionDAO extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return "Usuário já existe no banco de dados ";
+	}
+	
+	
 	
 }

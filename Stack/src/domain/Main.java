@@ -43,16 +43,16 @@ public class Main {
 				try {
 					int userID = userDAO.insert(user);
 					user.setId(userID);
-					// System.out.print("Usuario inserido\n");
+					System.out.print("Usuario inserido\n");
 				} catch (UserExceptionDAO e) {
 
-					e.printStackTrace();
+					System.out.println(e);
 				}
 				break;
 
 			// Update usuário
 			case 2:
-				
+
 				if (user != null) {
 					user.setPermission(User.Permission.ADMINISTRATOR);
 					user.setBlocked(true);
@@ -65,9 +65,8 @@ public class Main {
 					}
 				}
 				break;
-				
-				
-			//Login
+
+			// Login
 			case 3:
 
 				System.out.print("Digite o nome do usuário: ");
@@ -75,7 +74,6 @@ public class Main {
 				System.out.print("Digite a senha: ");
 				password = scanner.next();
 
-				
 				try {
 					User loggedUser = userDAO.select(username, password);
 					System.out.println("Login realizado");
@@ -88,13 +86,13 @@ public class Main {
 
 					e.printStackTrace();
 				}
-			break;
-			
+				break;
+
 			case 0:
 				System.out.println("Saindo...");
-			break;
-			
-			default: 
+				break;
+
+			default:
 				System.out.println("Digite uma opção válida.");
 			}
 
