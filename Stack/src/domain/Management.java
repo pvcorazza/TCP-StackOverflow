@@ -33,8 +33,11 @@ public class Management {
 		}
 	}
 
-	public void updateUser(String username) {
+	public void updateUser(User loggedUser, String username) {
 
+		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR || loggedUser.getPermission() == User.Permission.MODERATOR) {
+			
+	
 		User updatedUser;
 		UserDAO userDAO = new UserDAO();
 		scanner1 = new Scanner(System.in);
@@ -105,7 +108,7 @@ public class Management {
 			} while (option != 0); }
 			else {
 				System.out.println("Usuário não encontrado.");
-			}
+			} 
 
 		} catch (UserNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -113,6 +116,9 @@ public class Management {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} }
+		else {
+			System.out.println("Você não tem permissão para exeutar essa ação.");
 		}
 
 	}

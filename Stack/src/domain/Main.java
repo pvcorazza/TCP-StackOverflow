@@ -38,7 +38,7 @@ public class Main {
 
 					case 1:
 						System.out.print("Digite o nome do usuário: ");
-						m.updateUser(scanner.next());
+						m.updateUser(loggedUser, scanner.next());
 						break;
 
 					case 0:
