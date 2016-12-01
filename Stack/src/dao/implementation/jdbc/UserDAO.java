@@ -16,7 +16,7 @@ import exceptions.userDAO.UserNotFoundException;
 public class UserDAO implements UserDAOInterface {
 
 	@Override
-	public int insert(User user) throws UserExceptionDAO {
+	public int insert(User user) throws UserExceptionDAO, DatabaseConnectionException {
 
 		int generatedKey = 0;
 
@@ -46,10 +46,6 @@ public class UserDAO implements UserDAOInterface {
 
 			stmt.close();
 			conn.close();
-		}
-
-		catch (DatabaseConnectionException d) {
-			System.out.println(d);
 		}
 
 		catch (SQLException e) {

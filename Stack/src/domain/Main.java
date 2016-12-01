@@ -1,8 +1,10 @@
 package domain;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import dao.implementation.jdbc.UserDAO;
+import database.exception.DatabaseConnectionException;
 import domain.User.Permission;
 import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;
@@ -45,7 +47,8 @@ public class Main {
 					user.setId(userID);
 					System.out.print("Usuario inserido\n");
 				} catch (UserExceptionDAO e) {
-
+					System.out.println(e);
+				} catch (DatabaseConnectionException e) {
 					System.out.println(e);
 				}
 				break;

@@ -1,5 +1,8 @@
 package dao.interfaces;
 
+import java.sql.SQLException;
+
+import database.exception.DatabaseConnectionException;
 import domain.User;
 import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;
@@ -12,7 +15,7 @@ import exceptions.userDAO.UserNotFoundException;
  */
 public interface UserDAOInterface {
 	
-	int insert (User answer) throws UserExceptionDAO ;
+	int insert (User answer) throws UserExceptionDAO, DatabaseConnectionException, SQLException ;
 	void update (User answer) throws UserExceptionDAO;
 	void delete (User answer) throws UserExceptionDAO;
 	
