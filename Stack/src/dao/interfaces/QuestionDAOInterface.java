@@ -7,7 +7,7 @@ import domain.Question;
 
 public interface QuestionDAOInterface {
 	
-	void insert (Question question) throws DatabaseException;;
+	int insert (Question question) throws DatabaseException;;
 	void update (Question question) throws DatabaseException;;
 	
 	void delete (Question question) throws DatabaseException;;

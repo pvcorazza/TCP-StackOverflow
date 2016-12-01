@@ -1,8 +1,14 @@
 package dao.implementation.jdbc;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import dao.interfaces.QuestionDAOInterface;
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Question;
 
@@ -22,12 +28,55 @@ public class QuestionDAO implements QuestionDAOInterface {
 	private static final String COLUMN_TAG4 = "tag4";
 	private static final String COLUMN_TAG5 = "tag5";
 	
-	
 	@Override
-	public void insert(Question question) throws DatabaseException {
-		// TODO Auto-generated method stub
+	public int insert(Question question) throws DatabaseException {
 		
+		int generatedKey = 0;
+		
+		String sqlInsert = "insert into " + TABLE + " VALUES (NULL,?,?,?,?,?,?,?,?,?)";
+		
+		try {
+			
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+			
+			stmt.setInt(1, question.getId_author());
+			stmt.setString(2, question.getTitle());
+			stmt.setString(3, question.getText());
+			stmt.setDate(4, (Date) question.getDate());
+			
+			stmt.setString(5, question.getTag1());
+			stmt.setString(6, question.getTag2());
+			stmt.setString(7, question.getTag3());
+			stmt.setString(8, question.getTag4());
+			stmt.setString(9, question.getTag5());
+			
+
+			stmt.execute();
+
+			ResultSet rs = stmt.getGeneratedKeys();
+
+			if (rs.next()) {
+				generatedKey = rs.getInt(1);
+			}
+
+			System.out.println("Inserted record's ID: " + generatedKey);
+
+			stmt.close();
+			conn.close();
+		} catch (DatabaseConnectionException e) {
+			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			
+		}
+		catch (SQLException e) {
+			throw new DatabaseException("Não foi possível inserir usuário");
+		}
+		
+		return generatedKey;
 	}
+	
 	@Override
 	public void update(Question question) throws DatabaseException {
 		// TODO Auto-generated method stub
@@ -64,6 +113,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 
 
