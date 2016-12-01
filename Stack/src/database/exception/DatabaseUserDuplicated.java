@@ -1,4 +1,4 @@
-package exceptions.userDAO;
+package database.exception;
 
 import dao.interfaces.UserDAOInterface;
 
@@ -6,7 +6,7 @@ import dao.interfaces.UserDAOInterface;
  * Main class for all exceptions derived from {@link UserDAOInterface} implementation
  *
  */
-public class UserExceptionDAO extends Exception {
+public class DatabaseUserDuplicated extends Exception {
 
 	
 	
@@ -15,21 +15,13 @@ public class UserExceptionDAO extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public UserExceptionDAO() {
-		super();
+	public DatabaseUserDuplicated() {
+		super("Usuário já existe no banco de dados");
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserExceptionDAO(String message) {
+	public DatabaseUserDuplicated(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public String toString() {
-		return "Usuário já existe no banco de dados ";
-	}
-	
-	
-	
 }

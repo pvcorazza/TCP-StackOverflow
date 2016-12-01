@@ -3,8 +3,9 @@ package dao.interfaces;
 import java.sql.SQLException;
 
 import database.exception.DatabaseConnectionException;
+import database.exception.DatabaseException;
+import database.exception.DatabaseUserDuplicated;
 import domain.User;
-import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;
 
 /**
@@ -15,9 +16,9 @@ import exceptions.userDAO.UserNotFoundException;
  */
 public interface UserDAOInterface {
 	
-	int insert (User answer) throws UserExceptionDAO, DatabaseConnectionException, SQLException ;
-	void update (User answer) throws UserExceptionDAO;
-	void delete (User answer) throws UserExceptionDAO;
+	int insert (User answer) throws DatabaseUserDuplicated, DatabaseException ;
+	void update (User answer) throws DatabaseUserDuplicated;
+	void delete (User answer) throws DatabaseUserDuplicated;
 	
 	User select(Integer id) throws UserNotFoundException;
 	User select(String username, String password) throws UserNotFoundException;

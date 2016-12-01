@@ -1,6 +1,8 @@
 package exceptions.userDAO;
 
-public class UserNotFoundException extends UserExceptionDAO {
+import database.exception.DatabaseUserDuplicated;
+
+public class UserNotFoundException extends DatabaseUserDuplicated {
 
 	
 	

@@ -1,6 +1,8 @@
 package exceptions.userDAO;
 
-public class BlockedUserException extends UserExceptionDAO {
+import database.exception.DatabaseUserDuplicated;
+
+public class BlockedUserException extends DatabaseUserDuplicated {
 
 	
 	

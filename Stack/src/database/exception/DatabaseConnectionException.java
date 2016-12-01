@@ -7,11 +7,16 @@ public class DatabaseConnectionException extends DatabaseException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public String toString() {
-		return "Impossivel conectar ao banco de dados ";
+	public DatabaseConnectionException() {
+		super("Impossível conectar-se ao banco de dados");
+		// TODO Auto-generated constructor stub
 	}
-	
+
+	public DatabaseConnectionException(String arg0) {
+		super(arg0);
+		// TODO Auto-generated constructor stub
+	}
+
 	
 
 }

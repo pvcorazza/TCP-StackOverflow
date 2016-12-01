@@ -6,17 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import dao.interfaces.UserDAOInterface;
 import database.exception.DatabaseConnectionException;
+import database.exception.DatabaseException;
+import database.exception.DatabaseUserDuplicated;
 import domain.User;
 import domain.User.Permission;
-import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;
 
 public class UserDAO implements UserDAOInterface {
 
 	@Override
-	public int insert(User user) throws UserExceptionDAO, DatabaseConnectionException {
+	public int insert(User user) throws DatabaseConnectionException, DatabaseUserDuplicated, DatabaseException {
 
 		int generatedKey = 0;
 
@@ -48,8 +51,11 @@ public class UserDAO implements UserDAOInterface {
 			conn.close();
 		}
 
-		catch (SQLException e) {
-			throw new UserExceptionDAO();
+		catch (MySQLIntegrityConstraintViolationException e) {
+			throw new DatabaseUserDuplicated();
+			
+		} catch (SQLException e) {
+			throw new DatabaseException("Impossivel inserir usuário");
 		}
 
 		return generatedKey;
@@ -57,7 +63,7 @@ public class UserDAO implements UserDAOInterface {
 	}
 
 	@Override
-	public void update(User user) throws UserExceptionDAO {
+	public void update(User user) throws DatabaseUserDuplicated {
 
 		try {
 			Connection conn = new ConnectionFactory().getConnection();
@@ -83,7 +89,7 @@ public class UserDAO implements UserDAOInterface {
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new UserExceptionDAO("Não foi possível atualizar o usuário");
+			throw new DatabaseUserDuplicated("Não foi possível atualizar o usuário");
 		}
 
 	}

@@ -5,8 +5,9 @@ import java.util.Scanner;
 
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
+import database.exception.DatabaseException;
+import database.exception.DatabaseUserDuplicated;
 import domain.User.Permission;
-import exceptions.userDAO.UserExceptionDAO;
 import exceptions.userDAO.UserNotFoundException;
 
 public class Main {
@@ -46,11 +47,14 @@ public class Main {
 					int userID = userDAO.insert(user);
 					user.setId(userID);
 					System.out.print("Usuario inserido\n");
-				} catch (UserExceptionDAO e) {
+				} catch (DatabaseUserDuplicated e) {
 					System.out.println(e);
 				} catch (DatabaseConnectionException e) {
-					System.out.println(e);
-				}
+					e.getMessage();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}	
+				
 				break;
 
 			// Update usuário
@@ -62,12 +66,15 @@ public class Main {
 					try {
 						userDAO.update(user);
 						System.out.println("Realizou update\n");
-					} catch (UserExceptionDAO e) {
+					} catch (DatabaseUserDuplicated e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					finally {
+						break;
+					}
 				}
-				break;
+			
 
 			// Login
 			case 3:
