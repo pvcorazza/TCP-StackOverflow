@@ -1,37 +1,124 @@
 package dao.implementation.jdbc;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import dao.interfaces.AnswerDAOInterface;
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Answer;
+
 
 public class AnswerDAO implements AnswerDAOInterface {
 	
 	private static final String TABLE = "answer";
 	
 	private static final String COLUMN_ID = "id";
-	private static final String COLUMN_ID_USER = "id_user";
+	private static final String COLUMN_ID_AUTHOR = "id_author";
 	private static final String COLUMN_ID_QUESTION= "id_question";
 	private static final String COLUMN_TEXT_ANSWER = "text_answer";
-	private static final String COLUMN_TITLE = "title";
-	private static final String COLUMN_DATE = "date_question";
+	private static final String COLUMN_DATE = "date_answer";
 	private static final String COLUMN_BEST_ANSWER = "best_answer";
 	
 	
 	@Override
 	public int insert(Answer answer) throws DatabaseException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int generatedKey = -1;
+		
+		String sqlInsert = "insert into " + TABLE + " VALUES (NULL,?,?,?,?,?)";
+		
+		try {
+			
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);			
+			
+			stmt.setInt(1, answer.getId_author());
+			stmt.setInt(2, answer.getId_question());
+			stmt.setString(3, answer.getText());
+			stmt.setDate(4, new java.sql.Date(answer.getDate().getTime()));
+			stmt.setBoolean(5, answer.getBestAnswer());
+			
+			System.out.println(stmt.toString());
+			stmt.execute();
+
+			ResultSet rs = stmt.getGeneratedKeys();
+
+			if (rs.next()) {
+				generatedKey = rs.getInt(1);
+			}
+
+			System.out.println("Inserted record's ID: " + generatedKey);
+
+			stmt.close();
+			conn.close();
+			
+		} catch (DatabaseConnectionException e) {
+			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível inserir uma resposta");
+		}
+		return generatedKey;
+
 	}
 	@Override
 	public void update(Answer answer) throws DatabaseException {
-		// TODO Auto-generated method stub
+		
+		try {
+			
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			String sql = "UPDATE "+TABLE+" SET "+
+					COLUMN_TEXT_ANSWER+"=?,"+
+					COLUMN_BEST_ANSWER+"=? "+
+					"WHERE "+
+					COLUMN_ID+"=?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+			stmt.setString(1, answer.getText());
+			stmt.setBoolean(2, answer.getBestAnswer());
+			stmt.setInt(3, answer.getId());
+
+			System.out.println(stmt.toString());
+			stmt.executeUpdate();
+
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possivel atualizar");
+		}
+		
 		
 	}
 	@Override
 	public void delete(Answer answer) throws DatabaseException {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM "+TABLE+
+				" WHERE "+COLUMN_ID+"=?";
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, answer.getId());
+			stmt.executeUpdate();
+			
+			System.out.println("Row id deleted = "+answer.getId());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível deletar a resposta");
+		}
 		
 	}
 	@Override
@@ -41,19 +128,71 @@ public class AnswerDAO implements AnswerDAOInterface {
 	}
 	@Override
 	public Answer select(Integer answerId) throws DatabaseException {
-		// TODO Auto-generated method stub
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id=?";
+			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+			stmt.setInt(1, answerId);
+			ResultSet rs = stmt.executeQuery();
+			System.out.println(stmt.toString());
+			
+			if(rs.next()){
+				Answer answer = new Answer();
+				answer.setId(rs.getInt(COLUMN_ID));
+				answer.setId_author(rs.getInt(COLUMN_ID_AUTHOR));
+				answer.setId_question(rs.getInt(COLUMN_ID_QUESTION));
+				answer.setText(rs.getString(COLUMN_TEXT_ANSWER));
+				return answer;
+			}
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível recuperar a resposta");
+		}
+		
 		return null;
 	}
+
 	@Override
-	public Answer select(Integer answerId, Integer userId) throws DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Answer> selectAll(int questionId) throws DatabaseException {
+		ArrayList<Answer> answers = new ArrayList<>();
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id_question=?";
+			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+
+			stmt.setInt(1, questionId);
+			
+			ResultSet rs = stmt.executeQuery();
+			System.out.println(stmt.toString());
+			
+			while(rs.next()){
+				
+				Answer answer = new Answer();
+				answer.setId(rs.getInt(COLUMN_ID));
+				answer.setId_author(rs.getInt(COLUMN_ID_AUTHOR));
+				answer.setId_question(rs.getInt(COLUMN_ID_QUESTION));
+				answer.setText(rs.getString(COLUMN_TEXT_ANSWER));
+				
+				System.out.println("ID ="+answer.getId());
+				answers.add(answer);
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível recuperar a resposta");
+		}
+		return answers;
 	}
-	@Override
-	public Answer select(Integer answerId, Integer userId, Integer id_question) throws DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 
