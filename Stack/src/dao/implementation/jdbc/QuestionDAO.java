@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import dao.interfaces.QuestionDAOInterface;
 import database.exception.DatabaseConnectionException;
@@ -33,8 +34,9 @@ public class QuestionDAO implements QuestionDAOInterface {
 		
 		int generatedKey = 0;
 		
-		String sqlInsert = "insert into " + TABLE + " VALUES (NULL,?,?,?,?,?,?,?,?,?)";
+		String sqlInsert = "insert into " + TABLE + " VALUES (NULL,?,?,?,?,?,?,?,?,?,?)";
 		
+	
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
@@ -42,18 +44,21 @@ public class QuestionDAO implements QuestionDAOInterface {
 			
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 			
+	
 			stmt.setInt(1, question.getId_author());
 			stmt.setString(2, question.getTitle());
 			stmt.setString(3, question.getText());
-			stmt.setDate(4, (Date) question.getDate());
 			
-			stmt.setString(5, question.getTag1());
-			stmt.setString(6, question.getTag2());
-			stmt.setString(7, question.getTag3());
-			stmt.setString(8, question.getTag4());
-			stmt.setString(9, question.getTag5());
 			
-
+			
+			stmt.setDate(4, new java.sql.Date(question.getDate().getTime()));
+			stmt.setBoolean(5, question.getClosed());
+			stmt.setString(6, question.getTag1());
+			stmt.setString(7, question.getTag2());
+			stmt.setString(8, question.getTag3());
+			stmt.setString(9, question.getTag4());
+			stmt.setString(10, question.getTag5());
+		
 			stmt.execute();
 
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -71,7 +76,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 			
 		}
 		catch (SQLException e) {
-			throw new DatabaseException("Não foi possível inserir usuário");
+			e.printStackTrace();
 		}
 		
 		return generatedKey;

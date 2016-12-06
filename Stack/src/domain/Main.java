@@ -1,5 +1,9 @@
 package domain;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import domain.User.Permission;
@@ -13,7 +17,11 @@ public class Main {
 		Management m = new Management();
 		String username;
 		String password;
+		String title;
+		String text;
+		String tag;
 		User newUser, loggedUser;
+		Question newQuestion;
 
 		do {
 			System.out.println("1 - Login");
@@ -31,6 +39,7 @@ public class Main {
 				// Update usuário
 				do {
 					System.out.println("1 - Definir permissão de um usuário");
+					System.out.println("2 - Criar questão");
 					System.out.println("0 - Sair");
 					System.out.println("Digite a opção desejada: ");
 					opcao1 = scanner.nextInt();
@@ -40,7 +49,19 @@ public class Main {
 						System.out.print("Digite o nome do usuário: ");
 						m.updateUser(loggedUser, scanner.next());
 						break;
-
+						
+					case 2:
+						System.out.print("Digite um título para a questão: ");
+						title = scanner.next();
+						System.out.print("Digite a questão: ");
+						text = scanner.next();
+						System.out.println("Digite uma tag para a questão: ");
+						tag = scanner.next();
+						Date date = new Date(System.currentTimeMillis());
+						newQuestion = new Question(loggedUser.getId(), title, text, date, tag);
+						m.createQuestion(newQuestion);
+						break;
+						
 					case 0:
 						System.out.println("Saindo...");
 						break;

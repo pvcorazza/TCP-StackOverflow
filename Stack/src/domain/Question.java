@@ -1,5 +1,9 @@
 package domain;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Question extends Post {
 	
 	private int id;
@@ -11,6 +15,19 @@ public class Question extends Post {
 	private String tag4;
 	private String tag5;
 	
+	public Question(int userId, String title, String text, Date date, String tag1) {
+		super();
+		this.setId_author(userId);
+		this.title = title;
+		this.setText(text);
+		this.closed = false;
+		this.setDate(date);
+		this.tag1 = tag1;
+		this.tag2 = null;
+		this.tag3 = null;
+		this.tag4 = null;
+		this.tag5 = null;
+	}
 	public int getId() {
 		return id;
 	}
@@ -60,7 +77,4 @@ public class Question extends Post {
 		this.tag5 = tag5;
 	}
 	
-	
-	
-
 }

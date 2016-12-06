@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Scanner;
 
+import dao.implementation.jdbc.QuestionDAO;
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
@@ -26,6 +27,22 @@ public class Management {
 			System.out.print("Usuario inserido\n");
 		} catch (DatabaseUserDuplicated e) {
 			System.out.println(e);
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createQuestion(Question question) {
+
+		QuestionDAO questionDAO = new QuestionDAO();
+		scanner1 = new Scanner(System.in);
+
+		try {
+			int questionID = questionDAO.insert(question);
+			question.setId(questionID);
+			System.out.print("Questão criada\n");
 		} catch (DatabaseConnectionException e) {
 			e.getMessage();
 		} catch (DatabaseException e) {
