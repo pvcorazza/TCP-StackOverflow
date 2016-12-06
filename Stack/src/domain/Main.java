@@ -41,6 +41,7 @@ public class Main {
 				do {
 					System.out.println("1 - Definir permissão de um usuário");
 					System.out.println("2 - Criar questão");
+					System.out.println("3 - Buscar questão");
 					System.out.println("0 - Sair");
 					System.out.println("Digite a opção desejada: ");
 					opcao1 = scanner.nextInt();
@@ -52,16 +53,33 @@ public class Main {
 						break;
 						
 					case 2:
+						String tag1, tag2, tag3, tag4, tag5;
 						System.out.print("Digite um título para a questão: ");
 						title = scanner.next();
 						System.out.print("Digite a questão: ");
 						text = scanner.next();
-						System.out.print("Digite uma tag para a questão: ");
-						tag = scanner.next();
+						System.out.print("Digite no mínimo uma tag para a questão: ");
+						System.out.print("Digite a tag 1: ");
+						tag1 = scanner.next();
+						System.out.print("Digite a tag 2: ");
+						tag2 = scanner.next();
+						System.out.print("Digite a tag 3: ");
+						tag3 = scanner.next();
+						System.out.print("Digite a tag 4: ");
+						tag4 = scanner.next();
+						System.out.print("Digite a tag 5: ");
+						tag5 = scanner.next();
 						Date date = new Date(System.currentTimeMillis());
-						newQuestion = new Question(loggedUser.getId(), title, text, date, tag);
+						newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
 						m.createQuestion(newQuestion);
 						break;
+					case 3:
+						
+						//Buscar questão
+						System.out.println("Digite uma tag: ");
+						String searchTag;
+						searchTag = scanner.next();
+						m.searchQuestion(searchTag);
 						
 					case 0:
 						System.out.println("Saindo...");

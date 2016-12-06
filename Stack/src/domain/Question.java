@@ -15,7 +15,7 @@ public class Question extends Post {
 	private String tag4;
 	private String tag5;
 	
-	public Question(int userId, String title, String text, Date date, String tag1) {
+	public Question(int userId, String title, String text, Date date, String tag1, String tag2, String tag3, String tag4, String tag5) {
 		super();
 		this.setId_author(userId);
 		this.title = title;
@@ -23,10 +23,10 @@ public class Question extends Post {
 		this.closed = false;
 		this.setDate(date);
 		this.tag1 = tag1;
-		this.tag2 = null;
-		this.tag3 = null;
-		this.tag4 = null;
-		this.tag5 = null;
+		this.tag2 = tag2;
+		this.tag3 = tag3;
+		this.tag4 = tag4;
+		this.tag5 = tag5;
 	}
 	
 	public Question(int id, int idAuthor, String title, String text, Date date, Boolean closed, String tag1, String tag2, String tag3, String tag4,
