@@ -26,6 +26,7 @@ public class Main {
 		do {
 			System.out.println("1 - Login");
 			System.out.println("2 - Cadastro");
+			System.out.println("3 - Buscar Questão");
 			System.out.println("0 - Sair");
 			System.out.print("Digite a opção desejada: ");
 			opcao = scanner.nextInt();
@@ -55,7 +56,7 @@ public class Main {
 						title = scanner.next();
 						System.out.print("Digite a questão: ");
 						text = scanner.next();
-						System.out.println("Digite uma tag para a questão: ");
+						System.out.print("Digite uma tag para a questão: ");
 						tag = scanner.next();
 						Date date = new Date(System.currentTimeMillis());
 						newQuestion = new Question(loggedUser.getId(), title, text, date, tag);
@@ -88,6 +89,15 @@ public class Main {
 				m.createUser(newUser);
 				break;
 
+				
+			case 3:
+				
+				//Buscar questão
+				System.out.println("Digite uma tag: ");
+				String searchTag;
+				searchTag = scanner.next();
+				m.searchQuestion(searchTag);
+				
 			case 0:
 				System.out.println("Saindo...");
 				break;

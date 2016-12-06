@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.implementation.jdbc.QuestionDAO;
@@ -33,7 +34,7 @@ public class Management {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void createQuestion(Question question) {
 
 		QuestionDAO questionDAO = new QuestionDAO();
@@ -52,96 +53,120 @@ public class Management {
 
 	public void updateUser(User loggedUser, String username) {
 
-		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR || loggedUser.getPermission() == User.Permission.MODERATOR) {
-			
-	
-		User updatedUser;
-		UserDAO userDAO = new UserDAO();
-		scanner1 = new Scanner(System.in);
+		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR
+				|| loggedUser.getPermission() == User.Permission.MODERATOR) {
 
-		int option;
+			User updatedUser;
+			UserDAO userDAO = new UserDAO();
+			scanner1 = new Scanner(System.in);
 
-		try {
-			updatedUser = userDAO.select(username);
-			
-			if (updatedUser != null) {
-			
-			System.out.println("Usuário encontrado");
+			int option;
 
-			do {
-				if (updatedUser.getBlocked() == true) {
-					System.out.println("1 - Desbloquear usuário");
+			try {
+				updatedUser = userDAO.select(username);
+
+				if (updatedUser != null) {
+
+					System.out.println("Usuário encontrado");
+
+					do {
+						if (updatedUser.getBlocked() == true) {
+							System.out.println("1 - Desbloquear usuário");
+						} else {
+							System.out.println("1 - Bloquear usuário");
+						}
+						System.out.println("2 - Modificar permissão");
+						System.out.println("0 - Sair");
+						System.out.print("Digite a opção desejada: ");
+						option = scanner1.nextInt();
+
+						switch (option) {
+						case 1:
+							updatedUser.setBlocked(!updatedUser.getBlocked());
+							userDAO.update(updatedUser);
+							System.out.println("Operação realizada com sucesso");
+							break;
+
+						// Lembrar de controlar a entrada do usuário aqui pois
+						// pode
+						// entrar com um valor inválido...
+						case 2:
+							int privilege;
+							System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
+							System.out.println("Digite a opção desejada: ");
+							privilege = scanner1.nextInt();
+
+							switch (privilege) {
+							case 1:
+								updatedUser.setPermission(User.Permission.AUTHENTICATED);
+								userDAO.update(updatedUser);
+								System.out.println("Operação realizada com sucesso");
+								break;
+							case 2:
+								updatedUser.setPermission(User.Permission.MODERATOR);
+								userDAO.update(updatedUser);
+								System.out.println("Operação realizada com sucesso");
+								break;
+							case 3:
+								updatedUser.setPermission(User.Permission.ADMINISTRATOR);
+								userDAO.update(updatedUser);
+								System.out.println("Operação realizada com sucesso");
+								break;
+							default:
+								System.out.println("O valor digitado é inválido");
+
+							}
+
+							break;
+
+						default:
+							System.out.println("Digite uma opção válida.");
+
+						}
+
+					} while (option != 0);
 				} else {
-					System.out.println("1 - Bloquear usuário");
-				}
-				System.out.println("2 - Modificar permissão");
-				System.out.println("0 - Sair");
-				System.out.print("Digite a opção desejada: ");
-				option = scanner1.nextInt();
-
-				switch (option) {
-				case 1:
-					updatedUser.setBlocked(!updatedUser.getBlocked());
-					userDAO.update(updatedUser);
-					System.out.println("Operação realizada com sucesso");
-					break;
-
-				// Lembrar de controlar a entrada do usuário aqui pois pode
-				// entrar com um valor inválido...
-				case 2:
-					int privilege;
-					System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
-					System.out.println("Digite a opção desejada: ");
-					privilege = scanner1.nextInt();
-
-					switch (privilege) {
-					case 1:
-						updatedUser.setPermission(User.Permission.AUTHENTICATED);
-						userDAO.update(updatedUser);
-						System.out.println("Operação realizada com sucesso");
-						break;
-					case 2:
-						updatedUser.setPermission(User.Permission.MODERATOR);
-						userDAO.update(updatedUser);
-						System.out.println("Operação realizada com sucesso");
-						break;
-					case 3:
-						updatedUser.setPermission(User.Permission.ADMINISTRATOR);
-						userDAO.update(updatedUser);
-						System.out.println("Operação realizada com sucesso");
-						break;
-					default:
-						System.out.println("O valor digitado é inválido");
-
-					}
-
-					break;
-
-				default:
-					System.out.println("Digite uma opção válida.");
-
+					System.out.println("Usuário não encontrado.");
 				}
 
-			} while (option != 0); }
-			else {
-				System.out.println("Usuário não encontrado.");
-			} 
-
-		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} }
-		else {
+			} catch (UserNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
 			System.out.println("Você não tem permissão para exeutar essa ação.");
 		}
 
 	}
-	
+
+	public void searchQuestion(String tag) {
+
+		scanner1 = new Scanner(System.in);
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			ArrayList<Question> arrayQuestion = questionDAO.select(tag);
+			
+			for (int i=0; i<arrayQuestion.size(); i++) {
+			System.out.println("Questão encontrada");
+			System.out.println("-------------------------------");
+			System.out.println("Id: " + arrayQuestion.get(i).getId());
+			System.out.println("Título: " + arrayQuestion.get(i).getTitle());
+			System.out.println("Texto: " + arrayQuestion.get(i).getText());
+			System.out.println("-------------------------------");
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
 	public User login() {
-		
+
 		scanner1 = new Scanner(System.in);
 		UserDAO userDAO = new UserDAO();
 		System.out.print("Digite o nome do usuário: ");
@@ -163,6 +188,6 @@ public class Management {
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
 }

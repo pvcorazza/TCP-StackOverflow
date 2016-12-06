@@ -7,11 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import dao.interfaces.QuestionDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Question;
+import domain.User;
+import domain.User.Permission;
 
 
 public class QuestionDAO implements QuestionDAOInterface {
@@ -23,6 +26,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 	private static final String COLUMN_TITLE= "title";
 	private static final String COLUMN_TEXT = "text";
 	private static final String COLUMN_DATE = "date_question";
+	private static final String COLUMN_CLOSED = "closed";
 	private static final String COLUMN_TAG1 = "tag1";
 	private static final String COLUMN_TAG2 = "tag2";
 	private static final String COLUMN_TAG3 = "tag3";
@@ -117,6 +121,44 @@ public class QuestionDAO implements QuestionDAOInterface {
 	public Question select(String tag1, String tag2, String tag3, String tag4, String tag5) throws DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ArrayList<Question> select(String tag)  {
+		
+		ArrayList<Question> question = new ArrayList<Question>();
+		
+		Connection conn;
+		try {
+			conn = new ConnectionFactory().getConnection();
+		
+		System.out.println("Conexão aberta!");
+
+		String selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + " WHERE tag1 = ?";
+
+		PreparedStatement stmt = conn.prepareStatement(selectSQL);
+		stmt.setString(1, tag);
+		ResultSet rs = stmt.executeQuery();
+
+		while (rs.next()) {
+			question.add(new Question(rs.getInt(COLUMN_ID), rs.getInt(COLUMN_ID_USER),
+					rs.getString(COLUMN_TITLE), rs.getString(COLUMN_TEXT), rs.getDate(COLUMN_DATE), 
+					rs.getBoolean(COLUMN_CLOSED), rs.getString(COLUMN_TAG1), rs.getString(COLUMN_TAG2), 
+					rs.getString(COLUMN_TAG3), rs.getString(COLUMN_TAG4), rs.getString(COLUMN_TAG5)));
+		}
+		
+		stmt.close();
+		conn.close();
+		
+		return question;
+		
+		} catch (DatabaseConnectionException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+		
 	}
 	
 

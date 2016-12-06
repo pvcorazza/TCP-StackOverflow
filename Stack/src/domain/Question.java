@@ -28,6 +28,22 @@ public class Question extends Post {
 		this.tag4 = null;
 		this.tag5 = null;
 	}
+	
+	public Question(int id, int idAuthor, String title, String text, Date date, Boolean closed, String tag1, String tag2, String tag3, String tag4,
+			String tag5) {
+		this.id = id;
+		this.setId_author(idAuthor);
+		this.title = title;
+		this.setText(text);
+		this.setDate(date);
+		this.closed = closed;
+		this.tag1 = tag1;
+		this.tag2 = tag2;
+		this.tag3 = tag3;
+		this.tag4 = tag4;
+		this.tag5 = tag5;
+	}
+	
 	public int getId() {
 		return id;
 	}
