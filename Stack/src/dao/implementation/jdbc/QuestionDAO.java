@@ -134,10 +134,14 @@ public class QuestionDAO implements QuestionDAOInterface {
 		
 		System.out.println("Conexão aberta!");
 
-		String selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + " WHERE tag1 = ?";
+		String selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + " WHERE tag1 = ? or tag2 = ? or tag3 = ? or tag4 = ? or tag5 = ?";
 
 		PreparedStatement stmt = conn.prepareStatement(selectSQL);
 		stmt.setString(1, tag);
+		stmt.setString(2, tag);
+		stmt.setString(3, tag);
+		stmt.setString(4, tag);
+		stmt.setString(5, tag);
 		ResultSet rs = stmt.executeQuery();
 
 		while (rs.next()) {
