@@ -71,7 +71,6 @@ public class Main {
 						break;
 					case 3:
 
-
 					case 0:
 						System.out.println("Saindo...");
 						break;
@@ -101,20 +100,20 @@ public class Main {
 			case 3:
 
 				// Buscar questão
-				
+
 				System.out.println("1 - Tag");
 				System.out.println("2 - Título");
 				System.out.println("3 - Data");
 				System.out.println("4 - Autor");
 				System.out.println("0 - Sair");
 				System.out.print("Digite a opção desejada: ");
-				
+
 				int opcaoBuscar;
 				opcaoBuscar = scanner.nextInt();
 				ArrayList<Question> obtainedQuestions = null;
 
 				switch (opcaoBuscar) {
-				
+
 				case 1:
 					System.out.print("Digite uma tag: ");
 					String searchTag;
@@ -128,19 +127,19 @@ public class Main {
 					obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
 					break;
 				case 3:
-					
+
 					String searchDate;
 					String searchDia;
 					String searchMes;
 					String searchAno;
-					
+
 					System.out.print("Dia (dd): ");
 					searchDia = scanner.next();
 					System.out.print("Mes (mm): ");
 					searchMes = scanner.next();
 					System.out.print("Ano (aaaa): ");
 					searchAno = scanner.next();
-					
+
 					searchDate = searchAno + "/" + searchMes + "/" + searchDia;
 					obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
 					break;
@@ -153,29 +152,10 @@ public class Main {
 				case 0:
 					break;
 				}
-				
+
 				if (obtainedQuestions != null) {
-					
-					int id;
-					Question question;
-					System.out.print("Digite o id da questão que deseja visualizar: ");
-					id = scanner.nextInt();
-					question = m.getQuestion(id);
-					System.out.println("-------------------------------");
-					System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-					System.out.println("\t" + question.getText());
-					System.out.println("-------------------------------");
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+
+					m.displayQuestion();
 				}
 
 				break;

@@ -185,6 +185,22 @@ public class Management {
 		return null;
 
 	}
+	
+	public void displayQuestion () {
+		
+		Question question;
+		Scanner scanner = new Scanner(System.in);
+		int id;
+		System.out.print("Digite o id da questão que deseja visualizar: ");
+		id = scanner.nextInt();
+		question = this.getQuestion(id);
+		System.out.println("-------------------------------");
+		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+		System.out.println("\t" + question.getText());
+		System.out.println("-------------------------------");
+		scanner.close();	
+	}
 
 	// public void searchQuestion(String date) {
 	//
