@@ -1,6 +1,7 @@
 package dao.interfaces;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import database.exception.DatabaseException;
 import domain.Answer;
@@ -19,8 +20,8 @@ public interface AnswerDAOInterface {
 	void delete (Integer id) throws DatabaseException;
 	
 	Answer select(Integer answerId) throws DatabaseException;
-	Answer select(Integer answerId,Integer userId) throws DatabaseException;
-	Answer select(Integer answerId,Integer userId,Integer id_question) throws DatabaseException;
+	
+	ArrayList<Answer> selectAll(int questionId) throws DatabaseException;
 	
 	
 
