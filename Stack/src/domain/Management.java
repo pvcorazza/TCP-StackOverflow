@@ -168,6 +168,23 @@ public class Management {
 		return null;
 
 	}
+	
+	public Question getQuestion(int id) {
+
+		scanner1 = new Scanner(System.in);
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			Question question = questionDAO.select(id);
+			return question;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 
 	// public void searchQuestion(String date) {
 	//

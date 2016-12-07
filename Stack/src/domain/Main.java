@@ -1,6 +1,7 @@
 package domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import domain.User.Permission;
@@ -110,6 +111,7 @@ public class Main {
 				
 				int opcaoBuscar;
 				opcaoBuscar = scanner.nextInt();
+				ArrayList<Question> obtainedQuestions = null;
 
 				switch (opcaoBuscar) {
 				
@@ -117,13 +119,13 @@ public class Main {
 					System.out.print("Digite uma tag: ");
 					String searchTag;
 					searchTag = scanner.next();
-					m.searchQuestion(searchTag, Management.TAG);
+					obtainedQuestions = m.searchQuestion(searchTag, Management.TAG);
 					break;
 				case 2:
 					System.out.print("Digite um título: ");
 					String searchTitle;
 					searchTitle = scanner.next();
-					m.searchQuestion(searchTitle, Management.TITLE);
+					obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
 					break;
 				case 3:
 					
@@ -140,16 +142,40 @@ public class Main {
 					searchAno = scanner.next();
 					
 					searchDate = searchAno + "/" + searchMes + "/" + searchDia;
-					m.searchQuestion(searchDate, Management.DATE);
+					obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
 					break;
 				case 4:
 					System.out.print("Digite um autor: ");
 					String searchAuthor;
 					searchAuthor = scanner.next();
-					m.searchQuestion(searchAuthor, Management.AUTHOR);
+					obtainedQuestions = m.searchQuestion(searchAuthor, Management.AUTHOR);
 					break;
 				case 0:
 					break;
+				}
+				
+				if (obtainedQuestions != null) {
+					
+					int id;
+					Question question;
+					System.out.print("Digite o id da questão que deseja visualizar: ");
+					id = scanner.nextInt();
+					question = m.getQuestion(id);
+					System.out.println("-------------------------------");
+					System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+					System.out.println("\t" + question.getText());
+					System.out.println("-------------------------------");
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				}
 
 				break;
