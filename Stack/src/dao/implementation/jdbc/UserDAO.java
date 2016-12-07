@@ -100,7 +100,30 @@ public class UserDAO implements UserDAOInterface {
 
 	@Override
 	public User select(Integer id) throws UserNotFoundException {
-		// TODO Auto-generated method stub
+		try {
+
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+
+			String selectSQL = "SELECT * FROM " + ConnectionFactory.USER_TABLE + " WHERE id = ?";
+
+			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				User user = new User(rs.getInt("id"), rs.getString("username"), null,
+						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
+
+				return user;
+			}
+
+			stmt.close();
+			conn.close();
+
+		} catch (Exception e) {
+			throw new UserNotFoundException("Usuário não encontrado.");
+		}
 		return null;
 	}
 

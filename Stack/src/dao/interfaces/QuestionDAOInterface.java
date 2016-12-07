@@ -14,14 +14,6 @@ public interface QuestionDAOInterface {
 	void delete (Question question) throws DatabaseException;;
 	void delete (Integer id) throws DatabaseException;
 	
-	Question select(Integer id) throws DatabaseException;
-	Question select(Integer id,Integer id_user) throws DatabaseException;
-	
-	Question select(Integer id,Integer id_user,String tag1,String tag2,
-			String tag3,String tag4,String tag5) throws DatabaseException;
-	
-	Question select(String tag1,String tag2,String tag3,String tag4,String tag5) throws DatabaseException;
-	
-	ArrayList<Question> select(String tag) throws DatabaseException;
+	ArrayList<Question> select(String tag, int opção) throws DatabaseException;
 
 }

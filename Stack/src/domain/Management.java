@@ -8,11 +8,14 @@ import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
-import domain.User.Permission;
 import exceptions.userDAO.UserNotFoundException;
 
 public class Management {
 
+	public static final int TAG = 1;
+	public static final int TITLE = 2;
+	public static final int DATE = 3;
+	public static final int AUTHOR = 4;
 	private String username;
 	private String password;
 	private Scanner scanner1;
@@ -50,6 +53,7 @@ public class Management {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void updateUser(User loggedUser, String username) {
 
@@ -142,28 +146,54 @@ public class Management {
 
 	}
 
-	public void searchQuestion(String tag) {
+	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
 
 		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
+		User user;
+		UserDAO userDAO = new UserDAO();
 
 		try {
-			ArrayList<Question> arrayQuestion = questionDAO.select(tag);
-			
-			for (int i=0; i<arrayQuestion.size(); i++) {
-			System.out.println("Questão encontrada");
-			System.out.println("-------------------------------");
-			System.out.println("Id: " + arrayQuestion.get(i).getId());
-			System.out.println("Título: " + arrayQuestion.get(i).getTitle());
-			System.out.println("Texto: " + arrayQuestion.get(i).getText());
-			System.out.println("-------------------------------");
+			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
+
+			for (int i = 0; i < arrayQuestion.size(); i++) {
+				user = userDAO.select(arrayQuestion.get(i).getId_author());
+				System.out.println("-------------------------------");
+				System.out.println("Id: " + arrayQuestion.get(i).getId() + "\tTítulo: " + arrayQuestion.get(i).getTitle() + "\tAutor: " + user.getUsername());
+				System.out.println("-------------------------------");
 			}
+			return arrayQuestion;
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
+		return null;
 
 	}
+
+	// public void searchQuestion(String date) {
+	//
+	// scanner1 = new Scanner(System.in);
+	// QuestionDAO questionDAO = new QuestionDAO();
+	//
+	// try {
+	// ArrayList<Question> arrayQuestion = questionDAO.select(date);
+	//
+	// for (int i=0; i<arrayQuestion.size(); i++) {
+	// System.out.println("Questão encontrada");
+	// System.out.println("-------------------------------");
+	// System.out.println("Id: " + arrayQuestion.get(i).getId());
+	// System.out.println("Título: " + arrayQuestion.get(i).getTitle());
+	// System.out.println("Texto: " + arrayQuestion.get(i).getText());
+	// System.out.println("-------------------------------");
+	// }
+	// } catch (Exception e) {
+	//
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 	public User login() {
 

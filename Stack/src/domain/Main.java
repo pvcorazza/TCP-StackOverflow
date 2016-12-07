@@ -1,9 +1,6 @@
 package domain;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import domain.User.Permission;
@@ -15,11 +12,9 @@ public class Main {
 		int opcao;
 		Scanner scanner = new Scanner(System.in);
 		Management m = new Management();
-		String username;
-		String password;
+		String username, password;
 		String title;
 		String text;
-		String tag;
 		User newUser, loggedUser;
 		Question newQuestion;
 
@@ -51,7 +46,7 @@ public class Main {
 						System.out.print("Digite o nome do usuário: ");
 						m.updateUser(loggedUser, scanner.next());
 						break;
-						
+
 					case 2:
 						String tag1, tag2, tag3, tag4, tag5;
 						System.out.print("Digite um título para a questão: ");
@@ -74,13 +69,8 @@ public class Main {
 						m.createQuestion(newQuestion);
 						break;
 					case 3:
-						
-						//Buscar questão
-						System.out.println("Digite uma tag: ");
-						String searchTag;
-						searchTag = scanner.next();
-						m.searchQuestion(searchTag);
-						
+
+
 					case 0:
 						System.out.println("Saindo...");
 						break;
@@ -107,15 +97,62 @@ public class Main {
 				m.createUser(newUser);
 				break;
 
-				
 			case 3:
+
+				// Buscar questão
 				
-				//Buscar questão
-				System.out.println("Digite uma tag: ");
-				String searchTag;
-				searchTag = scanner.next();
-				m.searchQuestion(searchTag);
+				System.out.println("1 - Tag");
+				System.out.println("2 - Título");
+				System.out.println("3 - Data");
+				System.out.println("4 - Autor");
+				System.out.println("0 - Sair");
+				System.out.print("Digite a opção desejada: ");
 				
+				int opcaoBuscar;
+				opcaoBuscar = scanner.nextInt();
+
+				switch (opcaoBuscar) {
+				
+				case 1:
+					System.out.print("Digite uma tag: ");
+					String searchTag;
+					searchTag = scanner.next();
+					m.searchQuestion(searchTag, Management.TAG);
+					break;
+				case 2:
+					System.out.print("Digite um título: ");
+					String searchTitle;
+					searchTitle = scanner.next();
+					m.searchQuestion(searchTitle, Management.TITLE);
+					break;
+				case 3:
+					
+					String searchDate;
+					String searchDia;
+					String searchMes;
+					String searchAno;
+					
+					System.out.print("Dia (dd): ");
+					searchDia = scanner.next();
+					System.out.print("Mes (mm): ");
+					searchMes = scanner.next();
+					System.out.print("Ano (aaaa): ");
+					searchAno = scanner.next();
+					
+					searchDate = searchAno + "/" + searchMes + "/" + searchDia;
+					m.searchQuestion(searchDate, Management.DATE);
+					break;
+				case 4:
+					System.out.print("Digite um autor: ");
+					String searchAuthor;
+					searchAuthor = scanner.next();
+					m.searchQuestion(searchAuthor, Management.AUTHOR);
+					break;
+				case 0:
+					break;
+				}
+
+				break;
 			case 0:
 				System.out.println("Saindo...");
 				break;
