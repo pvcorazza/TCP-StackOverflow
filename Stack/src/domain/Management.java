@@ -150,16 +150,13 @@ public class Management {
 
 		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
-		User user;
-		UserDAO userDAO = new UserDAO();
 
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
 
-			for (int i = 0; i < arrayQuestion.size(); i++) {
-				user = userDAO.select(arrayQuestion.get(i).getId_author());
+			for (Question question:arrayQuestion) {
 				System.out.println("-------------------------------");
-				System.out.println("Id: " + arrayQuestion.get(i).getId() + "\tTítulo: " + arrayQuestion.get(i).getTitle() + "\tAutor: " + user.getUsername());
+				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
 				System.out.println("-------------------------------");
 			}
 			return arrayQuestion;
