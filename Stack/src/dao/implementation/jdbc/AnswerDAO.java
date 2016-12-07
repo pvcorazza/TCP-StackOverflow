@@ -45,7 +45,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			stmt.setDate(4, new java.sql.Date(answer.getDate().getTime()));
 			stmt.setBoolean(5, answer.getBestAnswer());
 			
-			System.out.println(stmt.toString());
 			stmt.execute();
 
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -123,20 +122,37 @@ public class AnswerDAO implements AnswerDAOInterface {
 	}
 	@Override
 	public void delete(Integer id) throws DatabaseException {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM "+TABLE+
+				" WHERE "+COLUMN_ID+"=?";
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			
+			System.out.println("Row id deleted = "+id);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível deletar a resposta");
+		}
 		
 	}
 	@Override
 	public Answer select(Integer answerId) throws DatabaseException {
+		Connection conn = null;
+		PreparedStatement stmt =null;
+		ResultSet rs= null;
+		
 		try {
-			Connection conn = new ConnectionFactory().getConnection();
+			conn = new ConnectionFactory().getConnection();
 			System.out.println("Conexão aberta!");
 			
 			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id=?";
-			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+			stmt = conn.prepareStatement(selectSQL);
 			stmt.setInt(1, answerId);
-			ResultSet rs = stmt.executeQuery();
-			System.out.println(stmt.toString());
+			rs= stmt.executeQuery();
 			
 			if(rs.next()){
 				Answer answer = new Answer();
@@ -146,11 +162,20 @@ public class AnswerDAO implements AnswerDAOInterface {
 				answer.setText(rs.getString(COLUMN_TEXT_ANSWER));
 				return answer;
 			}
-			stmt.close();
-			conn.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possível recuperar a resposta");
+		}
+		finally {
+			try{
+				conn.close();
+				stmt.close();
+				rs.close();
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 		}
 		
 		return null;
