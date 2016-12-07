@@ -19,6 +19,7 @@ public class Management {
 	private String username;
 	private String password;
 	private Scanner scanner1;
+	private Scanner scanner;
 
 	public void createUser(User user) {
 
@@ -189,7 +190,7 @@ public class Management {
 	public void displayQuestion () {
 		
 		Question question;
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 		int id;
 		System.out.print("Digite o id da questão que deseja visualizar: ");
 		id = scanner.nextInt();
@@ -199,7 +200,6 @@ public class Management {
 				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
 		System.out.println("\t" + question.getText());
 		System.out.println("-------------------------------");
-		scanner.close();	
 	}
 
 	// public void searchQuestion(String date) {
