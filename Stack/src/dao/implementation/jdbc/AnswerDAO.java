@@ -36,7 +36,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 			
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);			
 			
@@ -76,7 +75,7 @@ public class AnswerDAO implements AnswerDAOInterface {
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
+
 			
 			String sql = "UPDATE "+TABLE+" SET "+
 					COLUMN_TEXT_ANSWER+"=?,"+
@@ -148,7 +147,7 @@ public class AnswerDAO implements AnswerDAOInterface {
 		
 		try {
 			conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
+
 			
 			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id=?";
 			stmt = conn.prepareStatement(selectSQL);
@@ -188,7 +187,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 		
 		try {
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 			
 			String selectSQL = "SELECT * FROM " + TABLE + "," + ConnectionFactory.USER_TABLE
 					+ " WHERE id_author = " + ConnectionFactory.USER_TABLE + ".id AND id_question = ?";

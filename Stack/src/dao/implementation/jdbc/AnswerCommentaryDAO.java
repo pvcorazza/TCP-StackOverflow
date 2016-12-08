@@ -5,12 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
 
 import dao.interfaces.AnswerCommentaryDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
+import domain.QuestionCommentary;
+import domain.User;
 import ui.text.UIUtils;
 
 public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
@@ -33,7 +35,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 			
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);	
 			
@@ -77,7 +78,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 			
 			String sql = "UPDATE "+TABLE+" SET "+
 					COLUMN_TEXT_COMMENT+"=? "+
@@ -134,18 +134,18 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 		
 	}
 	@Override
-	public AnswerCommentary select(Integer id) throws DatabaseException {
+	public AnswerCommentary select(int idAnswer) throws DatabaseException {
 		Connection conn = null;
 		PreparedStatement stmt =null;
 		ResultSet rs= null;
 		
 		try {
 			conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
+
 			
 			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id=?";
 			stmt = conn.prepareStatement(selectSQL);
-			stmt.setInt(1, id);
+			stmt.setInt(1, idAnswer);
 			rs = stmt.executeQuery();
 			
 			if(rs.next()){
@@ -172,12 +172,47 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 		}
 		return null;
 	}
+
+
 	@Override
-	public AnswerCommentary select(Integer id, Integer userID, Integer answerID) throws DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<AnswerCommentary> selectALL(int idAnswer) throws DatabaseException {
+		ArrayList<AnswerCommentary> answerCommentaries = new ArrayList<>();
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			
+			String selectSQL = "SELECT * FROM " + TABLE + "," + ConnectionFactory.USER_TABLE
+					+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND id_answer = ?";
+			PreparedStatement stmt = conn.prepareStatement(selectSQL);
+
+			stmt.setInt(1, idAnswer);
+			
+			ResultSet rs = stmt.executeQuery();
+			User author;
+			
+			while(rs.next()){
+				
+				author = new User(rs.getString("username"));
+				AnswerCommentary commentary = new AnswerCommentary();
+				commentary.setId(rs.getInt(COLUMN_ID));
+				commentary.setIdAnswer(rs.getInt(COLUMN_ID_ANSWER));
+				commentary.setIdAuthor(rs.getInt(COLUMN_ID_AUTHOR));
+				commentary.setText(rs.getString(COLUMN_TEXT_COMMENT));
+				commentary.setDate(rs.getDate(COLUMN_DATE));
+				commentary.setAuthor(author);
+				
+				answerCommentaries.add(commentary);
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível recuperar a resposta");
+		}
+		return answerCommentaries;
 	}
-	
+
 	
 	
 

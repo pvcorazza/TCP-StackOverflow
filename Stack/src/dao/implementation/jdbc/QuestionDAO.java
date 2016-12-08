@@ -29,6 +29,10 @@ public class QuestionDAO implements QuestionDAOInterface {
 	private static final String COLUMN_TAG3 = "tag3";
 	private static final String COLUMN_TAG4 = "tag4";
 	private static final String COLUMN_TAG5 = "tag5";
+	public static final int TAG = 1;
+	public static final int TITLE = 2;
+	public static final int DATE = 3;
+	public static final int AUTHOR = 4;
 
 	@Override
 	public int insert(Question question) throws DatabaseException {
@@ -40,7 +44,6 @@ public class QuestionDAO implements QuestionDAOInterface {
 		try {
 
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
@@ -83,7 +86,6 @@ public class QuestionDAO implements QuestionDAOInterface {
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 			
 			String sql = "UPDATE "+TABLE+" SET "+
 					COLUMN_TEXT+"=?,"+
@@ -158,7 +160,6 @@ public class QuestionDAO implements QuestionDAOInterface {
 		try {
 			conn = new ConnectionFactory().getConnection();
 
-			System.out.println("Conexão aberta!");
 
 			String selectSQL;
 			PreparedStatement stmt = null;
@@ -166,7 +167,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			switch (opcao) {
 
-			case Management.TAG:
+			case TAG:
 
 				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
 						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND (tag1 = ? or tag2 = ? or tag3 = ? or tag4 = ? or tag5 = ?)";
@@ -178,7 +179,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 				stmt.setString(5, searchText);
 				break;
 
-			case Management.TITLE:
+			case TITLE:
 
 				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
 						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND title = ?";
@@ -187,7 +188,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 				break;
 
-			case Management.DATE:
+			case DATE:
 				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
 						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND date_question = ?";
 				stmt = conn.prepareStatement(selectSQL);
@@ -195,7 +196,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 				System.out.println(selectSQL);
 				break;
 
-			case Management.AUTHOR:
+			case AUTHOR:
 
 				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
 				+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND username = ?";
@@ -238,7 +239,6 @@ public class QuestionDAO implements QuestionDAOInterface {
 		try {
 			conn = new ConnectionFactory().getConnection();
 
-			System.out.println("Conexão aberta!");
 
 			String selectSQL;
 			PreparedStatement stmt = null;

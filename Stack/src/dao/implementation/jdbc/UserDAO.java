@@ -26,7 +26,6 @@ public class UserDAO implements UserDAOInterface {
 		try {
 
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			String sqlInsert = "insert into " + ConnectionFactory.USER_TABLE + " VALUES (NULL, ?, ?, ?, ?)";
 
@@ -67,7 +66,6 @@ public class UserDAO implements UserDAOInterface {
 
 		try {
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			String sqlInsert = "UPDATE " + ConnectionFactory.USER_TABLE + " SET blocked = ?,permission = ? WHERE id="
 					+ user.getId();
@@ -103,7 +101,6 @@ public class UserDAO implements UserDAOInterface {
 		try {
 
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			String selectSQL = "SELECT * FROM " + ConnectionFactory.USER_TABLE + " WHERE id = ?";
 
@@ -133,7 +130,6 @@ public class UserDAO implements UserDAOInterface {
 		try {
 
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			String selectSQL = "SELECT * FROM " + ConnectionFactory.USER_TABLE + " WHERE username = ?";
 
@@ -163,7 +159,6 @@ public class UserDAO implements UserDAOInterface {
 		try {
 
 			Connection conn = new ConnectionFactory().getConnection();
-			System.out.println("Conexão aberta!");
 
 			String selectSQL = "SELECT * FROM " + ConnectionFactory.USER_TABLE + " WHERE username = ? AND password=?";
 

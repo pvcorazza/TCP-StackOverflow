@@ -203,6 +203,22 @@ public class Management {
 
 	}
 	
+	public ArrayList<AnswerCommentary> getAnswerCommentaries(int idAnswer) {
+
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
+
+		try {
+			ArrayList<AnswerCommentary> arrayAnswerCommentary = answerCommentaryDAO.selectALL(idAnswer);
+			return arrayAnswerCommentary;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
 	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
 
 	public Question getQuestion(int id) {
