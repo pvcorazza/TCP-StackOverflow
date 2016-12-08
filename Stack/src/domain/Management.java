@@ -41,7 +41,6 @@ public class Management {
 	public void createQuestion(Question question) {
 
 		QuestionDAO questionDAO = new QuestionDAO();
-		scanner1 = new Scanner(System.in);
 
 		try {
 			int questionID = questionDAO.insert(question);
@@ -103,18 +102,10 @@ public class Management {
 
 	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
 
-		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
 
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
-
-			for (Question question : arrayQuestion) {
-				System.out.println("-------------------------------");
-				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
-						+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-				System.out.println("-------------------------------");
-			}
 			return arrayQuestion;
 
 		} catch (Exception e) {
@@ -141,44 +132,6 @@ public class Management {
 		return null;
 
 	}
-
-	public void displayQuestion() {
-
-		Question question;
-		scanner = new Scanner(System.in);
-		int id;
-		System.out.print("Digite o id da questão que deseja visualizar: ");
-		id = scanner.nextInt();
-		question = this.getQuestion(id);
-		System.out.println("-------------------------------");
-		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
-				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-		System.out.println("\t" + question.getText());
-		System.out.println("-------------------------------");
-	}
-
-	// public void searchQuestion(String date) {
-	//
-	// scanner1 = new Scanner(System.in);
-	// QuestionDAO questionDAO = new QuestionDAO();
-	//
-	// try {
-	// ArrayList<Question> arrayQuestion = questionDAO.select(date);
-	//
-	// for (int i=0; i<arrayQuestion.size(); i++) {
-	// System.out.println("Questão encontrada");
-	// System.out.println("-------------------------------");
-	// System.out.println("Id: " + arrayQuestion.get(i).getId());
-	// System.out.println("Título: " + arrayQuestion.get(i).getTitle());
-	// System.out.println("Texto: " + arrayQuestion.get(i).getText());
-	// System.out.println("-------------------------------");
-	// }
-	// } catch (Exception e) {
-	//
-	// e.printStackTrace();
-	// }
-	//
-	// }
 
 	public User login(String username, String password) {
 

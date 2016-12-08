@@ -9,7 +9,9 @@ import domain.User.Permission;
 public class TextForm {
 
 	private Scanner scanner;
+
 	
+	/* Classe principal */
 	public void showForm() {
 
 		Scanner scanner = new Scanner(System.in);
@@ -24,14 +26,13 @@ public class TextForm {
 
 		scanner.close();
 		System.exit(0);
-
 	}
 
+	
+	/* Classe para seleção das opções do menu inicial */
 	public int showOptionsInitialMenu() {
 
-		
 		User newUser, loggedUser;
-		
 
 		System.out.println("### INF UFRGS - Stack Overflow ###");
 		System.out.println("   =============================");
@@ -54,12 +55,13 @@ public class TextForm {
 				System.out.println("Login realizado");
 				printInfoUser(loggedUser);
 
+				int authenticatedOption;
 				do {
-					int authenticatedOption;
+					
 					authenticatedOption = showOptionsLoggedMenu(loggedUser);
 				}
 
-				while (initialMenuOption != 0);
+				while (authenticatedOption != 0);
 			}
 			break;
 
@@ -70,85 +72,114 @@ public class TextForm {
 			break;
 
 		case 3: // Buscar questão
-
-			System.out.println("1 - Tag");
-			System.out.println("2 - Título");
-			System.out.println("3 - Data");
-			System.out.println("4 - Autor");
-			System.out.println("0 - Sair");
-			System.out.print("Digite a opção desejada: ");
-
-			int opcaoBuscar;
-			opcaoBuscar = scanner.nextInt();
-			ArrayList<Question> obtainedQuestions = null;
-
-			switch (opcaoBuscar) {
-
-			case 1:
-				System.out.print("Digite uma tag: ");
-				String searchTag;
-				searchTag = scanner.next();
-				obtainedQuestions = m.searchQuestion(searchTag, Management.TAG);
-				break;
-			case 2:
-				System.out.print("Digite um título: ");
-				String searchTitle;
-				searchTitle = scanner.next();
-				obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
-				break;
-			case 3:
-
-				String searchDate;
-				String searchDia;
-				String searchMes;
-				String searchAno;
-
-				System.out.print("Dia (dd): ");
-				searchDia = scanner.next();
-				System.out.print("Mes (mm): ");
-				searchMes = scanner.next();
-				System.out.print("Ano (aaaa): ");
-				searchAno = scanner.next();
-
-				searchDate = searchAno + "/" + searchMes + "/" + searchDia;
-				obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
-				break;
-			case 4:
-				System.out.print("Digite um autor: ");
-				String searchAuthor;
-				searchAuthor = scanner.next();
-				obtainedQuestions = m.searchQuestion(searchAuthor, Management.AUTHOR);
-				break;
-			case 0:
-				break;
-			}
-
-			if (obtainedQuestions != null) {
-
-				m.displayQuestion();
-			}
-
+			
+			showSearchQuestionMenu();
 			break;
-			
-		case 0: //Sair
-			
+
+		case 0: // Sair
+
 			System.out.println("Saindo...");
 			break;
 
 		default:
 			System.out.println("Digite uma opção válida.");
 		}
-		
+
 		return initialMenuOption;
 	}
-
-	public int showOptionsLoggedMenu(User loggedUser) {
+	
+	public void showSearchQuestionMenu() {
 		
-		Question newQuestion;
 		Management m = new Management();
-		String title;
-		String text;
 		
+		System.out.println("1 - Tag");
+		System.out.println("2 - Título");
+		System.out.println("3 - Data");
+		System.out.println("4 - Autor");
+		System.out.println("0 - Sair");
+
+		int opcaoBuscar;
+		opcaoBuscar = getInput();
+		ArrayList<Question> obtainedQuestions = null;
+
+		switch (opcaoBuscar) {
+
+		case 1:
+			System.out.print("Digite uma tag: ");
+			String searchTag;
+			searchTag = getStringInput();
+			obtainedQuestions = m.searchQuestion(searchTag, Management.TAG);
+			break;
+		case 2:
+			System.out.print("Digite um título: ");
+			String searchTitle;
+			searchTitle = getStringInput();
+			obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
+			break;
+			
+		case 3:
+
+			String searchDate;
+			String searchDia;
+			String searchMes;
+			String searchAno;
+
+			System.out.print("Dia (dd): ");
+			searchDia = getStringInput();
+			System.out.print("Mes (mm): ");
+			searchMes = getStringInput();
+			System.out.print("Ano (aaaa): ");
+			searchAno = getStringInput();
+
+			searchDate = searchAno + "/" + searchMes + "/" + searchDia;
+			obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
+			break;
+			
+		case 4:
+			System.out.print("Digite um autor: ");
+			String searchAuthor;
+			searchAuthor = getStringInput();
+			obtainedQuestions = m.searchQuestion(searchAuthor, Management.AUTHOR);
+			break;
+			
+		case 0:
+			
+			break;
+		}
+
+		if (obtainedQuestions != null) {
+			for (Question question : obtainedQuestions) {
+				System.out.println("-------------------------------");
+				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+						+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+				System.out.println("-------------------------------");
+			}
+
+			displayQuestion();
+		}
+	}
+	
+	public void displayQuestion() {
+
+		Management m = new Management();
+		Question question;
+		int id;
+		System.out.print("Digite o id da questão que deseja visualizar: ");
+		id = getInput();
+		question = m.getQuestion(id);
+		
+		System.out.println("-------------------------------");
+		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+		System.out.println("\t" + question.getText());
+		System.out.println("-------------------------------");
+	}
+
+	/* Classe para seleção das opções do menu de usuário logado */
+	public int showOptionsLoggedMenu(User loggedUser) {
+		Management m = new Management();
+		
+
 		System.out.println("   =======================================================");
 		System.out.println("   |     1 - Definir permissão de um usuário             |");
 		System.out.println("   |     2 - Criar questão                               |");
@@ -174,29 +205,12 @@ public class TextForm {
 
 		// Criar Questão
 		case 2:
-			String tag1, tag2, tag3, tag4, tag5;
-			System.out.print("Digite um título para a questão: ");
-			title = getStringInput();
-			System.out.print("Digite a questão: ");
-			text = getStringInput();
-			System.out.print("Digite no mínimo uma tag para a questão: ");
-			System.out.print("Digite a tag 1: ");
-			tag1 = getStringInput();
-			System.out.print("Digite a tag 2: ");
-			tag2 = getStringInput();
-			System.out.print("Digite a tag 3: ");
-			tag3 = getStringInput();
-			System.out.print("Digite a tag 4: ");
-			tag4 = getStringInput();
-			System.out.print("Digite a tag 5: ");
-			tag5 = getStringInput();
-
-			Date date = new Date(System.currentTimeMillis());
-			newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
-			m.createQuestion(newQuestion);
+			showCreateQuestionOptions(loggedUser);
 			break;
 
 		case 3:
+			showSearchQuestionMenu();
+			break;
 
 		case 0:
 			System.out.println("Saindo...");
@@ -207,11 +221,13 @@ public class TextForm {
 		return authenticatedOption;
 
 	}
+
 	
+	/* Classe para seleção das opções para atualizar permissões de um usuário */
 	public int showUpdateOptions(User updatedUser) {
-		
+
 		Management m = new Management();
-		
+
 		System.out.println("   =======================================================");
 		if (updatedUser.getBlocked() == true) {
 			System.out.println("   |     1 - Desbloquear usuário                         |");
@@ -221,10 +237,10 @@ public class TextForm {
 		System.out.println("   |     2 - Modificar permissão                         |");
 		System.out.println("   |     0 - Sair                                        |");
 		System.out.println("   =======================================================\n");
-		
+
 		int updateOption;
 		updateOption = getInput();
-		
+
 		switch (updateOption) {
 
 		case 1:
@@ -240,29 +256,11 @@ public class TextForm {
 		// pode
 		// entrar com um valor inválido...
 		case 2:
-			int privilege;
-			printPermissions();
-			privilege = getInput();
+			setPermissions(updatedUser);
+		case 0:
 
-			switch (privilege) {
-			case 1:
-				updatedUser.setPermission(User.Permission.AUTHENTICATED);
-				m.updatePermission(updatedUser);
-				printMessageSuccess();
-				break;
-			case 2:
-				updatedUser.setPermission(User.Permission.MODERATOR);
-				m.updatePermission(updatedUser);
-				printMessageSuccess();
-				break;
-			case 3:
-				updatedUser.setPermission(User.Permission.ADMINISTRATOR);
-				m.updatePermission(updatedUser);
-				printMessageSuccess();
-				break;
-			default:
-				printMessageInvalid();
-			}
+			System.out.println("Saindo...");
+
 			break;
 
 		default:
@@ -271,6 +269,65 @@ public class TextForm {
 		return updateOption;
 	}
 	
+	/* Classe para seleção das opções para atualizar a permissão de um usuário */
+	public void setPermissions(User updatedUser) {
+
+		Management m = new Management();
+		System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
+
+		int privilege;
+		privilege = getInput();
+
+		switch (privilege) {
+		case 1:
+			updatedUser.setPermission(User.Permission.AUTHENTICATED);
+			m.updatePermission(updatedUser);
+			printMessageSuccess();
+			break;
+		case 2:
+			updatedUser.setPermission(User.Permission.MODERATOR);
+			m.updatePermission(updatedUser);
+			printMessageSuccess();
+			break;
+		case 3:
+			updatedUser.setPermission(User.Permission.ADMINISTRATOR);
+			m.updatePermission(updatedUser);
+			printMessageSuccess();
+			break;
+		default:
+			printMessageInvalid();
+		}
+	}
+	
+	public void showCreateQuestionOptions (User loggedUser) {
+		
+		Management m = new Management();
+		Question newQuestion;
+		String title;
+		String text;
+		
+		String tag1, tag2, tag3, tag4, tag5;
+		System.out.print("Digite um título para a questão: ");
+		title = getStringInput();
+		System.out.print("Digite a questão: ");
+		text = getStringInput();
+		System.out.print("Digite no mínimo uma tag para a questão: ");
+		System.out.print("Digite a tag 1: ");
+		tag1 = getStringInput();
+		System.out.print("Digite a tag 2: ");
+		tag2 = getStringInput();
+		System.out.print("Digite a tag 3: ");
+		tag3 = getStringInput();
+		System.out.print("Digite a tag 4: ");
+		tag4 = getStringInput();
+		System.out.print("Digite a tag 5: ");
+		tag5 = getStringInput();
+
+		Date date = new Date(System.currentTimeMillis());
+		newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
+		m.createQuestion(newQuestion);
+		
+	}
 
 	public void printInfoUser(User loggedUser) {
 		System.out.println("Id: " + loggedUser.getId());
@@ -290,12 +347,6 @@ public class TextForm {
 		return getStringInput();
 	}
 
-	
-
-	public void printPermissions() {
-		System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
-	}
-
 	public int getInput() {
 		int opcao;
 		scanner = new Scanner(System.in);
@@ -310,7 +361,7 @@ public class TextForm {
 		input = scanner.next();
 		return input;
 	}
-	
+
 	public void printMessageInvalid() {
 		System.out.println("O valor digitado é inválido.");
 	}
