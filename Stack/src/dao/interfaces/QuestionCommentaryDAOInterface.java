@@ -2,6 +2,7 @@ package dao.interfaces;
 
 import java.sql.SQLException;
 
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
 
@@ -12,7 +13,7 @@ import domain.AnswerCommentary;
  */
 public interface QuestionCommentaryDAOInterface {
 	
-	int  insert(AnswerCommentary commentary) throws DatabaseException;
+	int  insert(AnswerCommentary commentary) throws DatabaseException,DatabaseConnectionException;
 	void update(AnswerCommentary commentary) throws DatabaseException;
 	
 	void delete(AnswerCommentary commentary) throws DatabaseException;

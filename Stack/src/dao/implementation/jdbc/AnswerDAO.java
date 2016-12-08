@@ -27,7 +27,7 @@ public class AnswerDAO implements AnswerDAOInterface {
 	
 	
 	@Override
-	public int insert(Answer answer) throws DatabaseException {
+	public int insert(Answer answer) throws DatabaseException,DatabaseConnectionException {
 		
 		int generatedKey = -1;
 		
@@ -60,7 +60,7 @@ public class AnswerDAO implements AnswerDAOInterface {
 			conn.close();
 			
 		} catch (DatabaseConnectionException e) {
-			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 			
 		}
 		catch (SQLException e) {

@@ -4,11 +4,17 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import database.exception.DatabaseConnectionException;
+import database.exception.DatabaseException;
+import database.exception.DatabaseUserDuplicated;
 import domain.Answer;
 import domain.Management;
+import domain.OperationPermission;
 import domain.Question;
 import domain.User;
 import domain.User.Permission;
+import exceptions.permission.PermissionException;
+import exceptions.userDAO.UserNotFoundException;
 import ui.text.UIUtils;
 
 public class TextForm {
@@ -35,7 +41,7 @@ public class TextForm {
 	/* Classe para seleção das opções do menu inicial */
 	public int showOptionsInitialMenu() {
 
-		User newUser, loggedUser;
+		User newUser, loggedUser = null;
 
 		System.out.println("### INF UFRGS - Stack Overflow ###");
 		System.out.println("   =============================");
@@ -51,8 +57,20 @@ public class TextForm {
 		switch (initialMenuOption) {
 
 		case 1: // Login
+			
+			try {
+				loggedUser = m.login(getUsername(), getPassword());
+				
+			} catch (UserNotFoundException e) {
+				System.out.println(e.getMessage());
+				
+			} catch (DatabaseConnectionException e) {
+				System.out.println(e.getMessage());
+				
+			} catch (DatabaseException e) {
+				System.out.println(e.getMessage());
 
-			loggedUser = m.login(getUsername(), getPassword());
+			}
 
 			if (loggedUser != null) {
 				System.out.println(UIUtils.INSTANCE.getTextManager().
@@ -73,12 +91,26 @@ public class TextForm {
 		case 2: // Cadastro
 
 			newUser = new User(getUsername(), getPassword(), Permission.AUTHENTICATED);
-			m.createUser(newUser);
+			try {
+				m.createUser(newUser);
+			} catch (DatabaseConnectionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabaseUserDuplicated e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 
-		case 3: // Buscar questão
-
-			showSearchQuestionMenu(null);
+		case 3:
+			if(OperationPermission.searchQuestion(loggedUser)){
+				//Buscar questao sem estar logado loggedUser = null
+				showSearchQuestionMenu(null);
+			}
+			
 			break;
 
 		case 0: // Sair
@@ -183,46 +215,64 @@ public class TextForm {
 		
 		System.out.println("---------- RESPOSTAS ----------");
 		
-		for (Answer answer : obtainedAnswers) {
-			
-			System.out.println("\t| Id: " + answer.getId());
-			System.out.println("\t| Data: " + answer.getDate().toString());
-			System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
-			System.out.println("\t| Texto: " + answer.getText());
-			System.out.println("-------------------------------");
+		if(obtainedAnswers.size()==0){
+			System.out.println("Não tem respostas");
 		}
-		
+		else{
+			for (Answer answer : obtainedAnswers) {
+				
+				System.out.println("\t| Id: " + answer.getId());
+				System.out.println("\t| Data: " + answer.getDate().toString());
+				System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
+				System.out.println("\t| Texto: " + answer.getText());
+				System.out.println("-------------------------------");
+			}
+		}
+			
 
-		showPostOptions(loggedUser, question);
+		if(OperationPermission.displayPostOptions(loggedUser)){
+			showPostOptions(loggedUser, question);
+		}
+		else{
+			System.out.println("Por favor, faça o login para realizar outras operações");
+		}
 
 		System.out.println("-------------------------------");
 
 	}
 
 	public void showPostOptions(User loggedUser, Question question) {
+		
+		if(loggedUser!= null){
+			System.out.println("   ====================================================");
+			System.out.println("   |     1 - Responder questão                        |");
+			System.out.println("   |     2 - Comentar questão                         |");
+			System.out.println("   |     3 - Comentar resposta                        |");
+			System.out.println("   |     4 - Selecionar a melhor resposta             |");
+			System.out.println("   |     0 - Sair                                     |");
+			System.out.println("   ====================================================\n");
 
-		System.out.println("   ====================================================");
-		System.out.println("   |     1 - Responder questão                        |");
-		System.out.println("   |     2 - Comentar questão                         |");
-		System.out.println("   |     3 - Comentar resposta                        |");
-		System.out.println("   |     4 - Selecionar a melhor resposta             |");
-		System.out.println("   |     0 - Sair                                     |");
-		System.out.println("   ====================================================\n");
+			int postOption;
+			postOption = getInput();
 
-		int postOption;
-		postOption = getInput();
+			
+			switch (postOption) {
 
-		switch (postOption) {
+			case 1:
+				showCreateAnswerOptions(loggedUser, question.getId());
 
-		case 1:
-			showCreateAnswerOptions(loggedUser, question.getId());
+				break;
 
-			break;
+			case 2:
+				break;
 
-		case 2:
-			break;
-
+			}
 		}
+		else{
+			System.out.println("Faça o login para poder realizar as operações");
+		}
+
+		
 
 	}
 
@@ -237,7 +287,17 @@ public class TextForm {
 
 		Date date = new Date(System.currentTimeMillis());
 		newAnswer = new Answer(loggedUser.getId(), idQuestion, text, date, false);
-		m.createAnswer(newAnswer);
+		
+		try {
+			m.createAnswer(newAnswer);
+			
+		} catch (DatabaseConnectionException e) {
+			System.out.println(e.getMessage());
+			
+		} catch (DatabaseException e) {
+			System.out.println(e.getMessage());
+			
+		}
 
 	}
 
@@ -257,24 +317,42 @@ public class TextForm {
 		switch (authenticatedOption) {
 
 		case 1: // Definir permissão de um usuário
+			
+			if(OperationPermission.modifyUserPermission(loggedUser)){
+				User updatedUser;
+				updatedUser = m.findUserToUpdate(loggedUser, getUsername());
+				
+				int updateOption;
 
-			User updatedUser;
-			updatedUser = m.findUserToUpdate(loggedUser, getUsername());
-			int updateOption;
-
-			do {
-				updateOption = showUpdateOptions(updatedUser);
-			} while (updateOption != 0);
+				do {
+					updateOption = showUpdateOptions(loggedUser,updatedUser);
+				} while (updateOption != 0);
+			}	
+			else{
+				System.out.println("Usuário não possui permissão para realizar esta operação");
+			}
 
 			break;
 
 		// Criar Questão
 		case 2:
-			showCreateQuestionOptions(loggedUser);
+			
+			if(OperationPermission.createQuestion(loggedUser)){
+				showCreateQuestionOptions(loggedUser);
+			}
+			else{
+				System.out.println("Usuário não possui permissão para realizar esta operação");
+			}
+			
 			break;
 
 		case 3:
-			showSearchQuestionMenu(loggedUser);
+			if(OperationPermission.searchQuestion(loggedUser)){
+				showSearchQuestionMenu(loggedUser);
+			}
+			else{
+				System.out.println("Usuário não possui permissão para realizar esta operação");
+			}
 			break;
 
 		case 0:
@@ -288,12 +366,12 @@ public class TextForm {
 	}
 
 	/* Classe para seleção das opções para atualizar permissões de um usuário */
-	public int showUpdateOptions(User updatedUser) {
+	public int showUpdateOptions(User loggedUser,User userToUpdate) {
 
 		Management m = new Management();
 
 		System.out.println("   =======================================================");
-		if (updatedUser.getBlocked() == true) {
+		if (userToUpdate.getBlocked() == true) {
 			System.out.println("   |     1 - Desbloquear usuário                         |");
 		} else {
 			System.out.println("   |     1 - Bloquear usuário                            |");
@@ -308,11 +386,24 @@ public class TextForm {
 		switch (updateOption) {
 
 		case 1:
-			updatedUser.setBlocked(!updatedUser.getBlocked());
+			
+			if(OperationPermission.blockUser(loggedUser)){
+				
+				userToUpdate.setBlocked(!userToUpdate.getBlocked());
 
-			m.updatePermission(updatedUser);
+				try {
+					m.updatePermission(loggedUser,userToUpdate);
+				} catch (PermissionException e) {
+					System.out.println(e.getMessage());
+				}
 
-			printMessageSuccess();
+				printMessageSuccess();
+				
+			}
+			else{
+				System.out.println("Usuário não autorizado");
+			}
+			
 			break;
 
 		// Lembrar de controlar a entrada do usuário aqui
@@ -320,7 +411,15 @@ public class TextForm {
 		// pode
 		// entrar com um valor inválido...
 		case 2:
-			setPermissions(updatedUser);
+			
+			if(OperationPermission.blockUser(loggedUser)){
+				userToUpdate.setBlocked(!userToUpdate.getBlocked());
+				setPermissions(loggedUser, userToUpdate);
+			}
+			else{
+				System.out.println("Você não tem permissão para realizar a operação");
+			}
+			
 		case 0:
 
 			System.out.println("Saindo...");
@@ -336,7 +435,7 @@ public class TextForm {
 	/*
 	 * Classe para seleção das opções para atualizar a permissão de um usuário
 	 */
-	public void setPermissions(User updatedUser) {
+	public void setPermissions(User logedUser,User updatedUser) {
 
 		Management m = new Management();
 		System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
@@ -345,28 +444,47 @@ public class TextForm {
 		privilege = getInput();
 
 		switch (privilege) {
-		case 1:
-			updatedUser.setPermission(User.Permission.AUTHENTICATED);
-			m.updatePermission(updatedUser);
-			printMessageSuccess();
-			break;
-		case 2:
-			updatedUser.setPermission(User.Permission.MODERATOR);
-			m.updatePermission(updatedUser);
-			printMessageSuccess();
-			break;
-		case 3:
-			updatedUser.setPermission(User.Permission.ADMINISTRATOR);
-			m.updatePermission(updatedUser);
-			printMessageSuccess();
-			break;
-		default:
-			printMessageInvalid();
-		}
+		
+			case 1:
+				updatedUser.setPermission(User.Permission.AUTHENTICATED);
+				try {
+					m.updatePermission(logedUser,updatedUser);
+					printMessageSuccess();
+				} catch (PermissionException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				break;
+			
+			case 2:
+				updatedUser.setPermission(User.Permission.MODERATOR);
+				try {
+					m.updatePermission(logedUser,updatedUser);
+					printMessageSuccess();
+				} catch (PermissionException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				break;
+			
+			case 3:
+				updatedUser.setPermission(User.Permission.ADMINISTRATOR);
+				try {
+					m.updatePermission(logedUser,updatedUser);
+					printMessageSuccess();
+				} catch (PermissionException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				break;
+			default:
+				printMessageInvalid();
+			}
 	}
 
 	public void showCreateQuestionOptions(User loggedUser) {
-
+		
+		
 		Management m = new Management();
 		Question newQuestion;
 		String title;
@@ -391,7 +509,15 @@ public class TextForm {
 
 		Date date = new Date(System.currentTimeMillis());
 		newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
-		m.createQuestion(newQuestion);
+		try {
+			m.createQuestion(newQuestion);
+		} catch (DatabaseConnectionException e) {
+			System.out.println(e.getMessage());
+		} catch (PermissionException e) {
+			System.out.println(e.getMessage());
+		} catch (DatabaseException e) {
+			System.out.println(e.getMessage());
+		}
 
 	}
 

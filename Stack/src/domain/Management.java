@@ -9,7 +9,9 @@ import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
+import exceptions.permission.PermissionException;
 import exceptions.userDAO.UserNotFoundException;
+import ui.text.UIUtils;
 
 public class Management {
 
@@ -24,55 +26,39 @@ public class Management {
 	
 	/* Recebe um usuário e solicita a inserção no banco de dados */
 
-	public void createUser(User user) {
+	public void createUser(User user) throws DatabaseException,DatabaseConnectionException,DatabaseUserDuplicated {
 
 		UserDAO userDAO = new UserDAO();
 
-		try {
-			int userID = userDAO.insert(user);
-			user.setId(userID);
-			System.out.print("Usuario inserido\n");
-		} catch (DatabaseUserDuplicated e) {
-			System.out.println(e);
-		} catch (DatabaseConnectionException e) {
-			e.getMessage();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
+		int userID = userDAO.insert(user);
+		user.setId(userID);
+
 	}
 
 
-	public void createQuestion(Question question) {
+	public void createQuestion(Question question) throws PermissionException, DatabaseConnectionException, DatabaseException {
 		
-		QuestionDAO questionDAO = new QuestionDAO();
-
-		try {
+		if(question.getAuthor().getPermission() != User.Permission.NOT_AUTHENTICATED){
+			QuestionDAO questionDAO = new QuestionDAO();
 			int questionID = questionDAO.insert(question);
 			question.setId(questionID);
-			System.out.print("Questão criada\n");
-		} catch (DatabaseConnectionException e) {
-			e.getMessage();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
 		}
+		else{
+			throw new PermissionException("permissionException.permission.denied");
+		}	
 		
 	}
 	
 	/* Recebe uma resposta e solicita a inserção no banco de dados */
 	
-	public void createAnswer(Answer answer) {
+	public void createAnswer(Answer answer) throws DatabaseConnectionException, DatabaseException {
 		// TODO Auto-generated method stub
 		AnswerDAO answerDAO = new AnswerDAO();
 
-		try {
-			int answerID = answerDAO.insert(answer);
-			answer.setId(answerID);
-			System.out.print("Resposta criada\n");
-		} catch (DatabaseConnectionException e) {
-			e.getMessage();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
+		int answerID = answerDAO.insert(answer);
+		answer.setId(answerID);
+	
+		
 	}
 	
 	/* Recebe um usuário logado e um nome de usuário para pesquisar e retorna um usuário com esse nome */ 
@@ -107,7 +93,7 @@ public class Management {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Você não tem permissão para exeutar essa ação.");
+			System.out.println("Você não tem permissão para executar essa ação.");
 		}
 		return null;
 
@@ -115,15 +101,22 @@ public class Management {
 	
 	/* Recebe um usuário, atualiza as permissões e define bloqueio desse usuário */
 	
-	public void updatePermission (User userToUpdate) {
-		UserDAO userDAO = new UserDAO();
+	public void updatePermission (User loggedUser, User userToUpdate) throws PermissionException {
+		
+		if(loggedUser.getPermission() == User.Permission.ADMINISTRATOR){
+			UserDAO userDAO = new UserDAO();
 
-		try {
-			userDAO.update(userToUpdate);
-		} catch (DatabaseUserDuplicated e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+				userDAO.update(userToUpdate);
+			} catch (DatabaseUserDuplicated e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		else{
+			throw new PermissionException("Você não tem permissão para realizar a operação");
+		}
+		
 	}
 	
 	/* Retorna um conjunto de questões com base em em texto de entrada e uma opção */
@@ -183,18 +176,15 @@ public class Management {
 	
 	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
 	
-	public User login(String username, String password) {
+	public User login(String username, String password) throws UserNotFoundException, DatabaseException {
 
 		UserDAO userDAO = new UserDAO();
 
-		try {
-			User loggedUser = userDAO.select(username, password);
-			return loggedUser;
-		} catch (UserNotFoundException e) {
-
-			e.printStackTrace();
-		}
-		return null;
+		
+		User loggedUser = null;
+		loggedUser = userDAO.select(username, password);
+		return loggedUser;
+		
 
 	}
 

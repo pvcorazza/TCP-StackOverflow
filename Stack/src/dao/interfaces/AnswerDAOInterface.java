@@ -3,6 +3,7 @@ package dao.interfaces;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Answer;
 
@@ -12,7 +13,7 @@ import domain.Answer;
  */
 public interface AnswerDAOInterface {
 	
-	int  insert (Answer answer) throws DatabaseException;
+	int  insert (Answer answer) throws DatabaseException,DatabaseConnectionException;
 	
 	boolean update (Answer answer) throws DatabaseException;
 	

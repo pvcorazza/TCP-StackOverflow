@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import domain.User;
@@ -13,12 +14,12 @@ import exceptions.userDAO.UserNotFoundException;
  */
 public interface UserDAOInterface {
 	
-	int insert (User answer) throws DatabaseUserDuplicated, DatabaseException ;
+	int insert (User answer) throws DatabaseUserDuplicated, DatabaseException,DatabaseConnectionException ;
 	void update (User answer) throws DatabaseUserDuplicated;
 	void delete (User answer) throws DatabaseUserDuplicated;
 	
 	User select(Integer id) throws UserNotFoundException;
-	User select(String username, String password) throws UserNotFoundException;
+	User select(String username, String password) throws UserNotFoundException, DatabaseConnectionException, DatabaseException;
 	User select(String username) throws UserNotFoundException;
 	
 

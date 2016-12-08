@@ -59,7 +59,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			
 			
 		} catch (DatabaseConnectionException e) {
-			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 			
 		}
 		catch (SQLException e) {

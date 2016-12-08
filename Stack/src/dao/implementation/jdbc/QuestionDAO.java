@@ -31,7 +31,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 	private static final String COLUMN_TAG5 = "tag5";
 
 	@Override
-	public int insert(Question question) throws DatabaseException {
+	public int insert(Question question) throws DatabaseException,DatabaseConnectionException {
 
 		int generatedKey = 0;
 
@@ -68,10 +68,12 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			stmt.close();
 			conn.close();
+
 		} catch (DatabaseConnectionException e) {
 			new DatabaseConnectionException("Erro ao conectar banco de dados");
-
+			
 		} catch (SQLException e) {
+			new DatabaseException("databaseException.insert.error");
 			e.printStackTrace();
 		}
 

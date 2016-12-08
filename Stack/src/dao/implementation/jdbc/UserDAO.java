@@ -158,7 +158,9 @@ public class UserDAO implements UserDAOInterface {
 
 
 	@Override
-	public User select(String username, String password) throws UserNotFoundException {
+	public User select(String username, String password) throws UserNotFoundException,DatabaseException {
+		
+		User user = null;
 
 		try {
 
@@ -173,19 +175,28 @@ public class UserDAO implements UserDAOInterface {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"),
+				System.out.println(""+rs.getInt("id"));
+				user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"),
 						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
-
-				return user;
 			}
-
+			else{
+				System.out.println("Não existe usuário no result set");
+				throw new UserNotFoundException("Usuário não foi localizado");
+			}
+			
 			stmt.close();
 			conn.close();
 
-		} catch (Exception e) {
-			throw new UserNotFoundException("Usuário não encontrado.");
 		}
-		return null;
+		 catch (DatabaseConnectionException e) {
+				throw new DatabaseConnectionException("Erro ao conectar banco de dados");
+				
+		}
+		catch (SQLException e) {
+			throw new DatabaseException("Não foi possível realizar operação");
+			
+		}
+		return user;
 	}
 
 }

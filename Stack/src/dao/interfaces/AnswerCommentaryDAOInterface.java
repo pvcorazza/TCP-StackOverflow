@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
 
@@ -11,7 +12,7 @@ import domain.AnswerCommentary;
  */
 public interface AnswerCommentaryDAOInterface {
 	
-	int  insert (AnswerCommentary commentary) throws DatabaseException;
+	int  insert (AnswerCommentary commentary) throws DatabaseException,DatabaseConnectionException;
 	void update (AnswerCommentary commentary) throws DatabaseException;
 	
 	void delete (AnswerCommentary commentary) throws DatabaseException;

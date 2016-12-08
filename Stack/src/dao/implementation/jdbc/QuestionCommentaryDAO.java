@@ -61,7 +61,7 @@ public class QuestionCommentaryDAO implements QuestionCommentaryDAOInterface {
 			
 			
 		} catch (DatabaseConnectionException e) {
-			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 			
 		}
 		catch (SQLException e) {
