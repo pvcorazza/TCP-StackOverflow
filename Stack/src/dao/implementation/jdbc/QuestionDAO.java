@@ -44,7 +44,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
-			stmt.setInt(1, question.getId_author());
+			stmt.setInt(1, question.getIdAuthor());
 			stmt.setString(2, question.getTitle());
 			stmt.setString(3, question.getText());
 

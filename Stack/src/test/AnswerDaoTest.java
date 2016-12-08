@@ -25,9 +25,9 @@ public class AnswerDaoTest extends TestCase  {
 		answer.setId(id);
 		System.out.println("Inserido resposta\n");
 		System.out.println("id = "+answer.getId());
-		System.out.println("id_author "+answer.getId_author()+ "\n");
-		System.out.println("id_question "+answer.getId_question()+ "\n");
-		System.out.println("id_author "+answer.getId_author()+"\n");
+		System.out.println("id_author "+answer.getIdAuthor()+ "\n");
+		System.out.println("id_question "+answer.getIdQuestion()+ "\n");
+		System.out.println("id_author "+answer.getIdAuthor()+"\n");
 		
 	}
 
@@ -59,10 +59,10 @@ public class AnswerDaoTest extends TestCase  {
 	@Before
 	protected
 	void setUp(){
-		answer = new Answer(92, "Titulo", new Date(System.currentTimeMillis()), false);
+		//answer = new Answer(92, "Titulo", new Date(System.currentTimeMillis()), false);
 		
 		answer.setText("Isto é uma resposta para uma questao");
-		answer.setId_question(9);
+		answer.setIdQuestion(9);
 		answer.setId(13);
 		dao = new AnswerDAO();
 		

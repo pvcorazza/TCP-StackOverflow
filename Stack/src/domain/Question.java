@@ -14,11 +14,10 @@ public class Question extends Post {
 	private String tag3;
 	private String tag4;
 	private String tag5;
-	private User author;
 	
 	public Question(int userId, String title, String text, Date date, String tag1, String tag2, String tag3, String tag4, String tag5) {
 		super();
-		this.setId_author(userId);
+		this.setIdAuthor(userId);
 		this.title = title;
 		this.setText(text);
 		this.closed = false;
@@ -33,7 +32,7 @@ public class Question extends Post {
 	public Question(int id, int idAuthor, String title, String text, Date date, Boolean closed, String tag1, String tag2, String tag3, String tag4,
 			String tag5) {
 		this.id = id;
-		this.setId_author(idAuthor);
+		this.setIdAuthor(idAuthor);
 		this.title = title;
 		this.setText(text);
 		this.setDate(date);
@@ -48,7 +47,7 @@ public class Question extends Post {
 	public Question(int id, int idAuthor, String title, String text, Date date, Boolean closed, String tag1, String tag2, String tag3, String tag4,
 			String tag5, User author) {
 		this.id = id;
-		this.setId_author(idAuthor);
+		this.setIdAuthor(idAuthor);
 		this.title = title;
 		this.setText(text);
 		this.setDate(date);
@@ -58,17 +57,9 @@ public class Question extends Post {
 		this.tag3 = tag3;
 		this.tag4 = tag4;
 		this.tag5 = tag5;
-		this.author = author;
+		this.setAuthor(author);
 	}
 	
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
 	public int getId() {
 		return id;
 	}

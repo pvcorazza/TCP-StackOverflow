@@ -10,7 +10,6 @@ public class TextForm {
 
 	private Scanner scanner;
 
-	
 	/* Classe principal */
 	public void showForm() {
 
@@ -28,7 +27,6 @@ public class TextForm {
 		System.exit(0);
 	}
 
-	
 	/* Classe para seleção das opções do menu inicial */
 	public int showOptionsInitialMenu() {
 
@@ -57,7 +55,7 @@ public class TextForm {
 
 				int authenticatedOption;
 				do {
-					
+
 					authenticatedOption = showOptionsLoggedMenu(loggedUser);
 				}
 
@@ -72,8 +70,8 @@ public class TextForm {
 			break;
 
 		case 3: // Buscar questão
-			
-			showSearchQuestionMenu();
+
+			showSearchQuestionMenu(null);
 			break;
 
 		case 0: // Sair
@@ -87,11 +85,11 @@ public class TextForm {
 
 		return initialMenuOption;
 	}
-	
-	public void showSearchQuestionMenu() {
-		
+
+	public void showSearchQuestionMenu(User loggedUser) {
+
 		Management m = new Management();
-		
+
 		System.out.println("1 - Tag");
 		System.out.println("2 - Título");
 		System.out.println("3 - Data");
@@ -116,7 +114,7 @@ public class TextForm {
 			searchTitle = getStringInput();
 			obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
 			break;
-			
+
 		case 3:
 
 			String searchDate;
@@ -134,16 +132,16 @@ public class TextForm {
 			searchDate = searchAno + "/" + searchMes + "/" + searchDia;
 			obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
 			break;
-			
+
 		case 4:
 			System.out.print("Digite um autor: ");
 			String searchAuthor;
 			searchAuthor = getStringInput();
 			obtainedQuestions = m.searchQuestion(searchAuthor, Management.AUTHOR);
 			break;
-			
+
 		case 0:
-			
+
 			break;
 		}
 
@@ -155,30 +153,90 @@ public class TextForm {
 				System.out.println("-------------------------------");
 			}
 
-			displayQuestion();
+			displayQuestion(loggedUser);
 		}
 	}
-	
-	public void displayQuestion() {
+
+	public void displayQuestion(User loggedUser) {
 
 		Management m = new Management();
 		Question question;
+		ArrayList<Answer> obtainedAnswers;
+
 		int id;
 		System.out.print("Digite o id da questão que deseja visualizar: ");
 		id = getInput();
 		question = m.getQuestion(id);
-		
+		obtainedAnswers = m.getAnswers(id);
+
 		System.out.println("-------------------------------");
-		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
-				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-		System.out.println("\t" + question.getText());
+		System.out.println("| Título: " + question.getTitle() + "\n| Autor: "
+				+ question.getAuthor().getUsername() + "\n| Data: " + question.getDate().toString());
+		System.out.println("| Texto: " + question.getText());
+		for (Answer answer : obtainedAnswers) {
+			System.out.println("-------------------------------");
+			System.out.println("\t| Data: " + answer.getDate().toString());
+			System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
+			System.out.println("\t| Texto: " + answer.getText());
+		}
 		System.out.println("-------------------------------");
+
+		showPostOptions(loggedUser, question);
+
+		System.out.println("-------------------------------");
+
+	}
+
+	public void displayAnswers(int id) {
+		Management m = new Management();
+
+	}
+
+	public void showPostOptions(User loggedUser, Question question) {
+
+		System.out.println("   ====================================================");
+		System.out.println("   |     1 - Responder questão                        |");
+		System.out.println("   |     2 - Comentar questão                         |");
+		System.out.println("   |     3 - Comentar resposta                        |");
+		System.out.println("   |     4 - Selecionar a melhor resposta             |");
+		System.out.println("   |     0 - Sair                                     |");
+		System.out.println("   ====================================================\n");
+
+		int postOption;
+		postOption = getInput();
+
+		switch (postOption) {
+
+		case 1:
+			showCreateAnswerOptions(loggedUser, question.getId());
+
+			break;
+
+		case 2:
+			break;
+
+		}
+
+	}
+
+	public void showCreateAnswerOptions(User loggedUser, int idQuestion) {
+
+		Management m = new Management();
+		Answer newAnswer;
+		String text;
+
+		System.out.print("Digite a resposta: ");
+		text = getStringInput();
+
+		Date date = new Date(System.currentTimeMillis());
+		newAnswer = new Answer(loggedUser.getId(), idQuestion, text, date, false);
+		m.createAnswer(newAnswer);
+
 	}
 
 	/* Classe para seleção das opções do menu de usuário logado */
 	public int showOptionsLoggedMenu(User loggedUser) {
 		Management m = new Management();
-		
 
 		System.out.println("   =======================================================");
 		System.out.println("   |     1 - Definir permissão de um usuário             |");
@@ -209,7 +267,7 @@ public class TextForm {
 			break;
 
 		case 3:
-			showSearchQuestionMenu();
+			showSearchQuestionMenu(loggedUser);
 			break;
 
 		case 0:
@@ -222,7 +280,6 @@ public class TextForm {
 
 	}
 
-	
 	/* Classe para seleção das opções para atualizar permissões de um usuário */
 	public int showUpdateOptions(User updatedUser) {
 
@@ -268,8 +325,10 @@ public class TextForm {
 		}
 		return updateOption;
 	}
-	
-	/* Classe para seleção das opções para atualizar a permissão de um usuário */
+
+	/*
+	 * Classe para seleção das opções para atualizar a permissão de um usuário
+	 */
 	public void setPermissions(User updatedUser) {
 
 		Management m = new Management();
@@ -298,14 +357,14 @@ public class TextForm {
 			printMessageInvalid();
 		}
 	}
-	
-	public void showCreateQuestionOptions (User loggedUser) {
-		
+
+	public void showCreateQuestionOptions(User loggedUser) {
+
 		Management m = new Management();
 		Question newQuestion;
 		String title;
 		String text;
-		
+
 		String tag1, tag2, tag3, tag4, tag5;
 		System.out.print("Digite um título para a questão: ");
 		title = getStringInput();
@@ -326,7 +385,7 @@ public class TextForm {
 		Date date = new Date(System.currentTimeMillis());
 		newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
 		m.createQuestion(newQuestion);
-		
+
 	}
 
 	public void printInfoUser(User loggedUser) {
@@ -358,7 +417,7 @@ public class TextForm {
 	public String getStringInput() {
 		String input;
 		scanner = new Scanner(System.in);
-		input = scanner.next();
+		input = scanner.nextLine();
 		return input;
 	}
 

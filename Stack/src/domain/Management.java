@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import dao.implementation.jdbc.AnswerDAO;
 import dao.implementation.jdbc.QuestionDAO;
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
@@ -115,6 +116,22 @@ public class Management {
 		return null;
 
 	}
+	
+	public ArrayList<Answer> getAnswers(int id) {
+
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			ArrayList<Answer> arrayAnswer = answerDAO.selectAll(id);
+			return arrayAnswer;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 
 	public Question getQuestion(int id) {
 
@@ -147,4 +164,20 @@ public class Management {
 		return null;
 
 	}
+
+	public void createAnswer(Answer answer) {
+		// TODO Auto-generated method stub
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			int answerID = answerDAO.insert(answer);
+			answer.setId(answerID);
+			System.out.print("Resposta criada\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
