@@ -5,16 +5,28 @@ import java.util.Date;
 public class Answer extends Post {
 
 	private int id;
-	private int id_question;
+	private int idQuestion;
 	private Boolean bestAnswer;
 	
 	
 
-	public Answer(int id_user, String title, Date date_question, Boolean bestAnswer) {
+	public Answer(int id_user, int idQuestion, String text, Date date_question, Boolean bestAnswer) {
 		super();
-		setId_author(id_user);
+		setIdAuthor(id_user);
+		setIdQuestion(idQuestion);
+		setText(text);
 		setDate(date_question);
 		this.bestAnswer = bestAnswer;
+	}
+	
+	public Answer(int id_user, int idQuestion, String text, Date date_question, Boolean bestAnswer, User author) {
+		super();
+		setIdAuthor(id_user);
+		setIdQuestion(idQuestion);
+		setText(text);
+		setDate(date_question);
+		this.bestAnswer = bestAnswer;
+		setAuthor(author);
 	}
 	
 	
@@ -42,12 +54,12 @@ public class Answer extends Post {
 		this.bestAnswer = bestAnswer;
 	}
 
-	public int getId_question() {
-		return id_question;
+	public int getIdQuestion() {
+		return idQuestion;
 	}
 
-	public void setId_question(int id_question) {
-		this.id_question = id_question;
+	public void setIdQuestion(int id_question) {
+		this.idQuestion = id_question;
 	}
 
 

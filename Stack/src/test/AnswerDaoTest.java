@@ -9,6 +9,7 @@ import org.junit.Test;
 import dao.implementation.jdbc.AnswerDAO;
 import database.exception.DatabaseException;
 import domain.Answer;
+import domain.User;
 import junit.framework.TestCase;
 
 import static org.mockito.Mockito.*;
@@ -104,27 +105,31 @@ public class AnswerDaoTest extends TestCase  {
 	protected
 	void setUp(){
 		
+
 		//Create a mock object of AnswerDAO
 		mockedAnswerDao = mock(AnswerDAO.class);
+		
+		User author = new User(1, "author 1", "123", false, User.Permission.ADMINISTRATOR);
 		
 		//Create a few instances of Answer class
 		answer1 = new Answer();
 		answer1.setId(1);
-		answer1.setId_author(1);
-		answer1.setId_question(1);
+		answer1.setAuthor(author);
+		answer1.setIdQuestion(1);
 		answer1.setText("Este é a resposta 1 feita pelo id_author=1");
 		answer1.setDate(new Date(System.currentTimeMillis()));
 		answer1.setBestAnswer(false);
 		
 		answer2 = new Answer();
 		answer2.setId(2);
-		answer2.setId_author(1);
-		answer2.setId_question(1);
+		answer2.setAuthor(author);
+		answer2.setIdQuestion(1);
 		answer2.setText("Este é a resposta 1 feita pelo id_author=1");
 		answer2.setDate(new Date(System.currentTimeMillis()));
 		answer2.setBestAnswer(true);
 		
 		//when(mockedAnswerDao.insert(answer1)).thenReturn(answer1.getId());
+
 		
 	}
 }

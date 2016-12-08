@@ -142,9 +142,8 @@ public class UserDAO implements UserDAOInterface {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				User user = new User(rs.getInt("id"), rs.getString("username"), null,
-						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
-
+				User user = new User(rs.getInt("id"), rs.getString("username"),
+						rs.getString("password"), rs.getBoolean("blocked"), Permission.createPermission(rs.getInt("permission")));
 				return user;
 			}
 

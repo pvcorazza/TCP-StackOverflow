@@ -7,6 +7,15 @@ public abstract class Post {
 	private String text;
 	private int idAuthor;		//id do usuario que fez o post
 	private Date date;
+	private User author;
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 
 	public String getText() {
 		return text;
@@ -16,12 +25,12 @@ public abstract class Post {
 		this.text = text;
 	}
 
-	public int getId_author() {
+	public int getIdAuthor() {
 		return idAuthor;
 	}
 
-	public void setId_author(int id_author) {
-		this.idAuthor = id_author;
+	public void setIdAuthor(int idAuthor) {
+		this.idAuthor = idAuthor;
 	}
 
 	public Date getDate() {

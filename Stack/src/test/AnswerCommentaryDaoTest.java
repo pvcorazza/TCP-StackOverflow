@@ -18,7 +18,7 @@ public class AnswerCommentaryDaoTest extends TestCase  {
 		//fail("Not yet implemented");
 		AnswerCommentaryDAOImpl dao = new AnswerCommentaryDAOImpl();
 		AnswerCommentary commentary = new AnswerCommentary();
-		commentary.setId_author(91);
+		commentary.setIdAuthor(91);
 		commentary.setId_answer(36);
 		commentary.setText("Comentario de uma resposta id = 36");
 		commentary.setDate(new Date(System.currentTimeMillis()));

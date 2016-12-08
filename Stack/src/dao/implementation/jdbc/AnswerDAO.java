@@ -11,6 +11,7 @@ import dao.interfaces.AnswerDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Answer;
+import domain.User;
 
 
 public class AnswerDAO implements AnswerDAOInterface {
@@ -39,8 +40,8 @@ public class AnswerDAO implements AnswerDAOInterface {
 			
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);			
 			
-			stmt.setInt(1, answer.getId_author());
-			stmt.setInt(2, answer.getId_question());
+			stmt.setInt(1, answer.getIdAuthor());
+			stmt.setInt(2, answer.getIdQuestion());
 			stmt.setString(3, answer.getText());
 			stmt.setDate(4, new java.sql.Date(answer.getDate().getTime()));
 			stmt.setBoolean(5, answer.getBestAnswer());
@@ -176,8 +177,8 @@ public class AnswerDAO implements AnswerDAOInterface {
 			if(rs.next()){
 				Answer answer = new Answer();
 				answer.setId(rs.getInt(COLUMN_ID));
-				answer.setId_author(rs.getInt(COLUMN_ID_AUTHOR));
-				answer.setId_question(rs.getInt(COLUMN_ID_QUESTION));
+				answer.setIdAuthor(rs.getInt(COLUMN_ID_AUTHOR));
+				answer.setIdQuestion(rs.getInt(COLUMN_ID_QUESTION));
 				answer.setText(rs.getString(COLUMN_TEXT_ANSWER));
 				return answer;
 			}
@@ -208,23 +209,29 @@ public class AnswerDAO implements AnswerDAOInterface {
 			Connection conn = new ConnectionFactory().getConnection();
 			System.out.println("Conexão aberta!");
 			
-			String selectSQL = "SELECT * FROM " + TABLE + " WHERE id_question=?";
+			String selectSQL = "SELECT * FROM " + TABLE + "," + ConnectionFactory.USER_TABLE
+					+ " WHERE id_author = " + ConnectionFactory.USER_TABLE + ".id AND id_question = ?";
 			PreparedStatement stmt = conn.prepareStatement(selectSQL);
 
 			stmt.setInt(1, questionId);
 			
 			ResultSet rs = stmt.executeQuery();
-			System.out.println(stmt.toString());
+			User author;
 			
 			while(rs.next()){
 				
+				author = new User(rs.getString("username"));
 				Answer answer = new Answer();
 				answer.setId(rs.getInt(COLUMN_ID));
-				answer.setId_author(rs.getInt(COLUMN_ID_AUTHOR));
-				answer.setId_question(rs.getInt(COLUMN_ID_QUESTION));
+				answer.setIdAuthor(rs.getInt(COLUMN_ID_AUTHOR));
+				answer.setIdQuestion(rs.getInt(COLUMN_ID_QUESTION));
 				answer.setText(rs.getString(COLUMN_TEXT_ANSWER));
+				answer.setDate(rs.getDate(COLUMN_DATE));
+				answer.setBestAnswer(rs.getBoolean(COLUMN_BEST_ANSWER));
+				answer.setAuthor(author);
 				
-				System.out.println("ID ="+answer.getId());
+				
+
 				answers.add(answer);
 			}
 			

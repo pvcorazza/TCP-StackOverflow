@@ -1,10 +1,6 @@
 package domain;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import domain.User.Permission;
+import stackoverflow.ui.TextForm;
 
 public class Main {
 

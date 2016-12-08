@@ -44,7 +44,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
-			stmt.setInt(1, question.getId_author());
+			stmt.setInt(1, question.getIdAuthor());
 			stmt.setString(2, question.getTitle());
 			stmt.setString(3, question.getText());
 
@@ -80,19 +80,72 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 	@Override
 	public void update(Question question) throws DatabaseException {
-		// TODO Auto-generated method stub
+		try {
+			
+			Connection conn = new ConnectionFactory().getConnection();
+			System.out.println("Conexão aberta!");
+			
+			String sql = "UPDATE "+TABLE+" SET "+
+					COLUMN_TEXT+"=?,"+
+					COLUMN_CLOSED+"=? "+
+					"WHERE "+
+					COLUMN_ID+"=?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+			stmt.setString(1, question.getText());
+			stmt.setBoolean(2, question.getClosed());
+
+			System.out.println(stmt.toString());
+			stmt.executeUpdate();
+
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possivel atualizar");
+		}
+		
 
 	}
 
 	@Override
 	public void delete(Question question) throws DatabaseException {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM "+TABLE+
+				" WHERE "+COLUMN_ID+"=?";
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, question.getId());
+			stmt.executeUpdate();
+			
+			System.out.println("Row id deleted = "+question.getId());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível deletar a resposta");
+		}
 
 	}
 
 	@Override
 	public void delete(Integer id) throws DatabaseException {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM "+TABLE+
+				" WHERE "+COLUMN_ID+"=?";
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			
+			System.out.println("Row id deleted = "+id);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Não foi possível deletar a resposta");
+		}
 
 	}
 

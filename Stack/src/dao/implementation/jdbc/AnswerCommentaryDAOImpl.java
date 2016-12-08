@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 import dao.interfaces.AnswerCommentaryDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
+import ui.text.UIUtils;
 
 public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 	
@@ -35,7 +37,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);	
 			
-			stmt.setInt(1,commentary.getId_author());
+			stmt.setInt(1,commentary.getIdAuthor());
 			stmt.setInt(2,commentary.getId_answer());
 			stmt.setString(3,commentary.getText());
 			stmt.setDate(4,new java.sql.Date(commentary.getDate().getTime()));
@@ -93,7 +95,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new DatabaseException("Não foi possivel atualizar");
+			throw new DatabaseException(UIUtils.INSTANCE.getTextManager().getText("databaseException.update.error"));
 		}
 		
 		
@@ -150,7 +152,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 				AnswerCommentary commentary = new AnswerCommentary();
 				commentary.setId(rs.getInt(COLUMN_ID));
 				commentary.setId_answer(rs.getInt(COLUMN_ID_ANSWER));
-				commentary.setId_author(rs.getInt(COLUMN_ID_AUTHOR));
+				commentary.setIdAuthor(rs.getInt(COLUMN_ID_AUTHOR));
 				commentary.setText(rs.getString(COLUMN_TEXT_COMMENT));
 				commentary.setDate(rs.getDate(COLUMN_DATE));
 				

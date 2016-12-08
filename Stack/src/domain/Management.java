@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import dao.implementation.jdbc.AnswerDAO;
 import dao.implementation.jdbc.QuestionDAO;
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
@@ -20,11 +21,12 @@ public class Management {
 	private String password;
 	private Scanner scanner1;
 	private Scanner scanner;
+	
+	/* Recebe um usuário e solicita a inserção no banco de dados */
 
 	public void createUser(User user) {
 
 		UserDAO userDAO = new UserDAO();
-		scanner1 = new Scanner(System.in);
 
 		try {
 			int userID = userDAO.insert(user);
@@ -39,108 +41,62 @@ public class Management {
 		}
 	}
 
-	public String createQuestion(Question question) {
-		
-		if(question.getAuthor().getPermission() != User.Permission.NOT_AUTHENTICATED){
-			QuestionDAO questionDAO = new QuestionDAO();
-			scanner1 = new Scanner(System.in);
 
-			try {
-				int questionID = questionDAO.insert(question);
-				question.setId(questionID);
-				return "Questão criada\n";
-			} catch (DatabaseConnectionException e) {
-				e.getMessage();
-				return "Erro de conexão";
-			} catch (DatabaseException e) {
-				e.printStackTrace();
-				return "Não foi possível criar questão";
-			}
-		}
-		else{
-			return "Usuário não possui a permissão para criar questão";
-		}
+	public void createQuestion(Question question) {
 		
+		QuestionDAO questionDAO = new QuestionDAO();
 
+		try {
+			int questionID = questionDAO.insert(question);
+			question.setId(questionID);
+			System.out.print("Questão criada\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
+	/* Recebe uma resposta e solicita a inserção no banco de dados */
+	
+	public void createAnswer(Answer answer) {
+		// TODO Auto-generated method stub
+		AnswerDAO answerDAO = new AnswerDAO();
 
-	public void updateUser(User loggedUser, String username) {
+		try {
+			int answerID = answerDAO.insert(answer);
+			answer.setId(answerID);
+			System.out.print("Resposta criada\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Recebe um usuário logado e um nome de usuário para pesquisar e retorna um usuário com esse nome */ 
+
+	public User findUserToUpdate(User loggedUser, String username) {
 
 		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR
 				|| loggedUser.getPermission() == User.Permission.MODERATOR) {
 
-			User updatedUser;
+			User userToUpdate;
 			UserDAO userDAO = new UserDAO();
 
-			int option;
-
 			try {
-				updatedUser = userDAO.select(username);
+				userToUpdate = userDAO.select(username);
 
-				if (updatedUser != null) {
+				if (userToUpdate != null) {
 
 					System.out.println("Usuário encontrado");
+					return userToUpdate;
+				}
 
-					do {
-						if (updatedUser.getBlocked() == true) {
-							System.out.println("1 - Desbloquear usuário");
-						} else {
-							System.out.println("1 - Bloquear usuário");
-						}
-						System.out.println("2 - Modificar permissão");
-						System.out.println("0 - Sair");
-						System.out.print("Digite a opção desejada: ");
-						option = scanner1.nextInt();
-
-						switch (option) {
-						case 1:
-							updatedUser.setBlocked(!updatedUser.getBlocked());
-							userDAO.update(updatedUser);
-							System.out.println("Operação realizada com sucesso");
-							break;
-
-						// Lembrar de controlar a entrada do usuário aqui pois
-						// pode
-						// entrar com um valor inválido...
-						case 2:
-							int privilege;
-							System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
-							System.out.println("Digite a opção desejada: ");
-							privilege = scanner1.nextInt();
-
-							switch (privilege) {
-							case 1:
-								updatedUser.setPermission(User.Permission.AUTHENTICATED);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							case 2:
-								updatedUser.setPermission(User.Permission.MODERATOR);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							case 3:
-								updatedUser.setPermission(User.Permission.ADMINISTRATOR);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							default:
-								System.out.println("O valor digitado é inválido");
-
-							}
-
-							break;
-
-						default:
-							System.out.println("Digite uma opção válida.");
-
-						}
-
-					} while (option != 0);
-				} else {
+			 else {
 					System.out.println("Usuário não encontrado.");
+					return null;
 				}
 
 			} catch (UserNotFoundException e) {
@@ -153,22 +109,31 @@ public class Management {
 		} else {
 			System.out.println("Você não tem permissão para exeutar essa ação.");
 		}
+		return null;
 
 	}
+	
+	/* Recebe um usuário, atualiza as permissões e define bloqueio desse usuário */
+	
+	public void updatePermission (User userToUpdate) {
+		UserDAO userDAO = new UserDAO();
+
+		try {
+			userDAO.update(userToUpdate);
+		} catch (DatabaseUserDuplicated e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/* Retorna um conjunto de questões com base em em texto de entrada e uma opção */
 
 	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
 
-		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
 
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
-
-			for (Question question:arrayQuestion) {
-				System.out.println("-------------------------------");
-				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-				System.out.println("-------------------------------");
-			}
 			return arrayQuestion;
 
 		} catch (Exception e) {
@@ -179,6 +144,26 @@ public class Management {
 
 	}
 	
+	/* Recebe um id de uma pergunta, solicita a busca de respostas com esse id do banco de dados e retorna essa lista de respostas */
+	
+	public ArrayList<Answer> getAnswers(int id) {
+
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			ArrayList<Answer> arrayAnswer = answerDAO.selectAll(id);
+			return arrayAnswer;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
+
 	public Question getQuestion(int id) {
 
 		scanner1 = new Scanner(System.in);
@@ -196,48 +181,10 @@ public class Management {
 
 	}
 	
-	public void displayQuestion () {
-		
-		Question question;
-		scanner = new Scanner(System.in);
-		int id;
-		System.out.print("Digite o id da questão que deseja visualizar: ");
-		id = scanner.nextInt();
-		question = this.getQuestion(id);
-		System.out.println("-------------------------------");
-		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
-				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-		System.out.println("\t" + question.getText());
-		System.out.println("-------------------------------");
-	}
-
-	// public void searchQuestion(String date) {
-	//
-	// scanner1 = new Scanner(System.in);
-	// QuestionDAO questionDAO = new QuestionDAO();
-	//
-	// try {
-	// ArrayList<Question> arrayQuestion = questionDAO.select(date);
-	//
-	// for (int i=0; i<arrayQuestion.size(); i++) {
-	// System.out.println("Questão encontrada");
-	// System.out.println("-------------------------------");
-	// System.out.println("Id: " + arrayQuestion.get(i).getId());
-	// System.out.println("Título: " + arrayQuestion.get(i).getTitle());
-	// System.out.println("Texto: " + arrayQuestion.get(i).getText());
-	// System.out.println("-------------------------------");
-	// }
-	// } catch (Exception e) {
-	//
-	// e.printStackTrace();
-	// }
-	//
-	// }
-
-	
+	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
 	
 	public User login(String username, String password) {
-		
+
 		UserDAO userDAO = new UserDAO();
 
 		try {
@@ -250,4 +197,5 @@ public class Management {
 		return null;
 
 	}
+
 }
