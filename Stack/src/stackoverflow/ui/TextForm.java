@@ -256,7 +256,20 @@ public class TextForm {
 		case 3:
 			showCreateAnswerCommentaryOptions(loggedUser);
 			break;
+		case 4:
+			showSelectBestAnswerOptions(loggedUser);
+			break;
 		}
+	}
+
+	private void showSelectBestAnswerOptions(User loggedUser) {
+
+		Management m = new Management();
+		int option;
+		System.out.println("Digite o Id da melhor resposta: ");
+		option = getInput();
+		m.selectBestAnswer(option);
+		
 	}
 
 	public void showCreateAnswerOptions(User loggedUser, int idQuestion) {

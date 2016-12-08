@@ -237,6 +237,25 @@ public class Management {
 
 	}
 	
+	public void selectBestAnswer (int id) {
+		
+		Answer answer;
+		AnswerDAO answerDAO = new AnswerDAO();
+		
+		try {
+			answer = answerDAO.select(id);
+			answer.setBestAnswer(true);
+			
+			answerDAO.update(answer);
+			
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
 	
 	public User login(String username, String password) {
