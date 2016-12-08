@@ -58,4 +58,51 @@ public class OperationPermission {
 			return false;
 		}
 	}
+	
+	
+	
+	public static boolean answerQuestion(User loggedUser,Question question){
+		
+		if(!question.getClosed()){
+			if(loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean commentQuestion(User loggedUser,Question question){
+			
+			if(!question.getClosed()){
+				if(loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED){
+					return true;
+				}
+			}
+			
+			return false;
+		}
+	
+	public static boolean commentAnswer(User loggedUser,Question question){
+		
+		if(!question.getClosed()){
+			if(loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean deleteQuestion(User loggedUser,Question question){
+		if(loggedUser.getPermission() == User.Permission.ADMINISTRATOR 
+				|| loggedUser.getPermission() == User.Permission.MODERATOR
+				|| question.getAuthor().getId() == loggedUser.getId()){
+			
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }

@@ -302,20 +302,50 @@ public class TextForm {
 
 
 		case 1:
-			showCreateAnswerOptions(loggedUser, question.getId());
+			if(OperationPermission.answerQuestion(loggedUser, question)){
+				showCreateAnswerOptions(loggedUser, question.getId());
+			}
+			else{
+				System.out.println("Permissão negada ou a questão está fechada");
+			}
 			break;
 
 		case 2:
-			showCreateQuestionCommentaryOptions(loggedUser, question.getId());
+			if(OperationPermission.commentQuestion(loggedUser, question)){
+				showCreateQuestionCommentaryOptions(loggedUser, question.getId());
+			}
+			else{
+				System.out.println("Permissão negada ou a questão está fechada");
+			}
+			
 			break;
 		case 3:
-			showCreateAnswerCommentaryOptions(loggedUser);
+			
+			if(OperationPermission.commentAnswer(loggedUser, question)){
+				showCreateAnswerCommentaryOptions(loggedUser);
+			}
+			else{
+				System.out.println("Permissão negada ou a questão está fechada");
+			}
 			break;
 		case 4:
-			showSelectBestAnswerOptions(loggedUser);
+			
+			if(OperationPermission.selectBestAnswer(loggedUser, question)){
+				showSelectBestAnswerOptions(loggedUser);
+			}
+			else{
+				System.out.println("Não é possível selecionar como melhor resposta em uma questão que não é sua");
+			}
+			
 			break;
 		case 5:
-			deleteQuestion(loggedUser, question.getId());
+			
+			if(OperationPermission.deleteQuestion(loggedUser, question)){
+				deleteQuestion(loggedUser, question.getId());
+			}
+			else{
+				System.out.println("Usuário não tem permissão para executar este comando");
+			}
 			break;
 
 		}

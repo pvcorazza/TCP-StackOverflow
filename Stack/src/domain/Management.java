@@ -92,8 +92,6 @@ public class Management {
 
 	public User findUserToUpdate(User loggedUser, String username) {
 
-		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR
-				|| loggedUser.getPermission() == User.Permission.MODERATOR) {
 
 			User userToUpdate;
 			UserDAO userDAO = new UserDAO();
@@ -119,9 +117,7 @@ public class Management {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println("Você não tem permissão para executar essa ação.");
-		}
+		
 		return null;
 
 	}

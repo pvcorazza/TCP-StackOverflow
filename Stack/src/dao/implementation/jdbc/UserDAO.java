@@ -109,8 +109,8 @@ public class UserDAO implements UserDAOInterface {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				User user = new User(rs.getInt("id"), rs.getString("username"), null,
-						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
+				User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"),
+						rs.getBoolean("blocked"), Permission.createPermission(rs.getInt("permission")));
 
 				return user;
 			}
@@ -172,7 +172,9 @@ public class UserDAO implements UserDAOInterface {
 			if (rs.next()) {
 				System.out.println(""+rs.getInt("id"));
 				user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"),
-						rs.getBoolean("password"), Permission.createPermission(rs.getInt("permission")));
+						rs.getBoolean("blocked"), Permission.createPermission(rs.getInt("permission")));
+				
+				//System.out.println("Blocked: "+rs.getBoolean(""));
 			}
 			else{
 				System.out.println("Não existe usuário no result set");
@@ -188,6 +190,7 @@ public class UserDAO implements UserDAOInterface {
 				
 		}
 		catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Não foi possível realizar operação");
 			
 		}
