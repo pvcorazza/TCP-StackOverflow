@@ -13,7 +13,7 @@ import database.exception.DatabaseException;
 import domain.AnswerCommentary;
 import ui.text.UIUtils;
 
-public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
+public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 	
 	private static final String TABLE = "answer_comment";
 	
@@ -38,7 +38,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);	
 			
 			stmt.setInt(1,commentary.getIdAuthor());
-			stmt.setInt(2,commentary.getId_answer());
+			stmt.setInt(2,commentary.getIdAnswer());
 			stmt.setString(3,commentary.getText());
 			stmt.setDate(4,new java.sql.Date(commentary.getDate().getTime()));
 			
@@ -151,7 +151,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			if(rs.next()){
 				AnswerCommentary commentary = new AnswerCommentary();
 				commentary.setId(rs.getInt(COLUMN_ID));
-				commentary.setId_answer(rs.getInt(COLUMN_ID_ANSWER));
+				commentary.setIdAnswer(rs.getInt(COLUMN_ID_ANSWER));
 				commentary.setIdAuthor(rs.getInt(COLUMN_ID_AUTHOR));
 				commentary.setText(rs.getString(COLUMN_TEXT_COMMENT));
 				commentary.setDate(rs.getDate(COLUMN_DATE));

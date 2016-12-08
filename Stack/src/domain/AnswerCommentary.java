@@ -4,34 +4,43 @@ import java.util.Date;
 
 public class AnswerCommentary extends Post {
 
-	int id,id_answer;
-
-	public AnswerCommentary(int id, int id_answer) {
-		super();
-		this.id = id;
-		this.id_answer = id_answer;
-	}
-
+	private int id;
+	private int idAnswer;
+	
 	public AnswerCommentary() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-
-
-
+		
+	public AnswerCommentary(int idAuthor, int idQuestion, String text, Date date) {
+		super();
+		this.setIdAuthor(idAuthor);
+		this.idAnswer = idQuestion;
+		this.setText(text);
+		this.setDate(date);
+	}
+	
+	public AnswerCommentary(int idAuthor, int idQuestion, String text, Date date, User author) {
+		super();
+		this.setIdAuthor(idAuthor);
+		this.idAnswer = idQuestion;
+		this.setText(text);
+		this.setDate(date);
+		this.setAuthor(author);
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getId_answer() {
-		return id_answer;
+	public int getIdAnswer() {
+		return idAnswer;
 	}
-
-	public void setId_answer(int id_answer) {
-		this.id_answer = id_answer;
+	public void setIdAnswer(int idAnswer) {
+		this.idAnswer = idAnswer;
 	}
 
 	
