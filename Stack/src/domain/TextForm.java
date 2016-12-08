@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import domain.User.Permission;
+import ui.text.UIUtils;
 
 public class TextForm {
 
@@ -50,7 +51,9 @@ public class TextForm {
 			loggedUser = m.login(getUsername(), getPassword());
 
 			if (loggedUser != null) {
-				System.out.println("Login realizado");
+				System.out.println(UIUtils.INSTANCE.getTextManager().
+						getText("message.login.success"));
+				
 				printInfoUser(loggedUser);
 
 				int authenticatedOption;

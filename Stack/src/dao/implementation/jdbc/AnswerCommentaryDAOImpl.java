@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 import dao.interfaces.AnswerCommentaryDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
+import ui.text.UIUtils;
 
 public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 	
@@ -93,7 +95,7 @@ public class AnswerCommentaryDAOImpl implements AnswerCommentaryDAOInterface{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new DatabaseException("Não foi possivel atualizar");
+			throw new DatabaseException(UIUtils.INSTANCE.getTextManager().getText("databaseException.update.error"));
 		}
 		
 		
