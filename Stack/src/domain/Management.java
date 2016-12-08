@@ -63,7 +63,6 @@ public class Management {
 
 			User updatedUser;
 			UserDAO userDAO = new UserDAO();
-			scanner1 = new Scanner(System.in);
 
 			int option;
 
@@ -225,23 +224,14 @@ public class Management {
 	//
 	// }
 
-	public User login() {
-
-		scanner1 = new Scanner(System.in);
+	
+	
+	public User login(String username, String password) {
+		
 		UserDAO userDAO = new UserDAO();
-		System.out.print("Digite o nome do usuário: ");
-		username = scanner1.next();
-		System.out.print("Digite a senha: ");
-		password = scanner1.next();
 
 		try {
 			User loggedUser = userDAO.select(username, password);
-			System.out.println("Login realizado");
-			System.out.println("Id: " + loggedUser.getId());
-			System.out.println("username: " + loggedUser.getUsername());
-			System.out.println("Password: " + loggedUser.getPassword());
-			System.out.println("Blocked: " + loggedUser.getBlocked());
-			System.out.println("Permission: " + loggedUser.getPermission().getPermission());
 			return loggedUser;
 		} catch (UserNotFoundException e) {
 
