@@ -1,9 +1,13 @@
-package domain;
+package stackoverflow.ui;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import domain.Answer;
+import domain.Management;
+import domain.Question;
+import domain.User;
 import domain.User.Permission;
 import ui.text.UIUtils;
 
@@ -159,6 +163,7 @@ public class TextForm {
 			displayQuestion(loggedUser);
 		}
 	}
+	
 
 	public void displayQuestion(User loggedUser) {
 
@@ -167,31 +172,30 @@ public class TextForm {
 		ArrayList<Answer> obtainedAnswers;
 
 		int id;
-		System.out.print("Digite o id da questão que deseja visualizar: ");
-		id = getInput();
+		id = getInputId();
 		question = m.getQuestion(id);
 		obtainedAnswers = m.getAnswers(id);
 
-		System.out.println("-------------------------------");
+		System.out.println("------------ QUESTÃO ----------");
 		System.out.println("| Título: " + question.getTitle() + "\n| Autor: "
 				+ question.getAuthor().getUsername() + "\n| Data: " + question.getDate().toString());
 		System.out.println("| Texto: " + question.getText());
+		
+		System.out.println("---------- RESPOSTAS ----------");
+		
 		for (Answer answer : obtainedAnswers) {
-			System.out.println("-------------------------------");
+			
+			System.out.println("\t| Id: " + answer.getId());
 			System.out.println("\t| Data: " + answer.getDate().toString());
 			System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
 			System.out.println("\t| Texto: " + answer.getText());
+			System.out.println("-------------------------------");
 		}
-		System.out.println("-------------------------------");
+		
 
 		showPostOptions(loggedUser, question);
 
 		System.out.println("-------------------------------");
-
-	}
-
-	public void displayAnswers(int id) {
-		Management m = new Management();
 
 	}
 
@@ -413,6 +417,14 @@ public class TextForm {
 		int opcao;
 		scanner = new Scanner(System.in);
 		System.out.print("Digite a opção desejada: ");
+		opcao = scanner.nextInt();
+		return opcao;
+	}
+	
+	public int getInputId() {
+		int opcao;
+		scanner = new Scanner(System.in);
+		System.out.print("Digite o ID da questão para visualizar: ");
 		opcao = scanner.nextInt();
 		return opcao;
 	}

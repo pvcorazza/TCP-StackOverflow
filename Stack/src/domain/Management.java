@@ -21,6 +21,8 @@ public class Management {
 	private String password;
 	private Scanner scanner1;
 	private Scanner scanner;
+	
+	/* Recebe um usuário e solicita a inserção no banco de dados */
 
 	public void createUser(User user) {
 
@@ -39,6 +41,8 @@ public class Management {
 		}
 	}
 
+	/* Recebe uma questão e solicita a inserção no banco de dados */
+	
 	public void createQuestion(Question question) {
 
 		QuestionDAO questionDAO = new QuestionDAO();
@@ -53,6 +57,25 @@ public class Management {
 			e.printStackTrace();
 		}
 	}
+	
+	/* Recebe uma resposta e solicita a inserção no banco de dados */
+	
+	public void createAnswer(Answer answer) {
+		// TODO Auto-generated method stub
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			int answerID = answerDAO.insert(answer);
+			answer.setId(answerID);
+			System.out.print("Resposta criada\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Recebe um usuário logado e um nome de usuário para pesquisar e retorna um usuário com esse nome */ 
 
 	public User findUserToUpdate(User loggedUser, String username) {
 
@@ -90,6 +113,8 @@ public class Management {
 
 	}
 	
+	/* Recebe um usuário, atualiza as permissões e define bloqueio desse usuário */
+	
 	public void updatePermission (User userToUpdate) {
 		UserDAO userDAO = new UserDAO();
 
@@ -100,6 +125,8 @@ public class Management {
 			e.printStackTrace();
 		}
 	}
+	
+	/* Retorna um conjunto de questões com base em em texto de entrada e uma opção */
 
 	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
 
@@ -117,6 +144,8 @@ public class Management {
 
 	}
 	
+	/* Recebe um id de uma pergunta, solicita a busca de respostas com esse id do banco de dados e retorna essa lista de respostas */
+	
 	public ArrayList<Answer> getAnswers(int id) {
 
 		AnswerDAO answerDAO = new AnswerDAO();
@@ -132,6 +161,8 @@ public class Management {
 		return null;
 
 	}
+	
+	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
 
 	public Question getQuestion(int id) {
 
@@ -149,7 +180,9 @@ public class Management {
 		return null;
 
 	}
-
+	
+	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
+	
 	public User login(String username, String password) {
 
 		UserDAO userDAO = new UserDAO();
@@ -163,21 +196,6 @@ public class Management {
 		}
 		return null;
 
-	}
-
-	public void createAnswer(Answer answer) {
-		// TODO Auto-generated method stub
-		AnswerDAO answerDAO = new AnswerDAO();
-
-		try {
-			int answerID = answerDAO.insert(answer);
-			answer.setId(answerID);
-			System.out.print("Resposta criada\n");
-		} catch (DatabaseConnectionException e) {
-			e.getMessage();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
