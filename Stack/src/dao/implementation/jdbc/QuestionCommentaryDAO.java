@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import dao.interfaces.QuestionCommentaryDAOInterface;
 import database.exception.DatabaseException;
-import domain.Commentary;
+import domain.AnswerCommentary;
 
 /**
  * This interface handles all communications with the table that contains 
@@ -23,17 +23,17 @@ public class QuestionCommentaryDAO implements QuestionCommentaryDAOInterface {
 	
 	
 	@Override
-	public int insert(Commentary commentary) throws DatabaseException {
+	public int insert(AnswerCommentary commentary) throws DatabaseException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
-	public void update(Commentary commentary) throws DatabaseException {
+	public void update(AnswerCommentary commentary) throws DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void delete(Commentary commentary) throws DatabaseException {
+	public void delete(AnswerCommentary commentary) throws DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -43,7 +43,7 @@ public class QuestionCommentaryDAO implements QuestionCommentaryDAOInterface {
 		
 	}
 	@Override
-	public Commentary select(Integer id) throws DatabaseException {
+	public AnswerCommentary select(Integer id) throws DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}

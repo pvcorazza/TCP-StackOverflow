@@ -60,6 +60,10 @@ public class User {
 		this.permission = permission;
 	}
 	
+	public User(String username) {
+		this.username = username;
+	}
+	
 	public User(int id, Permission permission) {
 		super();
 		this.id = id;

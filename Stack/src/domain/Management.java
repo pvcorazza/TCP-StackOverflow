@@ -19,6 +19,7 @@ public class Management {
 	private String username;
 	private String password;
 	private Scanner scanner1;
+	private Scanner scanner;
 
 	public void createUser(User user) {
 
@@ -62,7 +63,6 @@ public class Management {
 
 			User updatedUser;
 			UserDAO userDAO = new UserDAO();
-			scanner1 = new Scanner(System.in);
 
 			int option;
 
@@ -150,16 +150,13 @@ public class Management {
 
 		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
-		User user;
-		UserDAO userDAO = new UserDAO();
 
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
 
-			for (int i = 0; i < arrayQuestion.size(); i++) {
-				user = userDAO.select(arrayQuestion.get(i).getId_author());
+			for (Question question:arrayQuestion) {
 				System.out.println("-------------------------------");
-				System.out.println("Id: " + arrayQuestion.get(i).getId() + "\tTítulo: " + arrayQuestion.get(i).getTitle() + "\tAutor: " + user.getUsername());
+				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
 				System.out.println("-------------------------------");
 			}
 			return arrayQuestion;
@@ -170,6 +167,38 @@ public class Management {
 		}
 		return null;
 
+	}
+	
+	public Question getQuestion(int id) {
+
+		scanner1 = new Scanner(System.in);
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			Question question = questionDAO.select(id);
+			return question;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public void displayQuestion () {
+		
+		Question question;
+		scanner = new Scanner(System.in);
+		int id;
+		System.out.print("Digite o id da questão que deseja visualizar: ");
+		id = scanner.nextInt();
+		question = this.getQuestion(id);
+		System.out.println("-------------------------------");
+		System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+				+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+		System.out.println("\t" + question.getText());
+		System.out.println("-------------------------------");
 	}
 
 	// public void searchQuestion(String date) {
@@ -195,23 +224,14 @@ public class Management {
 	//
 	// }
 
-	public User login() {
-
-		scanner1 = new Scanner(System.in);
+	
+	
+	public User login(String username, String password) {
+		
 		UserDAO userDAO = new UserDAO();
-		System.out.print("Digite o nome do usuário: ");
-		username = scanner1.next();
-		System.out.print("Digite a senha: ");
-		password = scanner1.next();
 
 		try {
 			User loggedUser = userDAO.select(username, password);
-			System.out.println("Login realizado");
-			System.out.println("Id: " + loggedUser.getId());
-			System.out.println("username: " + loggedUser.getUsername());
-			System.out.println("Password: " + loggedUser.getPassword());
-			System.out.println("Blocked: " + loggedUser.getBlocked());
-			System.out.println("Permission: " + loggedUser.getPermission().getPermission());
 			return loggedUser;
 		} catch (UserNotFoundException e) {
 

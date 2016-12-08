@@ -12,6 +12,7 @@ import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Management;
 import domain.Question;
+import domain.User;
 
 public class QuestionDAO implements QuestionDAOInterface {
 
@@ -114,8 +115,8 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			case Management.TAG:
 
-				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE
-				+ " WHERE tag1 = ? or tag2 = ? or tag3 = ? or tag4 = ? or tag5 = ?";
+				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
+						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND (tag1 = ? or tag2 = ? or tag3 = ? or tag4 = ? or tag5 = ?)";
 				stmt = conn.prepareStatement(selectSQL);
 				stmt.setString(1, searchText);
 				stmt.setString(2, searchText);
@@ -126,14 +127,16 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			case Management.TITLE:
 
-				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + " WHERE title = ?";
+				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
+						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND title = ?";
 				stmt = conn.prepareStatement(selectSQL);
 				stmt.setString(1, searchText);
 
 				break;
 
 			case Management.DATE:
-				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + " WHERE date_question = ?";
+				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
+						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND date_question = ?";
 				stmt = conn.prepareStatement(selectSQL);
 				stmt.setString(1, searchText);
 				System.out.println(selectSQL);
@@ -151,12 +154,15 @@ public class QuestionDAO implements QuestionDAOInterface {
 			}
 
 			rs = stmt.executeQuery();
+			
+			User author;
 
 			while (rs.next()) {
+				author = new User(rs.getString("username"));
 				question.add(new Question(rs.getInt(COLUMN_ID), rs.getInt(COLUMN_ID_USER), rs.getString(COLUMN_TITLE),
 						rs.getString(COLUMN_TEXT), rs.getDate(COLUMN_DATE), rs.getBoolean(COLUMN_CLOSED),
 						rs.getString(COLUMN_TAG1), rs.getString(COLUMN_TAG2), rs.getString(COLUMN_TAG3),
-						rs.getString(COLUMN_TAG4), rs.getString(COLUMN_TAG5)));
+						rs.getString(COLUMN_TAG4), rs.getString(COLUMN_TAG5), author));
 			}
 
 			stmt.close();
@@ -170,6 +176,51 @@ public class QuestionDAO implements QuestionDAOInterface {
 		}
 		return null;
 
+	}
+
+	@Override
+	public Question select(int id) throws DatabaseException {
+		Question question = null;
+		Connection conn;
+		try {
+			conn = new ConnectionFactory().getConnection();
+
+			System.out.println("Conexão aberta!");
+
+			String selectSQL;
+			PreparedStatement stmt = null;
+			ResultSet rs;
+			
+			selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
+					+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND " + ConnectionFactory.QUESTION_TABLE + ".id = ?";
+			stmt = conn.prepareStatement(selectSQL);
+			stmt.setInt(1, id);
+			
+			rs = stmt.executeQuery();
+			
+			User author;
+
+			while (rs.next()) {
+				author = new User(rs.getString("username"));
+				question = new Question(rs.getInt(COLUMN_ID), rs.getInt(COLUMN_ID_USER), rs.getString(COLUMN_TITLE),
+						rs.getString(COLUMN_TEXT), rs.getDate(COLUMN_DATE), rs.getBoolean(COLUMN_CLOSED),
+						rs.getString(COLUMN_TAG1), rs.getString(COLUMN_TAG2), rs.getString(COLUMN_TAG3),
+						rs.getString(COLUMN_TAG4), rs.getString(COLUMN_TAG5), author);
+			}
+
+			stmt.close();
+			conn.close();
+
+			return question;
+			
+		} catch (DatabaseConnectionException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+			
+			
+		return null;
 	}
 
 }

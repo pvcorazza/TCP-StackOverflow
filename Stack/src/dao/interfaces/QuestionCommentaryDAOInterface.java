@@ -3,7 +3,7 @@ package dao.interfaces;
 import java.sql.SQLException;
 
 import database.exception.DatabaseException;
-import domain.Commentary;
+import domain.AnswerCommentary;
 
 /**
  * It handles all persistence issues about commentaries on questions.
@@ -12,13 +12,13 @@ import domain.Commentary;
  */
 public interface QuestionCommentaryDAOInterface {
 	
-	int  insert(Commentary commentary) throws DatabaseException;
-	void update(Commentary commentary) throws DatabaseException;
+	int  insert(AnswerCommentary commentary) throws DatabaseException;
+	void update(AnswerCommentary commentary) throws DatabaseException;
 	
-	void delete(Commentary commentary) throws DatabaseException;
+	void delete(AnswerCommentary commentary) throws DatabaseException;
 	void delete(Integer id) throws DatabaseException;
 	
-	Commentary select(Integer id) throws DatabaseException;
+	AnswerCommentary select(Integer id) throws DatabaseException;
 	
 
 }
