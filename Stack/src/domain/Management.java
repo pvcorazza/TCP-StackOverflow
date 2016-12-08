@@ -237,6 +237,19 @@ public class Management {
 
 	}
 	
+	public void deleteQuestion(User loggedUser, int id) {
+
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			questionDAO.delete(id);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
 	public void selectBestAnswer (int id) {
 		
 		Answer answer;

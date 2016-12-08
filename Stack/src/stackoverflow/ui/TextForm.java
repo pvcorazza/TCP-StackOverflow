@@ -238,6 +238,7 @@ public class TextForm {
 		System.out.println("   |     2 - Comentar questão                         |");
 		System.out.println("   |     3 - Comentar resposta                        |");
 		System.out.println("   |     4 - Selecionar a melhor resposta             |");
+		System.out.println("   |     5 - Exlcuir questão                          |");
 		System.out.println("   |     0 - Sair                                     |");
 		System.out.println("   ====================================================\n");
 
@@ -259,7 +260,17 @@ public class TextForm {
 		case 4:
 			showSelectBestAnswerOptions(loggedUser);
 			break;
+		case 5:
+			deleteQuestion(loggedUser, question.getId());
+			break;
 		}
+	}
+
+	private void deleteQuestion(User loggedUser, int id) {
+		
+		Management m = new Management();
+		m.deleteQuestion(loggedUser, id);
+		
 	}
 
 	private void showSelectBestAnswerOptions(User loggedUser) {
