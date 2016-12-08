@@ -292,7 +292,7 @@ public class TextForm {
 		System.out.println("   |     2 - Comentar questão                         |");
 		System.out.println("   |     3 - Comentar resposta                        |");
 		System.out.println("   |     4 - Selecionar a melhor resposta             |");
-		System.out.println("   |     5 - Exlcuir questão                          |");
+		System.out.println("   |     5 - Excluir questão                          |");
 		System.out.println("   |     0 - Sair                                     |");
 		System.out.println("   ====================================================\n");
 
