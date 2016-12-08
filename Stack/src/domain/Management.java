@@ -24,7 +24,6 @@ public class Management {
 	public void createUser(User user) {
 
 		UserDAO userDAO = new UserDAO();
-		scanner1 = new Scanner(System.in);
 
 		try {
 			int userID = userDAO.insert(user);
@@ -54,83 +53,27 @@ public class Management {
 			e.printStackTrace();
 		}
 	}
-	
 
-	public void updateUser(User loggedUser, String username) {
+	public User findUserToUpdate(User loggedUser, String username) {
 
 		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR
 				|| loggedUser.getPermission() == User.Permission.MODERATOR) {
 
-			User updatedUser;
+			User userToUpdate;
 			UserDAO userDAO = new UserDAO();
 
-			int option;
-
 			try {
-				updatedUser = userDAO.select(username);
+				userToUpdate = userDAO.select(username);
 
-				if (updatedUser != null) {
+				if (userToUpdate != null) {
 
 					System.out.println("Usuário encontrado");
+					return userToUpdate;
+				}
 
-					do {
-						if (updatedUser.getBlocked() == true) {
-							System.out.println("1 - Desbloquear usuário");
-						} else {
-							System.out.println("1 - Bloquear usuário");
-						}
-						System.out.println("2 - Modificar permissão");
-						System.out.println("0 - Sair");
-						System.out.print("Digite a opção desejada: ");
-						option = scanner1.nextInt();
-
-						switch (option) {
-						case 1:
-							updatedUser.setBlocked(!updatedUser.getBlocked());
-							userDAO.update(updatedUser);
-							System.out.println("Operação realizada com sucesso");
-							break;
-
-						// Lembrar de controlar a entrada do usuário aqui pois
-						// pode
-						// entrar com um valor inválido...
-						case 2:
-							int privilege;
-							System.out.println("AUTHENTICATED(1),MODERATOR(2),ADMINISTRATOR(3)");
-							System.out.println("Digite a opção desejada: ");
-							privilege = scanner1.nextInt();
-
-							switch (privilege) {
-							case 1:
-								updatedUser.setPermission(User.Permission.AUTHENTICATED);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							case 2:
-								updatedUser.setPermission(User.Permission.MODERATOR);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							case 3:
-								updatedUser.setPermission(User.Permission.ADMINISTRATOR);
-								userDAO.update(updatedUser);
-								System.out.println("Operação realizada com sucesso");
-								break;
-							default:
-								System.out.println("O valor digitado é inválido");
-
-							}
-
-							break;
-
-						default:
-							System.out.println("Digite uma opção válida.");
-
-						}
-
-					} while (option != 0);
-				} else {
+			 else {
 					System.out.println("Usuário não encontrado.");
+					return null;
 				}
 
 			} catch (UserNotFoundException e) {
@@ -143,7 +86,19 @@ public class Management {
 		} else {
 			System.out.println("Você não tem permissão para exeutar essa ação.");
 		}
+		return null;
 
+	}
+	
+	public void updatePermission (User userToUpdate) {
+		UserDAO userDAO = new UserDAO();
+
+		try {
+			userDAO.update(userToUpdate);
+		} catch (DatabaseUserDuplicated e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
@@ -154,9 +109,10 @@ public class Management {
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
 
-			for (Question question:arrayQuestion) {
+			for (Question question : arrayQuestion) {
 				System.out.println("-------------------------------");
-				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: " + question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+						+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
 				System.out.println("-------------------------------");
 			}
 			return arrayQuestion;
@@ -168,7 +124,7 @@ public class Management {
 		return null;
 
 	}
-	
+
 	public Question getQuestion(int id) {
 
 		scanner1 = new Scanner(System.in);
@@ -185,9 +141,9 @@ public class Management {
 		return null;
 
 	}
-	
-	public void displayQuestion () {
-		
+
+	public void displayQuestion() {
+
 		Question question;
 		scanner = new Scanner(System.in);
 		int id;
@@ -224,10 +180,8 @@ public class Management {
 	//
 	// }
 
-	
-	
 	public User login(String username, String password) {
-		
+
 		UserDAO userDAO = new UserDAO();
 
 		try {
