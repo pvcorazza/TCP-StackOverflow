@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.implementation.jdbc.AnswerDAO;
+import dao.implementation.jdbc.QuestionCommentaryDAO;
 import dao.implementation.jdbc.QuestionDAO;
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
@@ -68,6 +69,23 @@ public class Management {
 			int answerID = answerDAO.insert(answer);
 			answer.setId(answerID);
 			System.out.print("Resposta criada\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Recebe um comentário de questão e solicita a inserção no banco de dados */
+	
+	public void createQuestionCommentary(QuestionCommentary questionCommentary) {
+		// TODO Auto-generated method stub
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			int questionCommentaryId = questionCommentaryDAO.insert(questionCommentary);
+			questionCommentary.setId(questionCommentaryId);
+			System.out.print("Comentário da questão criado\n");
 		} catch (DatabaseConnectionException e) {
 			e.getMessage();
 		} catch (DatabaseException e) {
@@ -153,6 +171,22 @@ public class Management {
 		try {
 			ArrayList<Answer> arrayAnswer = answerDAO.selectAll(id);
 			return arrayAnswer;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public ArrayList<QuestionCommentary> getQuestionCommentaries(int id) {
+
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			ArrayList<QuestionCommentary> arrayQuestionCommentary = questionCommentaryDAO.selectAll(id);
+			return arrayQuestionCommentary;
 
 		} catch (Exception e) {
 

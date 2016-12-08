@@ -7,6 +7,7 @@ import java.util.Scanner;
 import domain.Answer;
 import domain.Management;
 import domain.Question;
+import domain.QuestionCommentary;
 import domain.User;
 import domain.User.Permission;
 import ui.text.UIUtils;
@@ -164,27 +165,41 @@ public class TextForm {
 		}
 	}
 	
-
 	public void displayQuestion(User loggedUser) {
 
 		Management m = new Management();
 		Question question;
 		ArrayList<Answer> obtainedAnswers;
+		ArrayList<QuestionCommentary> obtainedQuestionCommentaries;
 
 		int id;
 		id = getInputId();
 		question = m.getQuestion(id);
 		obtainedAnswers = m.getAnswers(id);
+		obtainedQuestionCommentaries = m.getQuestionCommentaries(id);
 
-		System.out.println("------------ QUESTÃO ----------");
+		System.out.println("------------ QUESTÃO -----------");
 		System.out.println("| Título: " + question.getTitle() + "\n| Autor: "
 				+ question.getAuthor().getUsername() + "\n| Data: " + question.getDate().toString());
 		System.out.println("| Texto: " + question.getText());
+		System.out.println("--------------------------------");
 		
-		System.out.println("---------- RESPOSTAS ----------");
+		System.out.println("---- COMENTÁRIOS DA QUESTÃO ----");
+		
+		for (QuestionCommentary questionCommentary : obtainedQuestionCommentaries) {
+			System.out.println("| Id: " + questionCommentary.getId());
+			System.out.println("| Data: " + questionCommentary.getDate().toString());
+			System.out.println("| Autor: " + questionCommentary.getAuthor().getUsername());
+			System.out.println("| Texto: " + questionCommentary.getText());
+			System.out.println("--------------------------------");
+		}
+		
+		System.out.println("---------- RESPOSTAS -----------");
 		
 		for (Answer answer : obtainedAnswers) {
-			
+			if (answer.getBestAnswer()) {
+			System.out.println("\t| *ESCOLHIDA COMO MELHOR RESPOSTA PELO AUTOR");
+			}
 			System.out.println("\t| Id: " + answer.getId());
 			System.out.println("\t| Data: " + answer.getDate().toString());
 			System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
@@ -195,7 +210,7 @@ public class TextForm {
 
 		showPostOptions(loggedUser, question);
 
-		System.out.println("-------------------------------");
+		System.out.println("--------------------------------");
 
 	}
 
@@ -220,6 +235,7 @@ public class TextForm {
 			break;
 
 		case 2:
+			showCreateQuestionCommentaryOptions(loggedUser, question.getId());
 			break;
 
 		}
@@ -238,6 +254,21 @@ public class TextForm {
 		Date date = new Date(System.currentTimeMillis());
 		newAnswer = new Answer(loggedUser.getId(), idQuestion, text, date, false);
 		m.createAnswer(newAnswer);
+
+	}
+	
+	public void showCreateQuestionCommentaryOptions(User loggedUser, int idQuestion) {
+
+		Management m = new Management();
+		QuestionCommentary newQuestionCommentary;
+		String text;
+
+		System.out.print("Digite o comentário: ");
+		text = getStringInput();
+
+		Date date = new Date(System.currentTimeMillis());
+		newQuestionCommentary = new QuestionCommentary(loggedUser.getId(), idQuestion, text, date);
+		m.createQuestionCommentary(newQuestionCommentary);
 
 	}
 
