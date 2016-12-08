@@ -15,13 +15,12 @@ import static org.mockito.Mockito.*;
 
 public class AnswerDaoTest extends TestCase  {
 	
-	Answer answer;	//declare a Answer
-	AnswerDAO dao;
+
 	private static AnswerDAO mockedAnswerDao;
 	private static Answer answer1;
 	private static Answer answer2;
 
-<<<<<<< HEAD
+
 //	@Test
 //	public void testInsetAnswer() throws DatabaseException {
 //		int id =dao.insert(answer);	
@@ -33,11 +32,11 @@ public class AnswerDaoTest extends TestCase  {
 //		//System.out.println(r.getText());
 //	}
 	
-	@Test
-	public void testSelectArray() throws DatabaseException{
-		ArrayList<Answer> answers = dao.selectAll(9);
-		System.out.println("tamanho da lista: "+answers.size());
-	}
+//	@Test
+//	public void testSelectArray() throws DatabaseException{
+//		ArrayList<Answer> answers = dao.selectAll(9);
+//		System.out.println("tamanho da lista: "+answers.size());
+//	}
 	
 //	@Test
 //	public void testUpdateAnswer() throws DatabaseException{
@@ -50,19 +49,7 @@ public class AnswerDaoTest extends TestCase  {
 //	public void testDeleteAnswer() throws DatabaseException{
 //		dao.delete(answer);
 //	}
-	
-=======
-	@Test
-	public void testInsetAnswer() throws DatabaseException {
-		int id =dao.insert(answer);	
-		answer.setId(id);
-		System.out.println("Inserido resposta\n");
-		System.out.println("id = "+answer.getId());
-		System.out.println("id_author "+answer.getId_author()+ "\n");
-		System.out.println("id_question "+answer.getId_question()+ "\n");
-		System.out.println("id_author "+answer.getId_author()+"\n");
-		
-	}
+
 
 //	@Test
 //	public void testSelect() throws DatabaseException{
@@ -83,31 +70,39 @@ public class AnswerDaoTest extends TestCase  {
 //		dao.update(answer);
 //	}
 //	
->>>>>>> refs/remotes/origin/dao-implementation
+
 	@Test
-<<<<<<< HEAD
 	public void testInsertAnswer() throws DatabaseException{
+		
+		when(mockedAnswerDao.insert(answer1)).thenReturn(answer1.getId());
+		
 		int id = mockedAnswerDao.insert(answer1);
+		System.out.println("id="+id);
 		assertNotNull(id);
 		assertEquals(answer1.getId(), id);
-=======
-	public void testDeleteAnswer() throws DatabaseException{
-		int id =dao.insert(answer);	
-		answer.setId(id);
-		dao.delete(answer);
->>>>>>> refs/remotes/origin/dao-implementation
+		}
+
+	@Test
+	public void testUpdateAnswerText() throws DatabaseException{
+		
+		
+		when(mockedAnswerDao.update(answer1)).thenReturn(true);
+		
+		boolean result = mockedAnswerDao.update(answer1);
+		
+		assertTrue(result);
+		
 	}
+	
+//	public void testDeleteAnswer() throws DatabaseException{
+//		int id =dao.insert(answer);	
+//		answer.setId(id);
+//		dao.delete(answer);
+//	}
 	
 	@Before
 	protected
-	void setUp() throws DatabaseException{
-		answer = new Answer(92, "Titulo", new Date(System.currentTimeMillis()), false);
-		
-		answer.setText("Isto é uma resposta para uma questao");
-		answer.setId_question(9);
-		answer.setId(13);
-		
-		dao = new AnswerDAO();
+	void setUp(){
 		
 		//Create a mock object of AnswerDAO
 		mockedAnswerDao = mock(AnswerDAO.class);
@@ -129,7 +124,7 @@ public class AnswerDaoTest extends TestCase  {
 		answer2.setDate(new Date(System.currentTimeMillis()));
 		answer2.setBestAnswer(true);
 		
-		when(mockedAnswerDao.insert(answer1)).thenReturn(answer1.getId());
+		//when(mockedAnswerDao.insert(answer1)).thenReturn(answer1.getId());
 		
 	}
 }

@@ -39,20 +39,30 @@ public class Management {
 		}
 	}
 
-	public void createQuestion(Question question) {
+	public String createQuestion(Question question) {
+		
+		if(question.getAuthor().getPermission() != User.Permission.NOT_AUTHENTICATED){
+			QuestionDAO questionDAO = new QuestionDAO();
+			scanner1 = new Scanner(System.in);
 
-		QuestionDAO questionDAO = new QuestionDAO();
-		scanner1 = new Scanner(System.in);
-
-		try {
-			int questionID = questionDAO.insert(question);
-			question.setId(questionID);
-			System.out.print("Questão criada\n");
-		} catch (DatabaseConnectionException e) {
-			e.getMessage();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
+			try {
+				int questionID = questionDAO.insert(question);
+				question.setId(questionID);
+				return "Questão criada\n";
+			} catch (DatabaseConnectionException e) {
+				e.getMessage();
+				return "Erro de conexão";
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+				return "Não foi possível criar questão";
+			}
 		}
+		else{
+			return "Usuário não possui a permissão para criar questão";
+		}
+		
+
+		
 	}
 	
 

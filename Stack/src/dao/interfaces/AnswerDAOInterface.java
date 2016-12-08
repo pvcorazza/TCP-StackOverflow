@@ -14,10 +14,10 @@ public interface AnswerDAOInterface {
 	
 	int  insert (Answer answer) throws DatabaseException;
 	
-	void update (Answer answer) throws DatabaseException;
+	boolean update (Answer answer) throws DatabaseException;
 	
-	void delete (Answer answer) throws DatabaseException;
-	void delete (Integer id) throws DatabaseException;
+	boolean delete (Answer answer) throws DatabaseException;
+	boolean delete (Integer id) throws DatabaseException;
 	
 	Answer select(Integer answerId) throws DatabaseException;
 	

@@ -70,8 +70,9 @@ public class AnswerDAO implements AnswerDAOInterface {
 
 	}
 	@Override
-	public void update(Answer answer) throws DatabaseException {
+	public boolean update(Answer answer) throws DatabaseException {
 		
+		boolean success = false;
 		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
@@ -94,15 +95,22 @@ public class AnswerDAO implements AnswerDAOInterface {
 
 			stmt.close();
 			conn.close();
+			
+			success = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possivel atualizar");
 		}
 		
+		return success;
 		
 	}
 	@Override
-	public void delete(Answer answer) throws DatabaseException {
+	public boolean delete(Answer answer) throws DatabaseException {
+		
+		boolean success = false;
+		
 		String sql = "DELETE FROM "+TABLE+
 				" WHERE "+COLUMN_ID+"=?";
 		
@@ -114,14 +122,21 @@ public class AnswerDAO implements AnswerDAOInterface {
 			
 			System.out.println("Row id deleted = "+answer.getId());
 			
+			success = true;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		
+		return success;
+		
 	}
 	@Override
-	public void delete(Integer id) throws DatabaseException {
+	public boolean delete(Integer id) throws DatabaseException {
+		
+		boolean success = false;
+		
 		String sql = "DELETE FROM "+TABLE+
 				" WHERE "+COLUMN_ID+"=?";
 		
@@ -133,10 +148,14 @@ public class AnswerDAO implements AnswerDAOInterface {
 			
 			System.out.println("Row id deleted = "+id);
 			
+			success = true;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
+		
+		return success;
 		
 	}
 	@Override
