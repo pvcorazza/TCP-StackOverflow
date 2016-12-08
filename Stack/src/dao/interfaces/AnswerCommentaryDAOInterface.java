@@ -1,6 +1,7 @@
 package dao.interfaces;
 
 import database.exception.DatabaseConnectionException;
+import java.util.ArrayList;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
 
@@ -18,7 +19,6 @@ public interface AnswerCommentaryDAOInterface {
 	void delete (AnswerCommentary commentary) throws DatabaseException;
 	void delete (Integer id) throws DatabaseException;
 	
-	AnswerCommentary select (Integer id) throws DatabaseException;
-	AnswerCommentary select (Integer id,Integer userID,Integer answerID) throws DatabaseException;
-	
+	AnswerCommentary select (int idAnswer) throws DatabaseException;
+	ArrayList<AnswerCommentary> selectALL (int idAnswer) throws DatabaseException;
 }

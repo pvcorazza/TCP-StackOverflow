@@ -8,9 +8,11 @@ import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import domain.Answer;
+import domain.AnswerCommentary;
 import domain.Management;
 import domain.OperationPermission;
 import domain.Question;
+import domain.QuestionCommentary;
 import domain.User;
 import domain.User.Permission;
 import exceptions.permission.PermissionException;
@@ -18,6 +20,11 @@ import exceptions.userDAO.UserNotFoundException;
 import ui.text.UIUtils;
 
 public class TextForm {
+
+	public static final int TAG = 1;
+	public static final int TITLE = 2;
+	public static final int DATE = 3;
+	public static final int AUTHOR = 4;
 
 	private Scanner scanner;
 
@@ -73,9 +80,8 @@ public class TextForm {
 			}
 
 			if (loggedUser != null) {
-				System.out.println(UIUtils.INSTANCE.getTextManager().
-						getText("message.login.success"));
-				
+				System.out.println(UIUtils.INSTANCE.getTextManager().getText("message.login.success"));
+
 				printInfoUser(loggedUser);
 
 				int authenticatedOption;
@@ -145,13 +151,13 @@ public class TextForm {
 			System.out.print("Digite uma tag: ");
 			String searchTag;
 			searchTag = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchTag, Management.TAG);
+			obtainedQuestions = m.searchQuestion(searchTag, TAG);
 			break;
 		case 2:
 			System.out.print("Digite um título: ");
 			String searchTitle;
 			searchTitle = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchTitle, Management.TITLE);
+			obtainedQuestions = m.searchQuestion(searchTitle, TITLE);
 			break;
 
 		case 3:
@@ -169,14 +175,14 @@ public class TextForm {
 			searchAno = getStringInput();
 
 			searchDate = searchAno + "/" + searchMes + "/" + searchDia;
-			obtainedQuestions = m.searchQuestion(searchDate, Management.DATE);
+			obtainedQuestions = m.searchQuestion(searchDate, DATE);
 			break;
 
 		case 4:
 			System.out.print("Digite um autor: ");
 			String searchAuthor;
 			searchAuthor = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchAuthor, Management.AUTHOR);
+			obtainedQuestions = m.searchQuestion(searchAuthor, AUTHOR);
 			break;
 
 		case 0:
@@ -195,39 +201,73 @@ public class TextForm {
 			displayQuestion(loggedUser);
 		}
 	}
-	
 
 	public void displayQuestion(User loggedUser) {
 
 		Management m = new Management();
 		Question question;
 		ArrayList<Answer> obtainedAnswers;
+		ArrayList<QuestionCommentary> obtainedQuestionCommentaries;
+		ArrayList<AnswerCommentary> obtainedAnswerCommentaries;
 
 		int id;
 		id = getInputId();
 		question = m.getQuestion(id);
 		obtainedAnswers = m.getAnswers(id);
+		obtainedQuestionCommentaries = m.getQuestionCommentaries(id);
+		obtainedAnswerCommentaries = m.getAnswerCommentaries(id);
 
-		System.out.println("------------ QUESTÃO ----------");
-		System.out.println("| Título: " + question.getTitle() + "\n| Autor: "
-				+ question.getAuthor().getUsername() + "\n| Data: " + question.getDate().toString());
+		System.out.println("------------ QUESTÃO -----------");
+		System.out.println("| Título: " + question.getTitle() + "\n| Autor: " + question.getAuthor().getUsername()
+				+ "\n| Data: " + question.getDate().toString());
 		System.out.println("| Texto: " + question.getText());
+
 		
-		System.out.println("---------- RESPOSTAS ----------");
 		
+		
+		
+
+		System.out.println("--------------------------------");
+
+		System.out.println("---- COMENTÁRIOS DA QUESTÃO ----");
+
+		for (QuestionCommentary questionCommentary : obtainedQuestionCommentaries) {
+			System.out.println("| Id: " + questionCommentary.getId());
+			System.out.println("| Data: " + questionCommentary.getDate().toString());
+			System.out.println("| Autor: " + questionCommentary.getAuthor().getUsername());
+			System.out.println("| Texto: " + questionCommentary.getText());
+			System.out.println("--------------------------------");
+		}
+
 		if(obtainedAnswers.size()==0){
 			System.out.println("Não tem respostas");
 		}
-		else{
-			for (Answer answer : obtainedAnswers) {
-				
-				System.out.println("\t| Id: " + answer.getId());
-				System.out.println("\t| Data: " + answer.getDate().toString());
-				System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
-				System.out.println("\t| Texto: " + answer.getText());
+		for (Answer answer : obtainedAnswers) {
+			System.out.println("---------- RESPOSTA -----------");
+			obtainedAnswerCommentaries = m.getAnswerCommentaries(answer.getId());
+			if (answer.getBestAnswer()) {
+				System.out.println("\t| *ESCOLHIDA COMO MELHOR RESPOSTA PELO AUTOR");
+			}
+			System.out.println("\t| Id: " + answer.getId());
+			System.out.println("\t| Data: " + answer.getDate().toString());
+			System.out.println("\t| Autor: " + answer.getAuthor().getUsername());
+			System.out.println("\t| Texto: " + answer.getText());
+			System.out.println("-------------------------------");
+			if (!obtainedAnswerCommentaries.isEmpty()) {
+				System.out.println("-------- COMENTÁRIOS DA RESPOSTA --------");
+			}
+			for (AnswerCommentary answerCommentary : obtainedAnswerCommentaries) {
+				System.out.println("\t\t| Id: " + answerCommentary.getId());
+				System.out.println("\t\t| Data: " + answerCommentary.getDate().toString());
+				System.out.println("\t\t| Autor: " + answerCommentary.getAuthor().getUsername());
+				System.out.println("\t\t| Texto: " + answerCommentary.getText());
 				System.out.println("-------------------------------");
 			}
+
+
 		}
+
+		
 			
 
 		if(OperationPermission.displayPostOptions(loggedUser)){
@@ -237,43 +277,66 @@ public class TextForm {
 			System.out.println("Por favor, faça o login para realizar outras operações");
 		}
 
-		System.out.println("-------------------------------");
+		System.out.println("--------------------------------");
 
 	}
 
 	public void showPostOptions(User loggedUser, Question question) {
 		
-		if(loggedUser!= null){
-			System.out.println("   ====================================================");
-			System.out.println("   |     1 - Responder questão                        |");
-			System.out.println("   |     2 - Comentar questão                         |");
-			System.out.println("   |     3 - Comentar resposta                        |");
-			System.out.println("   |     4 - Selecionar a melhor resposta             |");
-			System.out.println("   |     0 - Sair                                     |");
-			System.out.println("   ====================================================\n");
 
-			int postOption;
-			postOption = getInput();
-
+		int postOption;
 			
-			switch (postOption) {
 
-			case 1:
-				showCreateAnswerOptions(loggedUser, question.getId());
+		System.out.println("   ====================================================");
+		System.out.println("   |     1 - Responder questão                        |");
+		System.out.println("   |     2 - Comentar questão                         |");
+		System.out.println("   |     3 - Comentar resposta                        |");
+		System.out.println("   |     4 - Selecionar a melhor resposta             |");
+		System.out.println("   |     5 - Exlcuir questão                          |");
+		System.out.println("   |     0 - Sair                                     |");
+		System.out.println("   ====================================================\n");
 
-				break;
+		postOption = getInput();
+			
+		switch (postOption) {
 
-			case 2:
-				break;
 
-			}
+		case 1:
+			showCreateAnswerOptions(loggedUser, question.getId());
+			break;
+
+		case 2:
+			showCreateQuestionCommentaryOptions(loggedUser, question.getId());
+			break;
+		case 3:
+			showCreateAnswerCommentaryOptions(loggedUser);
+			break;
+		case 4:
+			showSelectBestAnswerOptions(loggedUser);
+			break;
+		case 5:
+			deleteQuestion(loggedUser, question.getId());
+			break;
+
 		}
-		else{
-			System.out.println("Faça o login para poder realizar as operações");
-		}
+	}
 
+
+	private void deleteQuestion(User loggedUser, int id) {
 		
+		Management m = new Management();
+		m.deleteQuestion(loggedUser, id);
+		
+	}
 
+	private void showSelectBestAnswerOptions(User loggedUser) {
+
+		Management m = new Management();
+		int option;
+		System.out.println("Digite o Id da melhor resposta: ");
+		option = getInput();
+		m.selectBestAnswer(option);
+		
 	}
 
 	public void showCreateAnswerOptions(User loggedUser, int idQuestion) {
@@ -287,6 +350,7 @@ public class TextForm {
 
 		Date date = new Date(System.currentTimeMillis());
 		newAnswer = new Answer(loggedUser.getId(), idQuestion, text, date, false);
+
 		
 		try {
 			m.createAnswer(newAnswer);
@@ -298,6 +362,41 @@ public class TextForm {
 			System.out.println(e.getMessage());
 			
 		}
+
+
+	}
+
+	public void showCreateQuestionCommentaryOptions(User loggedUser, int idQuestion) {
+
+		Management m = new Management();
+		QuestionCommentary newQuestionCommentary;
+		String text;
+
+		System.out.print("Digite o comentário: ");
+		text = getStringInput();
+
+		Date date = new Date(System.currentTimeMillis());
+		newQuestionCommentary = new QuestionCommentary(loggedUser.getId(), idQuestion, text, date);
+		m.createQuestionCommentary(newQuestionCommentary);
+
+	}
+
+	public void showCreateAnswerCommentaryOptions(User loggedUser) {
+
+		Management m = new Management();
+		AnswerCommentary newAnswerCommentary;
+		String text;
+		int idAnswer;
+
+		System.out.println("Digite o id da resposta: ");
+		idAnswer = getInput();
+		System.out.print("Digite o comentário: ");
+		text = getStringInput();
+
+		Date date = new Date(System.currentTimeMillis());
+		newAnswerCommentary = new AnswerCommentary(loggedUser.getId(), idAnswer, text, date);
+		m.createAnswerCommentary(newAnswerCommentary);
+
 
 	}
 
@@ -487,6 +586,7 @@ public class TextForm {
 		
 		Management m = new Management();
 		Question newQuestion;
+		
 		String title;
 		String text;
 
@@ -509,6 +609,8 @@ public class TextForm {
 
 		Date date = new Date(System.currentTimeMillis());
 		newQuestion = new Question(loggedUser.getId(), title, text, date, tag1, tag2, tag3, tag4, tag5);
+		newQuestion.setAuthor(loggedUser);
+		
 		try {
 			m.createQuestion(newQuestion);
 		} catch (DatabaseConnectionException e) {
@@ -546,7 +648,7 @@ public class TextForm {
 		opcao = scanner.nextInt();
 		return opcao;
 	}
-	
+
 	public int getInputId() {
 		int opcao;
 		scanner = new Scanner(System.in);

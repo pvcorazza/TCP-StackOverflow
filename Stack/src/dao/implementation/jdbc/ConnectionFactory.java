@@ -19,12 +19,10 @@ public class ConnectionFactory {
 	//Retorna uma nova conexão
 	public Connection getConnection() throws DatabaseConnectionException {
 		try {
-			System.out.println("Conectando ao banco de dados...");
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {
 			throw new DatabaseConnectionException();
 		}
-		
 	}
 }
 

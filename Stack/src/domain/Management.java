@@ -3,7 +3,9 @@ package domain;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import dao.implementation.jdbc.AnswerCommentaryDAO;
 import dao.implementation.jdbc.AnswerDAO;
+import dao.implementation.jdbc.QuestionCommentaryDAO;
 import dao.implementation.jdbc.QuestionDAO;
 import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
@@ -14,15 +16,6 @@ import exceptions.userDAO.UserNotFoundException;
 import ui.text.UIUtils;
 
 public class Management {
-
-	public static final int TAG = 1;
-	public static final int TITLE = 2;
-	public static final int DATE = 3;
-	public static final int AUTHOR = 4;
-	private String username;
-	private String password;
-	private Scanner scanner1;
-	private Scanner scanner;
 	
 	/* Recebe um usuário e solicita a inserção no banco de dados */
 
@@ -55,10 +48,44 @@ public class Management {
 		// TODO Auto-generated method stub
 		AnswerDAO answerDAO = new AnswerDAO();
 
+
 		int answerID = answerDAO.insert(answer);
 		answer.setId(answerID);
 	
-		
+
+	}
+	
+	/* Recebe um comentário de questão e solicita a inserção no banco de dados */
+	
+	public void createQuestionCommentary(QuestionCommentary questionCommentary) {
+		// TODO Auto-generated method stub
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			int questionCommentaryId = questionCommentaryDAO.insert(questionCommentary);
+			questionCommentary.setId(questionCommentaryId);
+			System.out.print("Comentário da questão criado\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createAnswerCommentary(AnswerCommentary answerCommentary) {
+		// TODO Auto-generated method stub
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
+
+		try {
+			int answerCommentaryId = answerCommentaryDAO.insert(answerCommentary);
+			answerCommentary.setId(answerCommentaryId);
+			System.out.print("Comentário da resposta criado\n");
+		} catch (DatabaseConnectionException e) {
+			e.getMessage();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	/* Recebe um usuário logado e um nome de usuário para pesquisar e retorna um usuário com esse nome */ 
@@ -155,11 +182,42 @@ public class Management {
 
 	}
 	
+	public ArrayList<QuestionCommentary> getQuestionCommentaries(int id) {
+
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			ArrayList<QuestionCommentary> arrayQuestionCommentary = questionCommentaryDAO.selectAll(id);
+			return arrayQuestionCommentary;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public ArrayList<AnswerCommentary> getAnswerCommentaries(int idAnswer) {
+
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
+
+		try {
+			ArrayList<AnswerCommentary> arrayAnswerCommentary = answerCommentaryDAO.selectALL(idAnswer);
+			return arrayAnswerCommentary;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
 	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
 
 	public Question getQuestion(int id) {
 
-		scanner1 = new Scanner(System.in);
 		QuestionDAO questionDAO = new QuestionDAO();
 
 		try {
@@ -172,6 +230,38 @@ public class Management {
 		}
 		return null;
 
+	}
+	
+	public void deleteQuestion(User loggedUser, int id) {
+
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			questionDAO.delete(id);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	public void selectBestAnswer (int id) {
+		
+		Answer answer;
+		AnswerDAO answerDAO = new AnswerDAO();
+		
+		try {
+			answer = answerDAO.select(id);
+			answer.setBestAnswer(true);
+			
+			answerDAO.update(answer);
+			
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
