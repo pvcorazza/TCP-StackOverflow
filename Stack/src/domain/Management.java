@@ -135,16 +135,13 @@ public class Management {
 	
 	/* Recebe um usuário, atualiza as permissões e define bloqueio desse usuário */
 	
-	public void updatePermission (User loggedUser, User userToUpdate) throws PermissionException {
+	public void updatePermission (User loggedUser, User userToUpdate) throws PermissionException, DatabaseConnectionException, DatabaseUserDuplicated {
 		
 		if(OperationPermission.modifyUserPermission(loggedUser)){
 
-			try {
-				userDAO.update(userToUpdate);
-			} catch (DatabaseUserDuplicated e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			userDAO.update(userToUpdate);
+			
 		}
 		else{
 			throw new PermissionException("Você não tem permissão para realizar a operação");
@@ -154,17 +151,11 @@ public class Management {
 	
 	/* Retorna um conjunto de questões com base em em texto de entrada e uma opção */
 
-	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
+	public ArrayList<Question> searchQuestion(String searchText, int opcao) throws DatabaseException {
 
-		try {
-			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
+			ArrayList<Question> arrayQuestion = null;
+			arrayQuestion = questionDAO.select(searchText, opcao);
 			return arrayQuestion;
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-		return null;
 
 	}
 	

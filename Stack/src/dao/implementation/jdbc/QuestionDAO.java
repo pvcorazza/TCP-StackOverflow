@@ -66,17 +66,16 @@ public class QuestionDAO implements QuestionDAOInterface {
 				generatedKey = rs.getInt(1);
 			}
 
-			System.out.println("Inserted record's ID: " + generatedKey);
 
 			stmt.close();
 			conn.close();
 
 		} catch (DatabaseConnectionException e) {
-			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 			
 		} catch (SQLException e) {
-			new DatabaseException("databaseException.insert.error");
-			e.printStackTrace();
+			throw new DatabaseException("Não foi possível realizar operação");
+			
 		}
 
 		return generatedKey;
@@ -98,13 +97,11 @@ public class QuestionDAO implements QuestionDAOInterface {
 			stmt.setString(1, question.getText());
 			stmt.setInt(2, question.getId());
 
-			System.out.println(stmt.toString());
 			stmt.executeUpdate();
 
 			stmt.close();
 			conn.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possivel atualizar");
 		}
 		
@@ -127,7 +124,6 @@ public class QuestionDAO implements QuestionDAOInterface {
 			rowDeleted=  question.getId();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		return rowDeleted;
@@ -144,18 +140,16 @@ public class QuestionDAO implements QuestionDAOInterface {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
-			
-			System.out.println("Row id deleted = "+id);
+		
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 
 	}
 
 	@Override
-	public ArrayList<Question> select(String searchText, int opcao) {
+	public ArrayList<Question> select(String searchText, int opcao) throws DatabaseException {
 
 		ArrayList<Question> question = new ArrayList<Question>();
 
@@ -196,14 +190,13 @@ public class QuestionDAO implements QuestionDAOInterface {
 						+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND date_question = ?";
 				stmt = conn.prepareStatement(selectSQL);
 				stmt.setString(1, searchText);
-				System.out.println(selectSQL);
+				
 				break;
 
 			case AUTHOR:
 
 				selectSQL = "SELECT * FROM " + ConnectionFactory.QUESTION_TABLE + "," + ConnectionFactory.USER_TABLE
 				+ " WHERE id_user = " + ConnectionFactory.USER_TABLE + ".id AND username = ?";
-				System.out.println(selectSQL);
 				stmt = conn.prepareStatement(selectSQL);
 				stmt.setString(1, searchText);
 				break;
@@ -227,11 +220,13 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			return question;
 
-		} catch (DatabaseConnectionException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DatabaseConnectionException e) {
+			throw new DatabaseConnectionException();
 		}
-		return null;
+		catch(SQLException e){
+			throw new DatabaseException("Não foi possível executar a ação");
+		}
+
 
 	}
 
@@ -269,14 +264,13 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			return question;
 			
-		} catch (DatabaseConnectionException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DatabaseConnectionException  e) {
+			throw new DatabaseConnectionException();
+		}
+		catch(SQLException e){
+			throw new DatabaseException("Não foi possível realizar a consulta");
 		}
 			
-			
-			
-		return null;
 	}
 
 }

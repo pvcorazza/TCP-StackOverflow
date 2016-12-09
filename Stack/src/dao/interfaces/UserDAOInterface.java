@@ -15,7 +15,7 @@ import exceptions.userDAO.UserNotFoundException;
 public interface UserDAOInterface {
 	
 	int insert (User answer) throws DatabaseUserDuplicated, DatabaseException,DatabaseConnectionException ;
-	void update (User answer) throws DatabaseUserDuplicated;
+	void update (User answer) throws DatabaseUserDuplicated, DatabaseConnectionException;
 	void delete (User answer) throws DatabaseUserDuplicated;
 	
 	User select(Integer id) throws UserNotFoundException;

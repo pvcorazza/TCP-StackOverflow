@@ -51,8 +51,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 				generatedKey = rs.getInt(1);
 			}
 
-			System.out.println("Inserted record's ID: " + generatedKey);
-
 			stmt.close();
 			conn.close();
 
@@ -60,7 +58,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível inserir uma resposta");
 		}
 		return generatedKey;
@@ -82,7 +79,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			stmt.setString(1, answer.getText());
 			stmt.setInt(2, answer.getId());
 
-			System.out.println(stmt.toString());
 			stmt.executeUpdate();
 
 			stmt.close();
@@ -91,7 +87,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			success = true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possivel atualizar");
 		}
 
@@ -112,12 +107,9 @@ public class AnswerDAO implements AnswerDAOInterface {
 			stmt.setInt(1, answer.getId());
 			stmt.executeUpdate();
 
-			System.out.println("Row id deleted = " + answer.getId());
-
 			success = true;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 
@@ -138,12 +130,9 @@ public class AnswerDAO implements AnswerDAOInterface {
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
 
-			System.out.println("Row id deleted = " + id);
-
 			success = true;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 
@@ -175,7 +164,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível recuperar a resposta");
 		} finally {
 			try {
@@ -225,7 +213,6 @@ public class AnswerDAO implements AnswerDAOInterface {
 			stmt.close();
 			conn.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível recuperar a resposta");
 		}
 		return answers;

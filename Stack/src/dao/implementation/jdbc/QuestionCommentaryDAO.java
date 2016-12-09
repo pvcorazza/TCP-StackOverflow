@@ -67,14 +67,13 @@ public class QuestionCommentaryDAO implements QuestionCommentaryDAOInterface {
 			
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível inserir uma resposta");
 		}
 		return generatedKey;
 	}
 	@Override
 	public void update(QuestionCommentary commentary) throws DatabaseException {
-try {
+		try {
 			
 			Connection conn = new ConnectionFactory().getConnection();
 
@@ -95,7 +94,6 @@ try {
 			conn.close();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possivel atualizar");
 		}
 	}
@@ -110,7 +108,6 @@ try {
 			stmt.setInt(1, commentary.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		
@@ -126,7 +123,6 @@ try {
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		
@@ -205,7 +201,6 @@ try {
 			stmt.close();
 			conn.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível recuperar a resposta");
 		}
 		return questionCommentaries;

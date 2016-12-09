@@ -41,8 +41,7 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			stmt.setInt(2,commentary.getIdAnswer());
 			stmt.setString(3,commentary.getText());
 			stmt.setDate(4,new java.sql.Date(commentary.getDate().getTime()));
-			
-			System.out.println(stmt.toString());
+
 			
 			stmt.execute();
 
@@ -52,18 +51,16 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 				generatedKey = rs.getInt(1);
 			}
 
-			System.out.println("Inserted record's ID: " + generatedKey);
-
+			
 			stmt.close();
 			conn.close();
 			
 			
 		} catch (DatabaseConnectionException e) {
-			new DatabaseConnectionException("Erro ao conectar banco de dados");
+			throw new DatabaseConnectionException("Erro ao conectar banco de dados");
 			
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível inserir uma resposta");
 		}
 		return generatedKey;
@@ -94,7 +91,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			conn.close();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException(UIUtils.INSTANCE.getTextManager().getText("databaseException.update.error"));
 		}
 		
@@ -112,7 +108,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			stmt.setInt(1, commentary.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		
@@ -128,7 +123,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
 		
@@ -207,7 +201,6 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			stmt.close();
 			conn.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DatabaseException("Não foi possível recuperar a resposta");
 		}
 		return answerCommentaries;

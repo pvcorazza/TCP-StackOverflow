@@ -44,8 +44,6 @@ public class UserDAO implements UserDAOInterface {
 				generatedKey = rs.getInt(1);
 			}
 
-			System.out.println("Inserted record's ID: " + generatedKey);
-
 			stmt.close();
 			conn.close();
 		}
@@ -62,7 +60,7 @@ public class UserDAO implements UserDAOInterface {
 	}
 
 	@Override
-	public void update(User user) throws DatabaseUserDuplicated {
+	public void update(User user) throws DatabaseUserDuplicated, DatabaseConnectionException {
 
 		try {
 			Connection conn = new ConnectionFactory().getConnection();
@@ -81,10 +79,9 @@ public class UserDAO implements UserDAOInterface {
 			conn.close();
 
 		} catch (DatabaseConnectionException d) {
-			System.out.println(d);
+			throw new DatabaseConnectionException("Impossível conectar-se ao banco de dados");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	
 			throw new DatabaseUserDuplicated("Não foi possível atualizar o usuário");
 		}
 
@@ -174,7 +171,6 @@ public class UserDAO implements UserDAOInterface {
 				user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"),
 						rs.getBoolean("blocked"), Permission.createPermission(rs.getInt("permission")));
 				
-				//System.out.println("Blocked: "+rs.getBoolean(""));
 			}
 			else{
 				System.out.println("Não existe usuário no result set");
@@ -190,7 +186,7 @@ public class UserDAO implements UserDAOInterface {
 				
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+
 			throw new DatabaseException("Não foi possível realizar operação");
 			
 		}

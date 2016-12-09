@@ -151,13 +151,21 @@ public class TextForm {
 			System.out.print("Digite uma tag: ");
 			String searchTag;
 			searchTag = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchTag, TAG);
+			try {
+				obtainedQuestions = m.searchQuestion(searchTag, TAG);
+			} catch (DatabaseException e) {
+				System.out.println(e.getMessage());
+			}
 			break;
 		case 2:
 			System.out.print("Digite um título: ");
 			String searchTitle;
 			searchTitle = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchTitle, TITLE);
+			try {
+				obtainedQuestions = m.searchQuestion(searchTitle, TITLE);
+			} catch (DatabaseException e) {
+				System.out.println(e.getMessage());
+			}
 			break;
 
 		case 3:
@@ -175,14 +183,22 @@ public class TextForm {
 			searchAno = getStringInput();
 
 			searchDate = searchAno + "/" + searchMes + "/" + searchDia;
-			obtainedQuestions = m.searchQuestion(searchDate, DATE);
+			try {
+				obtainedQuestions = m.searchQuestion(searchDate, DATE);
+			} catch (DatabaseException e) {
+				System.out.println(e.getMessage());
+			}
 			break;
 
 		case 4:
 			System.out.print("Digite um autor: ");
 			String searchAuthor;
 			searchAuthor = getStringInput();
-			obtainedQuestions = m.searchQuestion(searchAuthor, AUTHOR);
+			try {
+				obtainedQuestions = m.searchQuestion(searchAuthor, AUTHOR);
+			} catch (DatabaseException e) {
+				System.out.println(e.getMessage());
+			}
 			break;
 
 		case 0:
@@ -705,7 +721,7 @@ public class TextForm {
 		int idAnswer;
 
 		System.out.println("Digite o id da resposta: ");
-		idAnswer = getInput();
+		idAnswer = scanner.nextInt();
 		System.out.print("Digite o comentário: ");
 		text = getStringInput();
 
@@ -810,6 +826,10 @@ public class TextForm {
 					m.updatePermission(loggedUser, userToUpdate);
 				} catch (PermissionException e) {
 					System.out.println(e.getMessage());
+				} catch (DatabaseConnectionException e) {
+					System.out.println(e.getMessage());
+				} catch (DatabaseUserDuplicated e) {
+					System.out.println(e.getMessage());
 				}
 
 				printMessageSuccess();
@@ -865,6 +885,10 @@ public class TextForm {
 				printMessageSuccess();
 			} catch (PermissionException e) {
 				System.out.println(e.getMessage());
+			} catch (DatabaseConnectionException e) {
+				System.out.println(e.getMessage());
+			} catch (DatabaseUserDuplicated e) {
+				System.out.println(e.getMessage());
 			}
 
 			break;
@@ -876,6 +900,10 @@ public class TextForm {
 				printMessageSuccess();
 			} catch (PermissionException e) {
 				System.out.println(e.getMessage());
+			} catch (DatabaseConnectionException e) {
+				System.out.println(e.getMessage());
+			} catch (DatabaseUserDuplicated e) {
+				System.out.println(e.getMessage());
 			}
 
 			break;
@@ -886,6 +914,10 @@ public class TextForm {
 				m.updatePermission(logedUser, updatedUser);
 				printMessageSuccess();
 			} catch (PermissionException e) {
+				System.out.println(e.getMessage());
+			} catch (DatabaseConnectionException e) {
+				System.out.println(e.getMessage());
+			} catch (DatabaseUserDuplicated e) {
 				System.out.println(e.getMessage());
 			}
 
