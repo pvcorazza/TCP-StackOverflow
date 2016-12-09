@@ -87,7 +87,7 @@ public class OperationPermission {
 		return false;
 	}
 
-	public static boolean deletePost(User loggedUser, int id) {
+	public static boolean editOrDeletePost(User loggedUser, int id) {
 		if (loggedUser.getPermission() == User.Permission.ADMINISTRATOR
 				|| loggedUser.getPermission() == User.Permission.MODERATOR
 				|| id == loggedUser.getId()) {

@@ -332,7 +332,7 @@ public class TextForm {
 
 		case 4:
 
-			if (OperationPermission.deletePost(loggedUser, question.getId())) {
+			if (OperationPermission.editOrDeletePost(loggedUser, question.getId())) {
 				m.deleteQuestion(question.getId());
 			} else {
 				System.out.println("Usuário não tem permissão para executar este comando");
@@ -352,8 +352,7 @@ public class TextForm {
 			break;
 
 		case 8:
-			showUpdateQuestionOptions(question);
-
+			showUpdateQuestionOptions(loggedUser, question);
 			break;
 
 		case 9:
@@ -387,13 +386,27 @@ public class TextForm {
 		}
 	}
 
-	private void showUpdateQuestionOptions(Question question) {
+	private void showUpdateQuestionOptions(User loggedUser, Question questionToUpdate) {
 		Management m = new Management();
 		String questionText;
-		System.out.println("Digite um novo texto para a pergunta: ");
+		System.out.print("Digite um novo texto para a pergunta: ");
 		questionText = getStringInput();
-		question.setText(questionText);
-		m.updateQuestion(question);
+		boolean foundQuestionId = false;
+		
+		questionToUpdate.setText(questionText);
+		
+		if (OperationPermission.editOrDeletePost(loggedUser, questionToUpdate.getIdAuthor())) {
+			foundQuestionId = true;
+
+			if (foundQuestionId == true) {
+				m.updateQuestion(questionToUpdate);
+			} else {
+				System.out.println("Question não encontrada.");
+			}
+
+		} else {
+			System.out.println("Usuário não tem permissão para executar este comando");
+	}
 	}
 
 	private void showUpdateAnswerOptions(User loggedUser, ArrayList<Answer> answers) {
@@ -419,7 +432,7 @@ public class TextForm {
 
 		answerToUpdate.setText(answerText);
 
-		if (OperationPermission.deletePost(loggedUser, answerToUpdate.getIdAuthor())) {
+		if (OperationPermission.editOrDeletePost(loggedUser, answerToUpdate.getIdAuthor())) {
 
 			if (foundAnswerId == true) {
 				m.updateAnswer(answerToUpdate);
@@ -455,7 +468,7 @@ public class TextForm {
 
 		questionCommentaryToUpdate.setText(questionCommentaryText);
 
-		if (OperationPermission.deletePost(loggedUser, questionCommentaryToUpdate.getIdAuthor())) {
+		if (OperationPermission.editOrDeletePost(loggedUser, questionCommentaryToUpdate.getIdAuthor())) {
 			if (foundQuestionCommentaryId == true) {
 				m.updateQuestionCommentary(questionCommentaryToUpdate);
 			} else {
@@ -491,7 +504,7 @@ public class TextForm {
 
 		answerCommentaryToUpdate.setText(answerCommentaryText);
 
-		if (OperationPermission.deletePost(loggedUser, answerCommentaryToUpdate.getIdAuthor())) {
+		if (OperationPermission.editOrDeletePost(loggedUser, answerCommentaryToUpdate.getIdAuthor())) {
 			if (foundAnswerCommentaryId == true) {
 				m.updateAnswerCommentary(answerCommentaryToUpdate);
 			} else {
@@ -540,7 +553,7 @@ public class TextForm {
 			}
 		}
 
-		if (OperationPermission.deletePost(loggedUser, idAuthor)) {
+		if (OperationPermission.editOrDeletePost(loggedUser, idAuthor)) {
 
 			if (foundAnswerId == true) {
 				m.deleteAnswer(answerOption);
@@ -569,7 +582,7 @@ public class TextForm {
 				foundQuestionCommentaryId = true;
 			}
 		}
-		if (OperationPermission.deletePost(loggedUser, idAuthor)) {
+		if (OperationPermission.editOrDeletePost(loggedUser, idAuthor)) {
 			if (foundQuestionCommentaryId == true) {
 				m.deleteQuestionCommentary(questionCommentaryOption);
 			} else {
@@ -597,7 +610,7 @@ public class TextForm {
 				foundAnswerCommentaryId = true;
 			}
 		}
-		if (OperationPermission.deletePost(loggedUser, idAuthor)) {
+		if (OperationPermission.editOrDeletePost(loggedUser, idAuthor)) {
 			if (foundAnswerCommentaryId == true) {
 				m.deleteAnswerCommentary(answerCommentaryOption);
 			} else {
