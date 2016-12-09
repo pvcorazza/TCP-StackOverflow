@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import dao.interfaces.QuestionDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
-import domain.Management;
 import domain.Question;
 import domain.User;
 

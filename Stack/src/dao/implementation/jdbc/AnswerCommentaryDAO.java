@@ -11,7 +11,6 @@ import dao.interfaces.AnswerCommentaryDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
-import domain.QuestionCommentary;
 import domain.User;
 import ui.text.UIUtils;
 
