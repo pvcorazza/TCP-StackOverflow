@@ -14,7 +14,6 @@ import domain.Answer;
 import domain.Question;
 import domain.User;
 import exceptions.permission.PermissionException;
-import exceptions.userDAO.UserNotFoundException;
 import impl.AnswerCommentaryDAO;
 import impl.AnswerDAO;
 import impl.QuestionCommentaryDAO;
