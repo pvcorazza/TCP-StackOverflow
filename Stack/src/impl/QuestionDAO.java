@@ -149,7 +149,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 	}
 
 	@Override
-	public ArrayList<Question> select(String searchText, int opcao) throws DatabaseException {
+	public ArrayList<Question> select(String searchText, int opcao) throws DatabaseException  {
 
 		ArrayList<Question> question = new ArrayList<Question>();
 
@@ -220,7 +220,7 @@ public class QuestionDAO implements QuestionDAOInterface {
 
 			return question;
 
-		} catch (DatabaseConnectionException e) {
+		}catch (DatabaseConnectionException e) {
 			throw new DatabaseConnectionException();
 		}
 		catch(SQLException e){
