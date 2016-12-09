@@ -117,7 +117,7 @@ try {
 		
 	}
 	@Override
-	public void delete(Integer id) throws DatabaseException {
+	public void delete(int id) throws DatabaseException {
 		String sql = "DELETE FROM "+TABLE+
 				" WHERE "+COLUMN_ID+"=?";
 		

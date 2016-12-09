@@ -212,12 +212,12 @@ public class Management {
 	
 	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
 
-	public Question getQuestion(int id) {
+	public Question getQuestion(int questionId) {
 
 		QuestionDAO questionDAO = new QuestionDAO();
 
 		try {
-			Question question = questionDAO.select(id);
+			Question question = questionDAO.select(questionId);
 			return question;
 
 		} catch (Exception e) {
@@ -228,13 +228,66 @@ public class Management {
 
 	}
 	
-	public void deleteQuestion(User loggedUser, int id) {
+	public Question getQuestionByUser(int userId) {
 
 		QuestionDAO questionDAO = new QuestionDAO();
 
 		try {
-			questionDAO.delete(id);
+			//Question question = questionDAO.selectByUser(userId);
+			//return question;
 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public void deleteQuestion(int questionId) {
+
+		QuestionDAO questionDAO = new QuestionDAO();
+
+		try {
+			questionDAO.delete(questionId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteAnswer(int answerId) {
+
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			answerDAO.delete(answerId);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteQuestionCommentary(int questionCommentaryId) {
+
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			questionCommentaryDAO.delete(questionCommentaryId);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void deleteAnswerCommentary(int answerCommentaryId) {
+
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
+
+		try {
+			answerCommentaryDAO.delete(answerCommentaryId);
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -272,6 +325,19 @@ public class Management {
 		return loggedUser;
 		
 
+	}
+
+
+	public void updateQuestion(Question question) {
+		QuestionDAO questionDAO = new QuestionDAO ();
+		
+		try {
+			questionDAO.update(question);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
