@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import dao.implementation.jdbc.AnswerCommentaryDAO;
 import dao.implementation.jdbc.AnswerDAO;
@@ -13,7 +12,6 @@ import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import exceptions.permission.PermissionException;
 import exceptions.userDAO.UserNotFoundException;
-import ui.text.UIUtils;
 
 public class Management {
 	UserDAO userDAO;
@@ -216,10 +214,10 @@ public class Management {
 	
 	/* Recebe um id, solicita a busca de uma questão com esse id do banco de dados e a retorna */
 
-	public Question getQuestion(int id) {
+	public Question getQuestion(int questionId) {
 
 		try {
-			Question question = questionDAO.select(id);
+			Question question = questionDAO.select(questionId);
 			return question;
 
 		} catch (Exception e) {
@@ -230,19 +228,51 @@ public class Management {
 
 	}
 	
+
 	public void deleteQuestion(User loggedUser, Question question) throws PermissionException {
 		if(OperationPermission.deleteQuestion(loggedUser, question)){
-			try {
-				questionDAO.delete(question);
+		try {
+			questionDAO.delete(question.getId());
 
 			} catch (Exception e) {
-
+	
 				e.printStackTrace();
 			}
 		}
-		else{
-			throw new PermissionException("Você não tem permissão para realizar a operação");
+	}
+	
+	public void deleteAnswer(int answerId) {
+
+		AnswerDAO answerDAO = new AnswerDAO();
+
+		try {
+			answerDAO.delete(answerId);
+		} catch (Exception e) {
+
+			e.printStackTrace();
 		}
+	}
+	
+	public void deleteQuestionCommentary(int questionCommentaryId) {
+
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
+		try {
+			questionCommentaryDAO.delete(questionCommentaryId);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void deleteAnswerCommentary(int answerCommentaryId) throws DatabaseException {
+
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
+
+
+		answerCommentaryDAO.delete(answerCommentaryId);
+
 		
 	}
 	
@@ -274,6 +304,56 @@ public class Management {
 		return loggedUser;
 		
 
+	}
+
+
+	public void updateQuestion(Question question) {
+		QuestionDAO questionDAO = new QuestionDAO ();
+		
+		try {
+			questionDAO.update(question);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	public void updateAnswer(Answer answer) {
+		AnswerDAO answerDAO = new AnswerDAO ();
+		
+		try {
+			answerDAO.update(answer);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public void updateQuestionCommentary(QuestionCommentary questionCommentaryToUpdate) {
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO ();
+		
+		try {
+			questionCommentaryDAO.update(questionCommentaryToUpdate);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void updateAnswerCommentary(AnswerCommentary answerCommentaryToUpdate) {
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO ();
+		
+		try {
+			answerCommentaryDAO.update(answerCommentaryToUpdate);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

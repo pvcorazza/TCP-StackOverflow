@@ -1,7 +1,8 @@
 package dao.interfaces;
 
-import database.exception.DatabaseConnectionException;
 import java.util.ArrayList;
+
+import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
 

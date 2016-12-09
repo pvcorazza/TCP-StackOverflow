@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import dao.interfaces.QuestionDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
-import domain.Management;
 import domain.Question;
 import domain.User;
 
@@ -90,15 +89,14 @@ public class QuestionDAO implements QuestionDAOInterface {
 			Connection conn = new ConnectionFactory().getConnection();
 			
 			String sql = "UPDATE "+TABLE+" SET "+
-					COLUMN_TEXT+"=?,"+
-					COLUMN_CLOSED+"=? "+
+					COLUMN_TEXT+"=? "+
 					"WHERE "+
 					COLUMN_ID+"=?";
 			
 			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 			stmt.setString(1, question.getText());
-			stmt.setBoolean(2, question.getClosed());
+			stmt.setInt(2, question.getId());
 
 			System.out.println(stmt.toString());
 			stmt.executeUpdate();

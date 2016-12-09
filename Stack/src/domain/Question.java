@@ -1,7 +1,5 @@
 package domain;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Question extends Post {

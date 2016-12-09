@@ -87,6 +87,7 @@ try {
 			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
 			stmt.setString(1, commentary.getText());
+			stmt.setInt(2, commentary.getId());
 			
 			stmt.executeUpdate();
 			
@@ -97,8 +98,6 @@ try {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possivel atualizar");
 		}
-		
-		
 	}
 	@Override
 	public void delete(QuestionCommentary commentary) throws DatabaseException {
@@ -117,7 +116,7 @@ try {
 		
 	}
 	@Override
-	public void delete(Integer id) throws DatabaseException {
+	public void delete(int id) throws DatabaseException {
 		String sql = "DELETE FROM "+TABLE+
 				" WHERE "+COLUMN_ID+"=?";
 		

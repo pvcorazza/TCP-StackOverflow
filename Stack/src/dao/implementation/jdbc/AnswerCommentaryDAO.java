@@ -11,7 +11,6 @@ import dao.interfaces.AnswerCommentaryDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
-import domain.QuestionCommentary;
 import domain.User;
 import ui.text.UIUtils;
 
@@ -87,6 +86,7 @@ public class AnswerCommentaryDAO implements AnswerCommentaryDAOInterface{
 			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
 			stmt.setString(1, commentary.getText());
+			stmt.setInt(2, commentary.getId());
 			
 			stmt.executeUpdate();
 			

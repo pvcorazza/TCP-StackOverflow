@@ -17,7 +17,7 @@ public interface QuestionCommentaryDAOInterface {
 
 	
 	void delete(QuestionCommentary commentary) throws DatabaseException;
-	void delete(Integer id) throws DatabaseException;
+	void delete(int id) throws DatabaseException;
 	
 	ArrayList<QuestionCommentary> selectAll(int idQuestion) throws DatabaseException;
 	QuestionCommentary select(int idQuestion) throws DatabaseException;
