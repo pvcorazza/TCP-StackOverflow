@@ -340,4 +340,41 @@ public class Management {
 		
 	}
 
+
+	public void updateAnswer(Answer answer) {
+		AnswerDAO answerDAO = new AnswerDAO ();
+		
+		try {
+			answerDAO.update(answer);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public void updateQuestionCommentary(QuestionCommentary questionCommentaryToUpdate) {
+		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO ();
+		
+		try {
+			questionCommentaryDAO.update(questionCommentaryToUpdate);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void updateAnswerCommentary(AnswerCommentary answerCommentaryToUpdate) {
+		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO ();
+		
+		try {
+			answerCommentaryDAO.update(answerCommentaryToUpdate);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }

@@ -295,7 +295,7 @@ public class TextForm {
 		System.out.println("   |     11 - Editar comentário de resposta           |");
 
 		if (question.getIdAuthor() == loggedUser.getId()) {
-			System.out.println("   |     12 - Selecionar a melhor resposta             |");
+			System.out.println("   |     12 - Selecionar a melhor resposta            |");
 		}
 
 		System.out.println("   |     0 - Sair                                     |");
@@ -350,21 +350,24 @@ public class TextForm {
 		case 7:
 			showDeleteCommentaryAnswerOptions(loggedUser, obtainedAnswerCommentaries);
 			break;
-			
+
 		case 8:
 			showUpdateQuestionOptions(question);
-			
+
 			break;
-			
+
 		case 9:
+			showUpdateAnswerOptions(loggedUser, obtainedAnswers);
 			break;
-		
+
 		case 10:
+			showUpdateQuestionCommentaryOptions(loggedUser, obtainedQuestionCommentaries);
 			break;
-		
+
 		case 11:
+			showUpdateAnswerCommentaryOptions(loggedUser, obtainedAnswerCommentaries);
 			break;
-			
+
 		case 12:
 			if (question.getIdAuthor() != loggedUser.getId()) {
 				System.out.println("Opção inválida");
@@ -393,6 +396,114 @@ public class TextForm {
 		m.updateQuestion(question);
 	}
 
+	private void showUpdateAnswerOptions(User loggedUser, ArrayList<Answer> answers) {
+
+		Management m = new Management();
+		String answerText;
+		int answerOption;
+		boolean foundAnswerId = false;
+		Answer answerToUpdate = null;
+
+		System.out.print("Digite o id da resposta: ");
+		answerOption = scanner.nextInt();
+
+		System.out.println("Digite um novo texto para a resposta: ");
+		answerText = getStringInput();
+
+		for (Answer answer : answers) {
+			if (answerOption == answer.getId()) {
+				answerToUpdate = answer;
+				foundAnswerId = true;
+			}
+		}
+
+		answerToUpdate.setText(answerText);
+
+		if (OperationPermission.deletePost(loggedUser, answerToUpdate.getIdAuthor())) {
+
+			if (foundAnswerId == true) {
+				m.updateAnswer(answerToUpdate);
+			} else {
+				System.out.println("Resposta não encontrada.");
+			}
+
+		} else {
+			System.out.println("Usuário não tem permissão para executar este comando");
+		}
+	}
+
+	private void showUpdateQuestionCommentaryOptions(User loggedUser, ArrayList<QuestionCommentary> questionCommentaries) {
+		
+		Management m = new Management();
+		String questionCommentaryText;
+		int questionCommentaryOption;
+		boolean foundQuestionCommentaryId = false;
+		QuestionCommentary questionCommentaryToUpdate = null;
+
+		System.out.print("Digite o id do comentário da questão: ");
+		questionCommentaryOption = scanner.nextInt();
+
+		System.out.println("Digite um novo texto para o comentário da questão: ");
+		questionCommentaryText = getStringInput();
+
+		for (QuestionCommentary questionCommentary : questionCommentaries) {
+			if (questionCommentaryOption == questionCommentary.getId()) {
+				questionCommentaryToUpdate = questionCommentary;
+				foundQuestionCommentaryId = true;
+			}
+		}
+
+		questionCommentaryToUpdate.setText(questionCommentaryText);
+
+		if (OperationPermission.deletePost(loggedUser, questionCommentaryToUpdate.getIdAuthor())) {
+			if (foundQuestionCommentaryId == true) {
+				m.updateQuestionCommentary(questionCommentaryToUpdate);
+			} else {
+				System.out.println("Resposta para a questão não encontrada.");
+			}
+
+		} else {
+			System.out.println("Usuário não tem permissão para executar este comando");
+		}
+
+	}
+	
+	private void showUpdateAnswerCommentaryOptions(User loggedUser, ArrayList<AnswerCommentary> answerCommentaries) {
+		
+		Management m = new Management();
+		String answerCommentaryText;
+		int answerCommentaryOption;
+		boolean foundAnswerCommentaryId = false;
+		AnswerCommentary answerCommentaryToUpdate = null;
+
+		System.out.print("Digite o id do comentário da resposta: ");
+		answerCommentaryOption = scanner.nextInt();
+
+		System.out.println("Digite um novo texto para o comentário da resposta: ");
+		answerCommentaryText = getStringInput();
+
+		for (AnswerCommentary answerCommentary : answerCommentaries) {
+			if (answerCommentaryOption == answerCommentary.getId()) {
+				answerCommentaryToUpdate = answerCommentary;
+				foundAnswerCommentaryId = true;
+			}
+		}
+
+		answerCommentaryToUpdate.setText(answerCommentaryText);
+
+		if (OperationPermission.deletePost(loggedUser, answerCommentaryToUpdate.getIdAuthor())) {
+			if (foundAnswerCommentaryId == true) {
+				m.updateAnswerCommentary(answerCommentaryToUpdate);
+			} else {
+				System.out.println("Comentário para a resposta não encontrada.");
+			}
+
+		} else {
+			System.out.println("Usuário não tem permissão para executar este comando");
+		}
+
+	}
+
 	private void showSelectBestAnswerOptions(ArrayList<Answer> obtainedAnswers) {
 
 		Management m = new Management();
@@ -418,7 +529,6 @@ public class TextForm {
 		Management m = new Management();
 		int answerOption, idAuthor = -1;
 		boolean foundAnswerId = false;
-		
 
 		System.out.print("Digite o id da resposta: ");
 		answerOption = scanner.nextInt();
@@ -429,17 +539,15 @@ public class TextForm {
 				foundAnswerId = true;
 			}
 		}
-		
-		
-		
+
 		if (OperationPermission.deletePost(loggedUser, idAuthor)) {
-			
+
 			if (foundAnswerId == true) {
 				m.deleteAnswer(answerOption);
 			} else {
 				System.out.println("Resposta não encontrada.");
 			}
-			
+
 		} else {
 			System.out.println("Usuário não tem permissão para executar este comando");
 		}
@@ -472,7 +580,7 @@ public class TextForm {
 		}
 
 	}
-	
+
 	private void showDeleteCommentaryAnswerOptions(User loggedUser,
 			ArrayList<AnswerCommentary> obtainedAnswerCommentaries) {
 
@@ -500,10 +608,6 @@ public class TextForm {
 		}
 
 	}
-	
-	
-	
-	
 
 	// private void showDeleteAnswerOptions(ArrayList<Answer> obtainedAnswers) {
 	//
