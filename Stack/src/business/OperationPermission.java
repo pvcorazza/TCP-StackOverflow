@@ -43,11 +43,16 @@ public class OperationPermission {
 		if (loggedUser == null) {
 			return false;
 		}
-		if (loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED) {
-			return true;
-		} else {
-			return false;
+		else{
+			if (loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED && loggedUser.getBlocked() == false) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+			
 		}
+		
 	}
 
 	public static boolean selectBestAnswer(User loggedUser, Question question) {

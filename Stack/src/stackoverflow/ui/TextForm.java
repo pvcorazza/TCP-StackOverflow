@@ -295,7 +295,12 @@ public class TextForm {
 			option = showPostOptions(loggedUser, question, obtainedAnswers, obtainedQuestionCommentaries,
 					obtainedAnswerCommentaries);
 		} else {
-			System.out.println("Por favor, faça o login para realizar outras operações");
+			if(loggedUser == null){
+				System.out.println("Por favor, faça o login para realizar outras operações");
+			}
+			else{
+				System.out.println("Usuário bloqueado. Solicite o desbloqueio para um moderador ou administrador!");
+			}
 		}
 
 		System.out.println("--------------------------------");

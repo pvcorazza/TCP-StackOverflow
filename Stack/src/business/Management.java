@@ -285,6 +285,12 @@ public class Management {
 		
 		User loggedUser = null;
 		loggedUser = userDAO.select(username, password);
+		
+		if(loggedUser != null){
+			if(loggedUser.getBlocked()){
+				loggedUser.setPermission(User.Permission.NOT_AUTHENTICATED);
+			}
+		}
 		return loggedUser;
 		
 
