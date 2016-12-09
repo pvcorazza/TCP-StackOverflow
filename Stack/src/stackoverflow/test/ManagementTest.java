@@ -6,20 +6,20 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.implementation.jdbc.AnswerCommentaryDAO;
-import dao.implementation.jdbc.AnswerDAO;
-import dao.implementation.jdbc.QuestionCommentaryDAO;
-import dao.implementation.jdbc.QuestionDAO;
-import dao.implementation.jdbc.UserDAO;
+import business.Management;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import domain.Answer;
-import domain.Management;
 import domain.Question;
 import domain.User;
 import exceptions.permission.PermissionException;
 import exceptions.userDAO.UserNotFoundException;
+import impl.AnswerCommentaryDAO;
+import impl.AnswerDAO;
+import impl.QuestionCommentaryDAO;
+import impl.QuestionDAO;
+import impl.UserDAO;
 import junit.framework.TestCase;
 
 public class ManagementTest extends TestCase {

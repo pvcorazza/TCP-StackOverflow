@@ -1,17 +1,22 @@
-package domain;
+package business;
 
 import java.util.ArrayList;
 
-import dao.implementation.jdbc.AnswerCommentaryDAO;
-import dao.implementation.jdbc.AnswerDAO;
-import dao.implementation.jdbc.QuestionCommentaryDAO;
-import dao.implementation.jdbc.QuestionDAO;
-import dao.implementation.jdbc.UserDAO;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
+import domain.Answer;
+import domain.AnswerCommentary;
+import domain.Question;
+import domain.QuestionCommentary;
+import domain.User;
 import exceptions.permission.PermissionException;
 import exceptions.userDAO.UserNotFoundException;
+import impl.AnswerCommentaryDAO;
+import impl.AnswerDAO;
+import impl.QuestionCommentaryDAO;
+import impl.QuestionDAO;
+import impl.UserDAO;
 
 public class Management {
 	UserDAO userDAO;

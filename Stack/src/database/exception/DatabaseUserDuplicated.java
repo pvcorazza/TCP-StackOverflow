@@ -1,6 +1,6 @@
 package database.exception;
 
-import dao.interfaces.UserDAOInterface;
+import business.UserDAOInterface;
 
 /**
  * Main class for all exceptions derived from {@link UserDAOInterface} implementation

@@ -1,4 +1,4 @@
-package dao.interfaces;
+package business;
 
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;

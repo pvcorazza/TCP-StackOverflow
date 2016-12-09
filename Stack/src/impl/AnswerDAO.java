@@ -1,4 +1,4 @@
-package dao.implementation.jdbc;
+package impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import dao.interfaces.AnswerDAOInterface;
+import business.AnswerDAOInterface;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import domain.Answer;

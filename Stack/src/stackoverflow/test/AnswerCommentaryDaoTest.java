@@ -6,9 +6,9 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import dao.implementation.jdbc.AnswerCommentaryDAO;
 import database.exception.DatabaseException;
 import domain.AnswerCommentary;
+import impl.AnswerCommentaryDAO;
 import junit.framework.TestCase;
 
 public class AnswerCommentaryDaoTest extends TestCase  {

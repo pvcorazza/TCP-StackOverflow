@@ -4,13 +4,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import business.Management;
+import business.OperationPermission;
 import database.exception.DatabaseConnectionException;
 import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import domain.Answer;
 import domain.AnswerCommentary;
-import domain.Management;
-import domain.OperationPermission;
 import domain.Question;
 import domain.QuestionCommentary;
 import domain.User;

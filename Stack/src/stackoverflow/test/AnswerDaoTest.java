@@ -5,10 +5,10 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.implementation.jdbc.AnswerDAO;
 import database.exception.DatabaseException;
 import domain.Answer;
 import domain.User;
+import impl.AnswerDAO;
 import junit.framework.TestCase;
 
 import static org.mockito.Mockito.*;
