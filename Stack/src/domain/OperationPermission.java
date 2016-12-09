@@ -13,8 +13,15 @@ public class OperationPermission {
 	}
 	
 	public static boolean createQuestion(User loggedUser){
-		if(loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED){
-			return true;
+		
+		if(loggedUser != null){
+			
+			if(loggedUser.getPermission() != User.Permission.NOT_AUTHENTICATED){
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 		else{
 			return false;

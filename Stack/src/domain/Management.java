@@ -16,12 +16,34 @@ import exceptions.userDAO.UserNotFoundException;
 import ui.text.UIUtils;
 
 public class Management {
+	UserDAO userDAO;
+	QuestionDAO questionDAO;
+	AnswerDAO answerDAO;
+	AnswerCommentaryDAO answerCommentaryDAO;
+	QuestionCommentaryDAO questionCommentaryDAO;
+	
+	public Management(UserDAO userDao,QuestionDAO questionDAO,
+			AnswerDAO answerDAO,AnswerCommentaryDAO answerCommentaryDAO,
+			QuestionCommentaryDAO questionCommentaryDAO){
+		
+		this.userDAO = userDao;
+		this.questionDAO = questionDAO;
+		this.answerDAO = answerDAO;
+		this.answerCommentaryDAO = answerCommentaryDAO;
+		this.questionCommentaryDAO = questionCommentaryDAO;
+	}
+	
+	public Management(){
+		this.userDAO = new UserDAO();
+		this.questionDAO = new QuestionDAO();
+		this.answerDAO = new AnswerDAO();
+		this.answerCommentaryDAO = new AnswerCommentaryDAO();
+		this.questionCommentaryDAO = new QuestionCommentaryDAO();
+	}
 	
 	/* Recebe um usuário e solicita a inserção no banco de dados */
 
 	public void createUser(User user) throws DatabaseException,DatabaseConnectionException,DatabaseUserDuplicated {
-
-		UserDAO userDAO = new UserDAO();
 
 		int userID = userDAO.insert(user);
 		user.setId(userID);
@@ -31,13 +53,12 @@ public class Management {
 
 	public void createQuestion(Question question) throws PermissionException, DatabaseConnectionException, DatabaseException {
 		
-		if(question.getAuthor().getPermission() != User.Permission.NOT_AUTHENTICATED){
-			QuestionDAO questionDAO = new QuestionDAO();
+		if(OperationPermission.createQuestion(question.getAuthor())){
 			int questionID = questionDAO.insert(question);
 			question.setId(questionID);
 		}
 		else{
-			throw new PermissionException("permissionException.permission.denied");
+			throw new PermissionException("Usuário não tem permissão para realizar esta operação");
 		}	
 		
 	}
@@ -45,9 +66,6 @@ public class Management {
 	/* Recebe uma resposta e solicita a inserção no banco de dados */
 	
 	public void createAnswer(Answer answer) throws DatabaseConnectionException, DatabaseException {
-		// TODO Auto-generated method stub
-		AnswerDAO answerDAO = new AnswerDAO();
-
 
 		int answerID = answerDAO.insert(answer);
 		answer.setId(answerID);
@@ -58,8 +76,7 @@ public class Management {
 	/* Recebe um comentário de questão e solicita a inserção no banco de dados */
 	
 	public void createQuestionCommentary(QuestionCommentary questionCommentary) {
-		// TODO Auto-generated method stub
-		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
+
 
 		try {
 			int questionCommentaryId = questionCommentaryDAO.insert(questionCommentary);
@@ -73,8 +90,6 @@ public class Management {
 	}
 	
 	public void createAnswerCommentary(AnswerCommentary answerCommentary) {
-		// TODO Auto-generated method stub
-		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
 
 		try {
 			int answerCommentaryId = answerCommentaryDAO.insert(answerCommentary);
@@ -92,9 +107,7 @@ public class Management {
 
 	public User findUserToUpdate(User loggedUser, String username) {
 
-
 			User userToUpdate;
-			UserDAO userDAO = new UserDAO();
 
 			try {
 				userToUpdate = userDAO.select(username);
@@ -126,8 +139,7 @@ public class Management {
 	
 	public void updatePermission (User loggedUser, User userToUpdate) throws PermissionException {
 		
-		if(loggedUser.getPermission() == User.Permission.ADMINISTRATOR){
-			UserDAO userDAO = new UserDAO();
+		if(OperationPermission.modifyUserPermission(loggedUser)){
 
 			try {
 				userDAO.update(userToUpdate);
@@ -146,8 +158,6 @@ public class Management {
 
 	public ArrayList<Question> searchQuestion(String searchText, int opcao) {
 
-		QuestionDAO questionDAO = new QuestionDAO();
-
 		try {
 			ArrayList<Question> arrayQuestion = questionDAO.select(searchText, opcao);
 			return arrayQuestion;
@@ -164,8 +174,6 @@ public class Management {
 	
 	public ArrayList<Answer> getAnswers(int id) {
 
-		AnswerDAO answerDAO = new AnswerDAO();
-
 		try {
 			ArrayList<Answer> arrayAnswer = answerDAO.selectAll(id);
 			return arrayAnswer;
@@ -180,8 +188,6 @@ public class Management {
 	
 	public ArrayList<QuestionCommentary> getQuestionCommentaries(int id) {
 
-		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
-
 		try {
 			ArrayList<QuestionCommentary> arrayQuestionCommentary = questionCommentaryDAO.selectAll(id);
 			return arrayQuestionCommentary;
@@ -195,8 +201,6 @@ public class Management {
 	}
 	
 	public ArrayList<AnswerCommentary> getAnswerCommentaries(int idAnswer) {
-
-		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
 
 		try {
 			ArrayList<AnswerCommentary> arrayAnswerCommentary = answerCommentaryDAO.selectALL(idAnswer);
@@ -214,8 +218,6 @@ public class Management {
 
 	public Question getQuestion(int id) {
 
-		QuestionDAO questionDAO = new QuestionDAO();
-
 		try {
 			Question question = questionDAO.select(id);
 			return question;
@@ -228,23 +230,25 @@ public class Management {
 
 	}
 	
-	public void deleteQuestion(User loggedUser, int id) {
+	public void deleteQuestion(User loggedUser, Question question) throws PermissionException {
+		if(OperationPermission.deleteQuestion(loggedUser, question)){
+			try {
+				questionDAO.delete(question);
 
-		QuestionDAO questionDAO = new QuestionDAO();
+			} catch (Exception e) {
 
-		try {
-			questionDAO.delete(id);
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
+				e.printStackTrace();
+			}
 		}
+		else{
+			throw new PermissionException("Você não tem permissão para realizar a operação");
+		}
+		
 	}
 	
 	public void selectBestAnswer (int id) {
 		
 		Answer answer;
-		AnswerDAO answerDAO = new AnswerDAO();
 		
 		try {
 			answer = answerDAO.select(id);
@@ -263,8 +267,6 @@ public class Management {
 	/* Recebe um nome de usuário e password e retorna esse usuário do banco de dados */
 	
 	public User login(String username, String password) throws UserNotFoundException, DatabaseException {
-
-		UserDAO userDAO = new UserDAO();
 
 		
 		User loggedUser = null;

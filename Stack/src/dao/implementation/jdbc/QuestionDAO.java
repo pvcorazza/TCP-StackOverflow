@@ -114,7 +114,9 @@ public class QuestionDAO implements QuestionDAOInterface {
 	}
 
 	@Override
-	public void delete(Question question) throws DatabaseException {
+	public int delete(Question question) throws DatabaseException {
+		
+		int rowDeleted = -1;
 		String sql = "DELETE FROM "+TABLE+
 				" WHERE "+COLUMN_ID+"=?";
 		
@@ -124,12 +126,13 @@ public class QuestionDAO implements QuestionDAOInterface {
 			stmt.setInt(1, question.getId());
 			stmt.executeUpdate();
 			
-			System.out.println("Row id deleted = "+question.getId());
+			rowDeleted=  question.getId();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Não foi possível deletar a resposta");
 		}
+		return rowDeleted;
 
 	}
 

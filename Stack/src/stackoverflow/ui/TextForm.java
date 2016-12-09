@@ -341,7 +341,7 @@ public class TextForm {
 		case 5:
 			
 			if(OperationPermission.deleteQuestion(loggedUser, question)){
-				deleteQuestion(loggedUser, question.getId());
+				deleteQuestion(loggedUser, question);
 			}
 			else{
 				System.out.println("Usuário não tem permissão para executar este comando");
@@ -352,20 +352,24 @@ public class TextForm {
 	}
 
 
-	private void deleteQuestion(User loggedUser, int id) {
+	private void deleteQuestion(User loggedUser, Question question) {
 		
 		Management m = new Management();
-		m.deleteQuestion(loggedUser, id);
+		try {
+			m.deleteQuestion(loggedUser, question);
+		} catch (PermissionException e) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
 
 	private void showSelectBestAnswerOptions(User loggedUser) {
 
 		Management m = new Management();
-		int option;
+		int idAnswer;
 		System.out.println("Digite o Id da melhor resposta: ");
-		option = getInput();
-		m.selectBestAnswer(option);
+		idAnswer = getInput();
+		m.selectBestAnswer(idAnswer);
 		
 	}
 
