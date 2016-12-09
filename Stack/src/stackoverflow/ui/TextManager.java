@@ -5,7 +5,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 
-
 public class TextManager {
 	
 	public static final Locale LANGUAGE[] = { new Locale("en", "US"),
