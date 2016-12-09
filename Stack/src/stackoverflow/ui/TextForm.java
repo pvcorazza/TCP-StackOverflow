@@ -99,6 +99,7 @@ public class TextForm {
 			newUser = new User(getUsername(), getPassword(), Permission.AUTHENTICATED);
 			try {
 				m.createUser(newUser);
+				System.out.println("Usuário cadastrado com sucesso!");
 			} catch (DatabaseConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -233,6 +234,7 @@ public class TextForm {
 		obtainedQuestionCommentaries = m.getQuestionCommentaries(id);
 		obtainedAnswerCommentaries = m.getAnswerCommentaries(id);
 
+		try {
 		System.out.println("------------ QUESTÃO -----------");
 		System.out.println("| Título: " + question.getTitle() + "\n| Autor: " + question.getAuthor().getUsername()
 				+ "\n| Data: " + question.getDate().toString());
@@ -287,6 +289,10 @@ public class TextForm {
 		}
 
 		System.out.println("--------------------------------");
+		}
+		catch (Exception e) {
+			System.out.println("Questão inválida. Impossível exibir");
+		}
 
 	}
 
@@ -987,25 +993,44 @@ public class TextForm {
 	}
 
 	public int getInput() {
-		int opcao;
+		int opcao = -1;
 		scanner = new Scanner(System.in);
 		System.out.print("Digite a opção desejada: ");
+		try {
 		opcao = scanner.nextInt();
+		}
+		catch (Exception e) {
+			System.out.println("O número digitado é inválido.");
+			getInput();
+		}
 		return opcao;
 	}
 
 	public int getInputId() {
-		int opcao;
+		int opcao=-1;
 		scanner = new Scanner(System.in);
 		System.out.print("Digite o ID da questão para visualizar: ");
+		try {
 		opcao = scanner.nextInt();
+		}
+		catch (Exception e) {
+			System.out.println("O número digitado é inválido.");
+			getInput();
+		}
 		return opcao;
 	}
 
 	public String getStringInput() {
-		String input;
+		String input=null;
 		scanner = new Scanner(System.in);
-		input = scanner.nextLine();
+		try {
+			input = scanner.nextLine();
+		}
+		catch (Exception e) {
+			System.out.println("Entrada inválida");
+			getStringInput();
+		}
+		
 		return input;
 	}
 
