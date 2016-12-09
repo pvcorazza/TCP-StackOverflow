@@ -208,14 +208,20 @@ public class TextForm {
 		}
 
 		if (obtainedQuestions != null) {
-			for (Question question : obtainedQuestions) {
-				System.out.println("-------------------------------");
-				System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
-						+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
-				System.out.println("-------------------------------");
+			
+			if(obtainedQuestions.size() > 0){
+				for (Question question : obtainedQuestions) {
+					System.out.println("-------------------------------");
+					System.out.println("Id: " + question.getId() + "\nTítulo: " + question.getTitle() + "\nAutor: "
+							+ question.getAuthor().getUsername() + "\nData: " + question.getDate().toString());
+					System.out.println("-------------------------------");
+				}
+				displayQuestion(loggedUser);
 			}
-
-			displayQuestion(loggedUser);
+			else{
+				System.out.println("Não tem questões cadastradas do autor informado");
+			}
+			
 		}
 	}
 
