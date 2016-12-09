@@ -1,6 +1,8 @@
 package test;
 
-import java.util.ArrayList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Date;
 
 import org.junit.Before;
@@ -11,8 +13,6 @@ import database.exception.DatabaseException;
 import domain.Answer;
 import domain.User;
 import junit.framework.TestCase;
-
-import static org.mockito.Mockito.*;
 
 public class AnswerDaoTest extends TestCase  {
 	

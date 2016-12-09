@@ -17,7 +17,6 @@ public class TextManager {
 	private String baseName;
 	private ResourceBundle bundle;
 	private ResourceBundle customBundle;
-	private String customName;
 	private Locale locale;
 	
 	public TextManager(String baseName) {
@@ -55,7 +54,6 @@ public class TextManager {
 	 *            the customName to set
 	 */
 	public void setCustomName(String customName) {
-		this.customName = customName;
 		if (customName == null) {
 			customBundle = null;
 		} else {

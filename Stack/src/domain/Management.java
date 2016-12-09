@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import dao.implementation.jdbc.AnswerCommentaryDAO;
 import dao.implementation.jdbc.AnswerDAO;
@@ -13,7 +12,6 @@ import database.exception.DatabaseException;
 import database.exception.DatabaseUserDuplicated;
 import exceptions.permission.PermissionException;
 import exceptions.userDAO.UserNotFoundException;
-import ui.text.UIUtils;
 
 public class Management {
 	
@@ -228,21 +226,7 @@ public class Management {
 
 	}
 	
-	public Question getQuestionByUser(int userId) {
 
-		QuestionDAO questionDAO = new QuestionDAO();
-
-		try {
-			//Question question = questionDAO.selectByUser(userId);
-			//return question;
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-		return null;
-
-	}
 	
 	public void deleteQuestion(int questionId) {
 
