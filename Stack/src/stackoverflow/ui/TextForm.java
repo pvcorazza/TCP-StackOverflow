@@ -234,12 +234,16 @@ public class TextForm {
 		ArrayList<AnswerCommentary> obtainedAnswerCommentaries;
 
 		int id;
+		int option = 0;
 		id = getInputId();
-		question = m.getQuestion(id);
-		obtainedAnswers = m.getAnswers(id);
-		obtainedQuestionCommentaries = m.getQuestionCommentaries(id);
-		obtainedAnswerCommentaries = m.getAnswerCommentaries(id);
+		
 
+		
+		do {
+			question = m.getQuestion(id);
+			obtainedAnswers = m.getAnswers(id);
+			obtainedQuestionCommentaries = m.getQuestionCommentaries(id);
+			obtainedAnswerCommentaries = m.getAnswerCommentaries(id);
 		try {
 		System.out.println("------------ QUESTÃO -----------");
 		System.out.println("| Título: " + question.getTitle() + "\n| Autor: " + question.getAuthor().getUsername()
@@ -288,7 +292,7 @@ public class TextForm {
 		}
 
 		if (OperationPermission.displayPostOptions(loggedUser)) {
-			showPostOptions(loggedUser, question, obtainedAnswers, obtainedQuestionCommentaries,
+			option = showPostOptions(loggedUser, question, obtainedAnswers, obtainedQuestionCommentaries,
 					obtainedAnswerCommentaries);
 		} else {
 			System.out.println("Por favor, faça o login para realizar outras operações");
@@ -298,11 +302,12 @@ public class TextForm {
 		}
 		catch (Exception e) {
 			System.out.println("Questão inválida. Impossível exibir");
-		}
+		} }
+		while (option != 0);
 
 	}
 
-	public void showPostOptions(User loggedUser, Question question, ArrayList<Answer> obtainedAnswers,
+	public int showPostOptions(User loggedUser, Question question, ArrayList<Answer> obtainedAnswers,
 			ArrayList<QuestionCommentary> obtainedQuestionCommentaries,
 			ArrayList<AnswerCommentary> obtainedAnswerCommentaries) {
 
@@ -363,6 +368,7 @@ public class TextForm {
 			if (OperationPermission.editOrDeletePost(loggedUser, question.getId())) {
 				try {
 					m.deleteQuestion(loggedUser,question);
+					postOption = 0;
 				} catch (PermissionException e) {
 					System.out.println(e.getMessage());
 				}
@@ -413,10 +419,13 @@ public class TextForm {
 			}
 
 			break;
+		case 0:
+		break;
 		default:
 			System.out.println("Opção inválida");
 
 		}
+		return postOption;
 	}
 
 	private void showUpdateQuestionOptions(User loggedUser, Question questionToUpdate) {
