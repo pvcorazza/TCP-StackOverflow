@@ -237,36 +237,24 @@ public class Management {
 		}
 	}
 	
-	public void deleteAnswer(int answerId) {
+	public void deleteAnswer(int answerId) throws DatabaseException {
 
 		AnswerDAO answerDAO = new AnswerDAO();
+		answerDAO.delete(answerId);
 
-		try {
-			answerDAO.delete(answerId);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
 	}
 	
-	public void deleteQuestionCommentary(int questionCommentaryId) {
+	public void deleteQuestionCommentary(int questionCommentaryId) throws DatabaseException {
 
 		QuestionCommentaryDAO questionCommentaryDAO = new QuestionCommentaryDAO();
-
-		try {
-			questionCommentaryDAO.delete(questionCommentaryId);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
+		questionCommentaryDAO.delete(questionCommentaryId);
+	
 	}
 	
 	
 	public void deleteAnswerCommentary(int answerCommentaryId) throws DatabaseException {
 
 		AnswerCommentaryDAO answerCommentaryDAO = new AnswerCommentaryDAO();
-
-
 		answerCommentaryDAO.delete(answerCommentaryId);
 
 		

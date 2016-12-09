@@ -592,7 +592,12 @@ public class TextForm {
 		if (OperationPermission.editOrDeletePost(loggedUser, idAuthor)) {
 
 			if (foundAnswerId == true) {
-				m.deleteAnswer(answerOption);
+				try {
+					m.deleteAnswer(answerOption);
+					System.out.println("Resposta excluída com sucesso!");
+				} catch (DatabaseException e) {
+					System.out.println(e.getMessage());;
+				}
 			} else {
 				System.out.println("Resposta não encontrada.");
 			}
@@ -620,7 +625,12 @@ public class TextForm {
 		}
 		if (OperationPermission.editOrDeletePost(loggedUser, idAuthor)) {
 			if (foundQuestionCommentaryId == true) {
-				m.deleteQuestionCommentary(questionCommentaryOption);
+				try {
+					m.deleteQuestionCommentary(questionCommentaryOption);
+					System.out.println("Comentário da questão excluído com sucesso!");
+				} catch (DatabaseException e) {
+					System.out.println(e.getMessage());
+				}
 			} else {
 				System.out.println("Comentário da questão não encontrado.");
 			}
@@ -637,7 +647,7 @@ public class TextForm {
 		int answerCommentaryOption, idAuthor = -1;
 		boolean foundAnswerCommentaryId = false;
 
-		System.out.print("Digite o id do comentário da questão: ");
+		System.out.print("Digite o id do comentário da resposta: ");
 		answerCommentaryOption = scanner.nextInt();
 
 		for (AnswerCommentary commentaryAnswer : obtainedAnswerCommentaries) {
@@ -650,6 +660,7 @@ public class TextForm {
 			if (foundAnswerCommentaryId == true) {
 				try {
 					m.deleteAnswerCommentary(answerCommentaryOption);
+					System.out.println("Comentário da resposta excluído com sucesso");
 				} catch (DatabaseException e) {
 					System.out.println(e.getMessage());
 				}
