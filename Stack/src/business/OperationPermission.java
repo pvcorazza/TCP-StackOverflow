@@ -2,7 +2,6 @@ package business;
 
 import domain.Question;
 import domain.User;
-import domain.User.Permission;
 
 public class OperationPermission {
 
